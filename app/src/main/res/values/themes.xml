@@ -1,9 +1,14 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
     <style name="Base.Theme.Tablia" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <item name="android:windowBackground">@color/tablia_cream_bg</item>
     </style>
 
     <style name="Theme.Tablia" parent="Base.Theme.Tablia" />
+
+    <style name="Theme.App.Starting" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/tablia_cream_bg</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/tablia_logo</item>
+        <item name="postSplashScreenTheme">@style/Theme.Tablia</item>
+    </style>
 </resources>
