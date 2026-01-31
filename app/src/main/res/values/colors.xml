@@ -2,4 +2,15 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="tablia_cream_bg">#FFFDF5</color>
+    <color name="tablia_beige_card">#F4EBD0</color>
+    <color name="tablia_terracotta">#D8572A</color>
+    <color name="tablia_text_charcoal">#333333</color>
+    <color name="tablia_text_soft_brown">#8D7B68</color>
+    <color name="colorSecondary">@color/tablia_terracotta</color>
+    <color name="android_windowBackground">@color/tablia_cream_bg</color>
+    <color name="tablia_shadow">#5D6F59</color>
+    <color name="tablia_paprika_orange">#E55B13</color>
+    <color name="tablia_olive_green">#A4B828</color>
+    <color name="tablia_herb_shadow">#5D6F59</color>
 </resources>
