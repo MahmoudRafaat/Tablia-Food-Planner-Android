@@ -2,6 +2,11 @@
     <!-- Base application theme. -->
     <style name="Base.Theme.Tablia" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Match background to Splash Screen to prevent flashes in Dark Mode -->
-        <item name="android:windowBackground">@color/tablia_cream_bg</item>
+        <item name="android:windowBackground">@color/background</item>
+    </style>
+
+    <style name="Theme.App.Starting" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/background</item>
+        <item name="postSplashScreenTheme">@style/Theme.Tablia</item>
     </style>
 </resources>
