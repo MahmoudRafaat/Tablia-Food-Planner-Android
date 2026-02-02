@@ -1,5 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
+    <color name="tomato_red">#FF6B6B</color>
+    <color name="tomato_red_dark">#E74C3C</color>
+    <color name="basil_green">#2ECC71</color>
+    <color name="basil_green_dark">#27AE60</color>
+    <color name="honey_yellow">#FFB84D</color>
+    <color name="creamy_white">#FFFBF5</color>
+    <color name="navy_foreground">#2C3E50</color>
+
+    <color name="primary">@color/tomato_red</color>
+    <color name="primary_variant">@color/tomato_red_dark</color>
+    <color name="secondary">@color/basil_green</color>
+    <color name="accent">@color/honey_yellow</color>
+
+    <color name="background">@color/creamy_white</color>
+    <color name="onBackground">@color/navy_foreground</color>
+    <color name="white">#FFFFFF</color>
+    <color name="white_transparent">#B3FFFFFF</color>
 </resources>
