@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/onboardingFragment">
+
+
+    <fragment
+        android:id="@+id/onboardingFragment"
+        android:name="com.example.tablia.presentation.onboarding.view.OnboardingFragment"
+        android:label="OnboardingFragment" >
+        <action
+            android:id="@+id/action_onboardingFragment_to_loginFragment"
+            app:destination="@id/loginFragment"
+            app:enterAnim="@animator/nav_default_enter_anim" />
+    </fragment>
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="com.example.tablia.presentation.auth.login.view.LoginFragment"
+        android:label="LoginFragment" />
+</navigation>
