@@ -1,5 +1,6 @@
 package com.example.tablia.presentation.splash.view;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -8,6 +9,8 @@ import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.splashscreen.SplashScreen;
+
+import com.example.tablia.presentation.auth.AuthActivity;
 import com.example.tablia.databinding.ActivitySplashBinding;
 import com.example.tablia.presentation.splash.presenter.SplashPresenter;
 import com.example.tablia.presentation.splash.presenter.SplashPresenterImp;
@@ -25,7 +28,7 @@ public class SplashActivity extends AppCompatActivity implements SplashView {
         binding = ActivitySplashBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        presenter = new SplashPresenterImp(this);
+        presenter = new SplashPresenterImp(this,getApplication());
 
         startAnimations();
 
@@ -88,6 +91,8 @@ public class SplashActivity extends AppCompatActivity implements SplashView {
     }
 
     @Override public void navigateToLogin() { finish(); }
-    @Override public void navigateToOnboarding() { finish(); }
+    @Override public void navigateToOnboarding() {
+        Intent intent = new Intent(this, AuthActivity.class);
+        startActivity(intent); }
     @Override public void navigateToHome() { finish(); }
 }

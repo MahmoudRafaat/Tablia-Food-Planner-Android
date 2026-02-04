@@ -53,6 +53,7 @@ dependencies {
     implementation("com.google.firebase:firebase-auth")
     implementation("com.google.firebase:firebase-storage")
     implementation("com.google.firebase:firebase-firestore")
+    implementation("com.tbuonomo:dotsindicator:5.1.0")
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)

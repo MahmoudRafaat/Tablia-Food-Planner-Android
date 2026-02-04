@@ -12,7 +12,9 @@
     <color name="primary_variant">@color/tomato_red_dark</color>
     <color name="secondary">@color/basil_green</color>
     <color name="accent">@color/honey_yellow</color>
-
+    <color name="onboarding_red_end">#FF8A80</color>
+    <color name="onboarding_green_end">#69F0AE</color>
+    <color name="onboarding_yellow_end">#FFD54F</color>
     <color name="background">@color/creamy_white</color>
     <color name="onBackground">@color/navy_foreground</color>
     <color name="white">#FFFFFF</color>
