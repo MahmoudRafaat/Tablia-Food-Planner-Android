@@ -46,7 +46,6 @@
                 android:layout_margin="6dp"
                 android:padding="25dp"
                 android:scaleType="fitCenter"
-
                 app:shapeAppearanceOverlay="@style/CircleImage"
                 app:srcCompat="@drawable/ic_utensils" />
         </FrameLayout>
