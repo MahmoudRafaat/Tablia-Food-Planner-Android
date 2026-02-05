@@ -34,7 +34,7 @@ public class LoginFragment extends Fragment implements LoginView {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        presenter = new LoginPresenterImp(this);
+        presenter = new LoginPresenterImp(this, getActivity().getApplication());
 
         setupClickListeners();
         setupTextWatchers();
