@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
 import com.example.tablia.R;
 import com.example.tablia.databinding.FragmentLoginBinding;
@@ -85,8 +86,6 @@ public class LoginFragment extends Fragment implements LoginView {
     private void clearErrors() {
         binding.layoutEmail.setError(null);
         binding.layoutPassword.setError(null);
-        binding.layoutPassword.setErrorEnabled(false);
-        binding.layoutEmail.setErrorEnabled(false);
     }
 
     @Override
@@ -127,6 +126,7 @@ public class LoginFragment extends Fragment implements LoginView {
     @Override
     public void showFullAuthError(String message) {
         hideLoading();
+        binding.layoutEmail.setError(" ");
         binding.layoutPassword.setError(message);
         binding.layoutPassword.requestFocus();
     }
@@ -151,8 +151,14 @@ public class LoginFragment extends Fragment implements LoginView {
 
     @Override
     public void navigateToSignUp() {
-        // Navigation logic here
+        if (getView() != null) {
+            Navigation.findNavController(getView()).navigate(R.id.action_loginFragment_to_signUpFragment);
+        }
     }
 
-
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
+    }
 }
