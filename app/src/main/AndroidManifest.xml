@@ -18,6 +18,10 @@
             android:windowSoftInputMode="adjustPan" />
 
         <activity
+            android:name=".presentation.home.view.HomeActivity"
+            android:exported="false" />
+
+        <activity
             android:name=".presentation.splash.view.SplashActivity"
             android:theme="@style/Theme.App.Starting"
             android:exported="true">
