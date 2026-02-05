@@ -90,9 +90,26 @@ public class SplashActivity extends AppCompatActivity implements SplashView {
                 }).start();
     }
 
-    @Override public void navigateToLogin() { finish(); }
-    @Override public void navigateToOnboarding() {
+    @Override
+    public void navigateToLogin() {
         Intent intent = new Intent(this, AuthActivity.class);
-        startActivity(intent); }
-    @Override public void navigateToHome() { finish(); }
+        intent.putExtra("destination", "login");
+        startActivity(intent);
+        finish();
+    }
+
+    @Override
+    public void navigateToOnboarding() {
+        Intent intent = new Intent(this, AuthActivity.class);
+        intent.putExtra("destination", "onboarding");
+        startActivity(intent);
+        finish();
+    }
+
+    @Override
+    public void navigateToHome() {
+        // Intent intent = new Intent(this, HomeActivity.class);
+        // startActivity(intent);
+        finish();
+    }
 }
