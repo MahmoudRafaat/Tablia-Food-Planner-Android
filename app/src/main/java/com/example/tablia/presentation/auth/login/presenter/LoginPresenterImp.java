@@ -1,5 +1,7 @@
 package com.example.tablia.presentation.auth.login.presenter;
 
+import android.content.Context;
+
 import com.example.tablia.data.auth.AuthRepository;
 import com.example.tablia.data.auth.datasource.remote.AuthNetworkCallback;
 import com.example.tablia.presentation.auth.login.view.LoginView;
@@ -8,9 +10,9 @@ public class LoginPresenterImp implements LoginPresenter {
     private AuthRepository repository;
     private LoginView view;
 
-    public LoginPresenterImp(LoginView view) {
+    public LoginPresenterImp(LoginView view, Context context) {
         this.view = view;
-        this.repository = new AuthRepository();
+        this.repository = new AuthRepository(context);
     }
 
     @Override
@@ -25,7 +27,7 @@ public class LoginPresenterImp implements LoginPresenter {
         }
         
         view.showLoading();
-        repository.login(email, password, createCallback());
+        repository.loginWithEmail(email, password, createCallback());
     }
 
     @Override
@@ -36,14 +38,17 @@ public class LoginPresenterImp implements LoginPresenter {
 
     @Override
     public void loginAsGuest() {
-        view.showLoading();
-        repository.loginAsGuest(createCallback());
+        repository.setLoggedIn(true);
+        repository.setFirstRun(false);
+        view.onLoginSuccess();
     }
 
     private AuthNetworkCallback createCallback() {
         return new AuthNetworkCallback() {
             @Override
             public void onSuccess() {
+                repository.setLoggedIn(true);
+                repository.setFirstRun(false);
                 view.hideLoading();
                 view.onLoginSuccess();
             }

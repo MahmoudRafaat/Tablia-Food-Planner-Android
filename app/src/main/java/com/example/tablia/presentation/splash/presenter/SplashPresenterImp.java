@@ -1,32 +1,27 @@
 package com.example.tablia.presentation.splash.presenter;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 
+import com.example.tablia.data.auth.AuthRepository;
 import com.example.tablia.presentation.splash.view.SplashView;
 
-public class SplashPresenterImp implements  SplashPresenter {
-   private SplashView splashView;
-    private Context context;
+public class SplashPresenterImp implements SplashPresenter {
+    private SplashView splashView;
+    private AuthRepository repository;
 
     public SplashPresenterImp(SplashView splashView, Context context) {
         this.splashView = splashView;
-        this.context = context;
+        this.repository = new AuthRepository(context);
     }
 
     @Override
     public void decideNextScreen() {
-        /// to do check if user is logged in
-        SharedPreferences prefs = context.getSharedPreferences("TabliaPrefs", Context.MODE_PRIVATE);
-        boolean isFirstRun = prefs.getBoolean("isFirstRun", true);
-
-       // if (isFirstRun) {
+        if (repository.isFirstRun()) {
             splashView.navigateToOnboarding();
-        //} else {
-            /// to do check if user is logged in
-            // splashView.navigateToHome();
-          //  splashView.navigateToLogin();
+        } else if (repository.isLoggedIn()) {
+            splashView.navigateToHome();
+        } else {
+            splashView.navigateToLogin();
         }
-
     }
-//}
+}
