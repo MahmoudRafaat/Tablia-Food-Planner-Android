@@ -22,13 +22,14 @@ import java.util.List;
 public class PopularMealAdapter extends RecyclerView.Adapter<PopularMealAdapter.ViewHolder> {
 
     private List<Meal> meals = new ArrayList<>();
-    private final OnFavoriteClickListener listener;
+    private final OnMealClickListener listener;
 
-    public interface OnFavoriteClickListener {
+    public interface OnMealClickListener {
         void onFavoriteClick(Meal meal);
+        void onMealClick(Meal meal);
     }
 
-    public PopularMealAdapter(OnFavoriteClickListener listener) {
+    public PopularMealAdapter(OnMealClickListener listener) {
         this.listener = listener;
     }
 
@@ -55,6 +56,7 @@ public class PopularMealAdapter extends RecyclerView.Adapter<PopularMealAdapter.
         updateFavoriteUI(holder, meal.isFavorite());
 
         holder.btnFav.setOnClickListener(v -> listener.onFavoriteClick(meal));
+        holder.itemView.setOnClickListener(v -> listener.onMealClick(meal));
     }
 
     private void updateFavoriteUI(ViewHolder holder, boolean isFavorite) {
