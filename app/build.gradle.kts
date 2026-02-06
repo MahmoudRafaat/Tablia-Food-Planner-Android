@@ -1,11 +1,20 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     id("com.google.gms.google-services")
 }
 
+val localProperties = Properties()
+val localPropertiesFile = rootProject.file("local.properties")
+if (localPropertiesFile.exists()) {
+    localProperties.load(localPropertiesFile.inputStream())
+}
+
 android {
     buildFeatures {
-        viewBinding =true
+        viewBinding = true
+        buildConfig = true
     }
     namespace = "com.example.tablia"
     compileSdk = 36
@@ -17,6 +26,11 @@ android {
         versionCode = 1
         versionName = "1.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        buildConfigField("String", "API_KEY", localProperties.getProperty("API_KEY") ?: "\"1\"")
+        buildConfigField("String", "BASE_URL", localProperties.getProperty("BASE_URL") ?: "\"https://www.themealdb.com/api/json/v1/\"")
+        buildConfigField("String", "WEB_CLIENT_ID", localProperties.getProperty("WEB_CLIENT_ID") ?: "\"\"")
+        buildConfigField("String", "PREF_NAME", localProperties.getProperty("PREF_NAME") ?: "\"TabliaPrefs\"")
     }
 
     buildTypes {
@@ -78,6 +92,8 @@ dependencies {
 
     //room with RXJava
     implementation("androidx.room:room-rxjava3:$room_version")
+
+    implementation("com.f2prateek.rx.preferences2:rx-preferences:2.0.1")
 
 
     testImplementation(libs.junit)
