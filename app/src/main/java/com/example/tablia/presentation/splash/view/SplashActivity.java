@@ -12,6 +12,7 @@ import androidx.core.splashscreen.SplashScreen;
 
 import com.example.tablia.presentation.auth.AuthActivity;
 import com.example.tablia.databinding.ActivitySplashBinding;
+import com.example.tablia.presentation.home.view.HomeActivity;
 import com.example.tablia.presentation.splash.presenter.SplashPresenter;
 import com.example.tablia.presentation.splash.presenter.SplashPresenterImp;
 
@@ -108,8 +109,8 @@ public class SplashActivity extends AppCompatActivity implements SplashView {
 
     @Override
     public void navigateToHome() {
-        // Intent intent = new Intent(this, HomeActivity.class);
-        // startActivity(intent);
+        Intent intent = new Intent(this, HomeActivity.class);
+        startActivity(intent);
         finish();
     }
 }

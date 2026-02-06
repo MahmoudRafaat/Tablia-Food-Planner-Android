@@ -9,7 +9,7 @@ import androidx.credentials.GetCredentialRequest;
 import androidx.credentials.GetCredentialResponse;
 import androidx.credentials.CustomCredential;
 
-import com.example.tablia.R;
+import com.example.tablia.BuildConfig;
 import com.google.android.libraries.identity.googleid.GetGoogleIdOption;
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential;
 import java.util.concurrent.Executor;
@@ -29,7 +29,8 @@ public class GoogleSignInHelper {
     public static void signIn(Activity activity, CredentialCallback callback) {
         CredentialManager credentialManager = CredentialManager.create(activity);
 
-        String clientId = activity.getString(R.string.default_web_client_id);
+        String clientId = BuildConfig.WEB_CLIENT_ID;
+
         //Log.d("GoogleSignIn", "Using Client ID: " + clientId);
 
         GetGoogleIdOption googleIdOption = new GetGoogleIdOption.Builder()

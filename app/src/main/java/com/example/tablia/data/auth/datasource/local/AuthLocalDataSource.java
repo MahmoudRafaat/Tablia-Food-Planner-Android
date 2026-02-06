@@ -3,22 +3,50 @@ package com.example.tablia.data.auth.datasource.local;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.example.tablia.BuildConfig;
+
+import io.reactivex.rxjava3.core.Completable;
+import io.reactivex.rxjava3.core.Single;
+
 public class AuthLocalDataSource {
+    private static final String KEY_IS_LOGGED_IN = "isLoggedIn";
+    private static final String KEY_IS_FIRST_RUN = "isFirstRun";
+
     private final SharedPreferences prefs;
-    private static AuthLocalDataSource instance = null;
+    private static AuthLocalDataSource instance ;
 
     private AuthLocalDataSource(Context context) {
-        prefs = context.getSharedPreferences("TabliaPrefs", Context.MODE_PRIVATE);
+        prefs = context.getSharedPreferences(BuildConfig.PREF_NAME, Context.MODE_PRIVATE);
     }
 
     public static AuthLocalDataSource getInstance(Context context) {
-        if (instance == null) instance = new AuthLocalDataSource(context);
+        if (instance == null) {
+            instance = new AuthLocalDataSource(context.getApplicationContext());
+        }
         return instance;
     }
 
-    public boolean isLoggedIn() { return prefs.getBoolean("isLoggedIn", false); }
-    public void setLoggedIn(boolean value) { prefs.edit().putBoolean("isLoggedIn", value).apply(); }
+    public Single<Boolean> isLoggedIn() {
+        return Single.fromCallable(() -> prefs.getBoolean(KEY_IS_LOGGED_IN, false));
+    }
 
-    public boolean isFirstRun() { return prefs.getBoolean("isFirstRun", true); }
-    public void setFirstRun(boolean value) { prefs.edit().putBoolean("isFirstRun", value).apply(); }
+    public Completable setLoggedIn(boolean value) {
+        return Completable.fromAction(() -> 
+            prefs.edit().putBoolean(KEY_IS_LOGGED_IN, value).apply()
+        );
+    }
+
+    public Single<Boolean> isFirstRun() {
+        return Single.fromCallable(() -> prefs.getBoolean(KEY_IS_FIRST_RUN, true));
+    }
+
+    public Completable setFirstRun(boolean value) {
+        return Completable.fromAction(() -> 
+            prefs.edit().putBoolean(KEY_IS_FIRST_RUN, value).apply()
+        );
+    }
+
+    public Completable clear() {
+        return Completable.fromAction(() -> prefs.edit().clear().apply());
+    }
 }

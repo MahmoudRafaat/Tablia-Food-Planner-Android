@@ -1,5 +1,6 @@
 package com.example.tablia.presentation.auth.signup.view;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
@@ -19,6 +20,7 @@ import com.example.tablia.R;
 import com.example.tablia.databinding.FragmentSignUpBinding;
 import com.example.tablia.presentation.auth.signup.presenter.SignUpPresenter;
 import com.example.tablia.presentation.auth.signup.presenter.SignUpPresenterImp;
+import com.example.tablia.presentation.home.view.HomeActivity;
 import com.google.android.material.snackbar.Snackbar;
 
 public class SignUpFragment extends Fragment implements SignUpView {
@@ -124,8 +126,10 @@ public class SignUpFragment extends Fragment implements SignUpView {
 
     @Override
     public void onSignUpSuccess() {
-        if (getView() != null) {
-            Snackbar.make(getView(), "Account created successfully!", Snackbar.LENGTH_LONG).show();
+        if (getActivity() != null) {
+            Intent intent = new Intent(getActivity(), HomeActivity.class);
+            startActivity(intent);
+            getActivity().finish();
         }
     }
 

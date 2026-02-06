@@ -1,5 +1,6 @@
 package com.example.tablia.presentation.auth.login.view;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -17,6 +18,7 @@ import com.example.tablia.R;
 import com.example.tablia.databinding.FragmentLoginBinding;
 import com.example.tablia.presentation.auth.login.presenter.LoginPresenter;
 import com.example.tablia.presentation.auth.login.presenter.LoginPresenterImp;
+import com.example.tablia.presentation.home.view.HomeActivity;
 import com.example.tablia.utils.GoogleSignInHelper;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -147,6 +149,9 @@ public class LoginFragment extends Fragment implements LoginView {
     public void onLoginSuccess() {
         hideLoading();
         Log.d("LOGIN_SUCCESS", "Login successful. Navigating to home...");
+        Intent intent = new Intent(getActivity(), HomeActivity.class);
+        startActivity(intent);
+        getActivity().finish();
     }
 
     @Override

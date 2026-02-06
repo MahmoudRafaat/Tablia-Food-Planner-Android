@@ -6,6 +6,9 @@ import android.net.Uri;
 import com.example.tablia.data.auth.datasource.local.AuthLocalDataSource;
 import com.example.tablia.data.auth.datasource.remote.*;
 
+import io.reactivex.rxjava3.core.Completable;
+import io.reactivex.rxjava3.core.Single;
+
 public class AuthRepository {
     private final AuthRemoteDataSource remote;
     private final AuthLocalDataSource local;
@@ -27,8 +30,9 @@ public class AuthRepository {
         remote.loginWithGoogle(token, callback);
     }
 
-    public boolean isLoggedIn() { return local.isLoggedIn(); }
-    public void setLoggedIn(boolean value) { local.setLoggedIn(value); }
-    public boolean isFirstRun() { return local.isFirstRun(); }
-    public void setFirstRun(boolean value) { local.setFirstRun(value); }
+    public Single<Boolean> isLoggedIn() { return local.isLoggedIn(); }
+    public Completable setLoggedIn(boolean value) { return local.setLoggedIn(value); }
+    public Single<Boolean> isFirstRun() { return local.isFirstRun(); }
+    public Completable setFirstRun(boolean value) { return local.setFirstRun(value); }
+    public Completable logout() { return local.clear(); }
 }
