@@ -31,10 +31,37 @@
     <string name="minutes_suffix">%s min</string>
     <string name="kcal_suffix">%s kcal</string>
 
+    <!-- Search Screen -->
+    <string name="search_hint">Search recipes, ingredients...</string>
+    <string name="explore_by">Explore by</string>
+    <string name="browse_by_food_type">Browse by food type</string>
+    <string name="countries">Countries</string>
+    <string name="discover_cuisines_worldwide">Discover cuisines worldwide</string>
+    <string name="ingredients">Ingredients</string>
+    <string name="search_by_what_you_have">Search by what you have</string>
+    <string name="more_suffix">+%d more</string>
+    <string name="select_category">Select Category</string>
+    <string name="select_country">Select Country</string>
+    <string name="select_ingredient">Select Ingredient</string>
+    <string name="found_recipes_count">Found %d recipes</string>
+    <string name="filters">Filters</string>
+
+    <!-- Favorites Screen -->
+    <string name="favorites">Favorites</string>
+    <string name="saved_meals_count">%d saved meals</string>
+    <string name="no_favorite_recipes">You have no favorite recipes yet.</string>
+
+    <!-- Meal Details -->
+    <string name="instructions">Instructions</string>
+    <string name="add_to_planner">Add to Planner</string>
+    <string name="watch_cooking_video">Watch Cooking Video</string>
+    <string name="meal_details">Meal Details</string>
+
+    <!-- Alerts -->
     <string name="ok">OK</string>
     <string name="error">Error</string>
     <string name="no_internet_connection">No Internet Connection</string>
+    <string name="no_recipes_found">No Recipes Found</string>
+
     <string name="no_internet_message">Please check your internet connection and try again.</string>
-    <string name="added_to_favorites">Added to favorites successfully</string>
-    <string name="removed_from_favorites">Removed from favorites</string>
 </resources>
