@@ -1,4 +1,4 @@
-package com.example.tablia.presentation.search.presenter;
+package com.example.tablia.presentation.search.main_search.presenter;
 
 import com.example.tablia.data.meals.models.Meal;
 

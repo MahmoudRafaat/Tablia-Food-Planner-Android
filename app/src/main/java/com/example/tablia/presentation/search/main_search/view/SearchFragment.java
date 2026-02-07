@@ -1,4 +1,4 @@
-package com.example.tablia.presentation.search.view;
+package com.example.tablia.presentation.search.main_search.view;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -23,15 +23,15 @@ import com.example.tablia.data.meals.models.Meal;
 import com.example.tablia.databinding.FragmentSearchBinding;
 import com.example.tablia.presentation.home.view.PopularMealAdapter;
 import com.example.tablia.presentation.meal_details.view.MealDetailsActivity;
-import com.example.tablia.presentation.search.presenter.SearchPresenter;
-import com.example.tablia.presentation.search.presenter.SearchPresenterImpl;
+import com.example.tablia.presentation.search.main_search.presenter.SearchPresenter;
+import com.example.tablia.presentation.search.main_search.presenter.SearchPresenterImpl;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 
 import java.util.Collections;
 import java.util.List;
 
-public class SearchFragment extends Fragment implements com.example.tablia.presentation.search.view.SearchView, PopularMealAdapter.OnMealClickListener {
+public class SearchFragment extends Fragment implements com.example.tablia.presentation.search.main_search.view.SearchView, PopularMealAdapter.OnMealClickListener {
 
     private FragmentSearchBinding binding;
     private SearchPresenter presenter;

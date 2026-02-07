@@ -1,4 +1,4 @@
-package com.example.tablia.presentation.search.view;
+package com.example.tablia.presentation.search.main_search.view;
 
 import com.example.tablia.data.meals.models.Area;
 import com.example.tablia.data.meals.models.Category;

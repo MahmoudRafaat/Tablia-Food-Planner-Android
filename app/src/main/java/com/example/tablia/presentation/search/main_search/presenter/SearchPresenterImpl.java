@@ -1,9 +1,9 @@
-package com.example.tablia.presentation.search.presenter;
+package com.example.tablia.presentation.search.main_search.presenter;
 
 import com.example.tablia.data.meals.datasource.MealsRepository;
 import com.example.tablia.data.meals.models.Meal;
 import com.example.tablia.data.meals.models.MealResponse;
-import com.example.tablia.presentation.search.view.SearchView;
+import com.example.tablia.presentation.search.main_search.view.SearchView;
 
 import java.util.Collections;
 import java.util.concurrent.TimeUnit;
