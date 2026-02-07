@@ -79,6 +79,8 @@ dependencies {
     implementation("io.reactivex.rxjava3:rxjava:3.1.6")
     implementation("io.reactivex.rxjava3:rxandroid:3.0.2")
 
+    // YouTube Player
+    implementation("com.pierfrancescosoffritti.androidyoutubeplayer:core:13.0.0")
 
     val room_version = "2.8.4"
 

@@ -37,4 +37,5 @@
             app:exitAnim="@animator/nav_default_exit_anim"
             app:popEnterAnim="@animator/nav_default_pop_enter_anim" />
     </fragment>
+
 </navigation>
