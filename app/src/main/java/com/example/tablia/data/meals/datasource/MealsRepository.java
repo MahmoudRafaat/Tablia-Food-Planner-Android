@@ -1,5 +1,8 @@
 package com.example.tablia.data.meals.datasource;
 
+import android.content.Context;
+
+import com.example.tablia.data.db.AppDatabase;
 import com.example.tablia.data.meals.datasource.local.MealsLocalDataSource;
 import com.example.tablia.data.meals.datasource.remote.MealsRemoteDataSoucre;
 import com.example.tablia.data.meals.models.AreaResponse;
@@ -21,19 +24,19 @@ public class MealsRepository {
     private final MealsRemoteDataSoucre remoteDataSource;
     private static MealsRepository instance = null;
 
-    private MealsRepository(MealsLocalDataSource localDataSource, MealsRemoteDataSoucre remoteDataSource) {
-        this.localDataSource = localDataSource;
-        this.remoteDataSource = remoteDataSource;
+    private MealsRepository(Context context) {
+        this.localDataSource = MealsLocalDataSource.getInstance(AppDatabase.getInstance(context).mealDao());
+        this.remoteDataSource = MealsRemoteDataSoucre.getInstance();
     }
 
-    public static MealsRepository getInstance(MealsLocalDataSource localDataSource, MealsRemoteDataSoucre remoteDataSource) {
+    public static MealsRepository getInstance(Context context) {
         if (instance == null) {
-            instance = new MealsRepository(localDataSource, remoteDataSource);
+            instance = new MealsRepository(context);
         }
         return instance;
     }
 
-    // Remote methods
+    // Remote methods (TheMealDB)
     public Single<MealResponse> getRandomMeal() {
         return remoteDataSource.getRandomMeal();
     }
@@ -69,18 +72,24 @@ public class MealsRepository {
     public Observable<MealResponse> filterByArea(String area) {
         return remoteDataSource.filterByArea(area);
     }
+    public Observable<MealResponse> searchMealsByName(String name) {
+        return remoteDataSource.searchMealsByName(name);
+    }
 
-    // Local methods
+
+    // Local & Remote methods (Favorites)
     public Observable<List<Meal>> getAllFavMeals() {
         return localDataSource.getAllFavMeals();
     }
 
     public Completable insertFavMeal(Meal meal) {
-        return localDataSource.insertFavMeal(meal);
+        return localDataSource.insertFavMeal(meal)
+                .andThen(remoteDataSource.addFavorite(meal));
     }
 
     public Completable deleteFavMeal(Meal meal) {
-        return localDataSource.deleteFavMeal(meal);
+        return localDataSource.deleteFavMeal(meal)
+                .andThen(remoteDataSource.removeFavorite(meal.getIdMeal()));
     }
 
     public Single<Boolean> isMealFavorite(String id) {
@@ -95,24 +104,19 @@ public class MealsRepository {
         return localDataSource.clearAllFavorites();
     }
 
+    // Local & Remote methods (Appointments)
     public Observable<List<MealAppointment>> getAllAppointments() {
         return localDataSource.getAllAppointments();
     }
 
     public Completable insertAppointment(MealAppointment appointment) {
-        return localDataSource.insertAppointment(appointment);
-    }
-
-    public Completable insertAllFavMeals(List<Meal> meals) {
-        return localDataSource.insertAllFavMeals(meals);
-    }
-
-    public Completable insertAllAppointments(List<MealAppointment> appointments) {
-        return localDataSource.insertAllAppointments(appointments);
+        return localDataSource.insertAppointment(appointment)
+                .andThen(remoteDataSource.addAppointment(appointment));
     }
 
     public Completable deleteAppointment(MealAppointment appointment) {
-        return localDataSource.deleteAppointment(appointment);
+        return localDataSource.deleteAppointment(appointment)
+                .andThen(remoteDataSource.removeAppointment(appointment.getId()));
     }
 
     public Completable clearAllAppointments() {
@@ -121,5 +125,16 @@ public class MealsRepository {
 
     public Observable<List<MealAppointment>> getAppointmentsForMeal(String mealId) {
         return localDataSource.getAppointmentsForMeal(mealId);
+    }
+
+    // Sync methods
+    public Completable syncFavoritesWithRemote() {
+        return remoteDataSource.getFavorites()
+                .flatMapCompletable(localDataSource::insertAllFavMeals);
+    }
+
+    public Completable syncAppointmentsWithRemote() {
+        return remoteDataSource.getAppointments()
+                .flatMapCompletable(localDataSource::insertAllAppointments);
     }
 }

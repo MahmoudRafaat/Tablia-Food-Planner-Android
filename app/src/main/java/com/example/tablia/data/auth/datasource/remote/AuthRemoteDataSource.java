@@ -13,7 +13,7 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class AuthRemoteDataSource {
     private final FirebaseAuth mAuth = FirebaseAuth.getInstance();
-    private final FirebaseManager firebaseManager = new FirebaseManager();
+    private final FirebaseManager firebaseManager = FirebaseManager.getInstance();
 
     public void registerWithEmail(String email, String password, String name, Uri imageUri, Context context, AuthNetworkCallback callback) {
         mAuth.createUserWithEmailAndPassword(email, password)
