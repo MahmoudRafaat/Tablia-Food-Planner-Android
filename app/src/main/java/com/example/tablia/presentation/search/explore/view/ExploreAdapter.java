@@ -56,8 +56,7 @@ public class ExploreAdapter extends RecyclerView.Adapter<ExploreAdapter.ViewHold
         } else if (item instanceof Area) {
             Area area = (Area) item;
             name = area.getStrArea();
-            // No images for areas in API, using placeholder or initial
-            imageUrl = "https://www.themealdb.com/images/ingredients/" + name + ".png"; // This is a hack, usually areas don't have images
+            imageUrl = "https://www.themealdb.com/images/ingredients/" + name + ".png";
         } else if (item instanceof Ingredient) {
             Ingredient ing = (Ingredient) item;
             name = ing.getStrIngredient();
@@ -67,9 +66,7 @@ public class ExploreAdapter extends RecyclerView.Adapter<ExploreAdapter.ViewHold
         holder.tvName.setText(name);
         
         if (item instanceof Area) {
-             // For areas, we can use a generic globe icon as requested or try to fetch a flag
-             holder.ivIcon.setImageResource(R.drawable.ic_chef_hat); // Placeholder
-             // Optionally use a library for flags or initials
+             holder.ivIcon.setImageResource(R.drawable.ic_chef_hat);
         } else {
             Glide.with(holder.itemView.getContext())
                     .load(imageUrl)
