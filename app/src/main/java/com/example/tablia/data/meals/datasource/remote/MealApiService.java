@@ -18,6 +18,9 @@ public interface MealApiService {
     Single<MealResponse> getMealById(@Query("i") String id);
 
     @GET("search.php")
+    Observable<MealResponse> searchMealsByName(@Query("s") String name);
+
+    @GET("search.php")
     Observable<MealResponse> searchMealsByFirstLetter(@Query("f") String firstLetter);
 
     @GET("list.php?c=list")
