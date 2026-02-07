@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_main"
+    app:startDestination="@id/navigation_home">
+
+    <fragment
+        android:id="@+id/navigation_home"
+        android:name="com.example.tablia.presentation.home.view.HomeFragment"
+        android:label="Home"
+        tools:layout="@layout/fragment_home" />
+
+    <fragment
+        android:id="@+id/navigation_search"
+        android:name="com.example.tablia.presentation.search.main_search.view.SearchFragment"
+        android:label="Search"
+        tools:layout="@layout/fragment_search">
+        <action
+            android:id="@+id/action_searchFragment_to_exploreListFragment"
+            app:destination="@id/exploreListFragment" />
+        <action
+            android:id="@+id/action_searchFragment_to_mealListFragment"
+            app:destination="@id/mealListFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/exploreListFragment"
+        android:name="com.example.tablia.presentation.search.explore.view.ExploreListFragment"
+        android:label="Explore"
+        tools:layout="@layout/fragment_explore_list">
+        <argument
+            android:name="type"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_exploreListFragment_to_mealListFragment"
+            app:destination="@id/mealListFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/mealListFragment"
+        android:name="com.example.tablia.presentation.search.meallist.view.MealListFragment"
+        android:label="Meals"
+        tools:layout="@layout/fragment_meal_list">
+        <argument
+            android:name="filterType"
+            app:argType="string" />
+        <argument
+            android:name="filterValue"
+            app:argType="string" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_favorite"
+        android:name="com.example.tablia.presentation.favorites.view.FavoritesFragment"
+        android:label="Favorites"
+        tools:layout="@layout/fragment_favorites" />
+
+    <fragment
+        android:id="@+id/navigation_calendar"
+        android:name="com.example.tablia.presentation.home.view.HomeFragment"
+        android:label="Planner" />
+
+    <fragment
+        android:id="@+id/navigation_profile"
+        android:name="com.example.tablia.presentation.home.view.HomeFragment"
+        android:label="Profile" />
+
+</navigation>
