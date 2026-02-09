@@ -43,7 +43,6 @@ public class HomeFragment extends Fragment implements HomeView, PopularMealAdapt
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
         MealsRepository repository = MealsRepository.getInstance(getContext());
         presenter = new HomePresenterImpl(this, repository);
 
@@ -63,7 +62,7 @@ public class HomeFragment extends Fragment implements HomeView, PopularMealAdapt
 
         binding.cvMealOfTheDay.setOnClickListener(v -> {
             if (currentRandomMeal != null) {
-                navigateToDetails(currentRandomMeal.getIdMeal());
+                navigateToDetails(currentRandomMeal);
             }
         });
     }
@@ -74,14 +73,15 @@ public class HomeFragment extends Fragment implements HomeView, PopularMealAdapt
         binding.rvPopularMeals.setAdapter(popularMealAdapter);
     }
 
-    private void navigateToDetails(String mealId) {
+    private void navigateToDetails(Meal meal) {
         Intent intent = new Intent(requireContext(), MealDetailsActivity.class);
-        intent.putExtra("mealId", mealId);
+        intent.putExtra("meal", meal);
         startActivity(intent);
     }
 
     @Override
     public void showRandomMeal(Meal meal) {
+        if (binding == null) return;
         this.currentRandomMeal = meal;
         binding.tvMealName.setText(meal.getStrMeal());
         binding.tvMealArea.setText(meal.getStrArea());
@@ -93,6 +93,7 @@ public class HomeFragment extends Fragment implements HomeView, PopularMealAdapt
 
     @Override
     public void showPopularMeals(List<Meal> meals) {
+        if (binding == null) return;
         popularMealAdapter.setList(meals);
     }
 
@@ -144,14 +145,18 @@ public class HomeFragment extends Fragment implements HomeView, PopularMealAdapt
     public void updateFavoriteStatus(String mealId, boolean isFavorite) {
         if (currentRandomMeal != null && currentRandomMeal.getIdMeal().equals(mealId)) {
             currentRandomMeal.setFavorite(isFavorite);
-            if (isFavorite) {
-                binding.btnFavMealOfDay.setImageResource(R.drawable.ic_heart_filled);
-            } else {
-                binding.btnFavMealOfDay.setImageResource(R.drawable.ic_heart);
+            if (binding != null) {
+                if (isFavorite) {
+                    binding.btnFavMealOfDay.setImageResource(R.drawable.ic_heart_filled);
+                } else {
+                    binding.btnFavMealOfDay.setImageResource(R.drawable.ic_heart);
+                }
+                binding.btnFavMealOfDay.setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.primary)));
             }
-            binding.btnFavMealOfDay.setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.primary)));
         }
-        popularMealAdapter.updateFavoriteStatus(mealId, isFavorite);
+        if (popularMealAdapter != null) {
+            popularMealAdapter.updateFavoriteStatus(mealId, isFavorite);
+        }
     }
 
     @Override
@@ -161,20 +166,20 @@ public class HomeFragment extends Fragment implements HomeView, PopularMealAdapt
 
     @Override
     public void onMealClick(Meal meal) {
-        navigateToDetails(meal.getIdMeal());
+        navigateToDetails(meal);
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        if (presenter instanceof HomePresenterImpl) {
+            ((HomePresenterImpl) presenter).dispose();
+        }
         binding = null;
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (presenter instanceof HomePresenterImpl) {
-            ((HomePresenterImpl) presenter).dispose();
-        }
     }
 }

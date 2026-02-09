@@ -35,6 +35,9 @@ public interface MealDao {
     @Query("SELECT * FROM meal_appointments ORDER BY dateTimestamp ASC")
     Observable<List<MealAppointment>> getAllAppointments();
 
+    @Query("SELECT * FROM meal_appointments WHERE dateTimestamp = :timestamp")
+    Observable<List<MealAppointment>> getAppointmentsByDate(long timestamp);
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     Completable insertAppointment(MealAppointment appointment);
 
@@ -47,8 +50,6 @@ public interface MealDao {
     @Delete
     Completable deleteAppointment(MealAppointment appointment);
 
-    @Query("SELECT * FROM meal_appointments WHERE mealId = :mealId")
-    Observable<List<MealAppointment>> getAppointmentsForMeal(String mealId);
 
     @Query("DELETE FROM meals")
     Completable clearAllFavorites();

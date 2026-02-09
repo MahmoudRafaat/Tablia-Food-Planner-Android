@@ -5,8 +5,12 @@
         <item name="cornerSize">50%</item>
     </style>
 
-
     <style name="CircleImage">
         <item name="cornerSize">50%</item>
+    </style>
+
+    <style name="CustomCalendarTheme" parent="Theme.MaterialComponents.Light">
+        <item name="colorAccent">@color/primary</item>
+        <item name="colorPrimary">@color/primary</item>
     </style>
 </resources>

@@ -1,9 +1,11 @@
 package com.example.tablia.presentation.meal_details.view;
 
+import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import com.bumptech.glide.Glide;
 import com.example.tablia.R;
@@ -13,6 +15,9 @@ import com.example.tablia.databinding.ActivityMealDetailsBinding;
 import com.example.tablia.presentation.meal_details.presenter.MealDetailsPresenter;
 import com.example.tablia.presentation.meal_details.presenter.MealDetailsPresenterImpl;
 import com.example.tablia.utils.VideoHelper;
+import com.google.android.material.snackbar.Snackbar;
+
+import java.util.Calendar;
 
 public class MealDetailsActivity extends AppCompatActivity implements MealDetailsView {
 
@@ -20,7 +25,7 @@ public class MealDetailsActivity extends AppCompatActivity implements MealDetail
     private MealDetailsPresenter presenter;
     private IngredientAdapter ingredientsAdapter;
     private Meal currentMeal;
-    private boolean isFavorite = false;
+    private boolean isFavorite ;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -35,11 +40,12 @@ public class MealDetailsActivity extends AppCompatActivity implements MealDetail
 
         getLifecycle().addObserver(binding.youtubePlayerView);
 
-        String mealId = getIntent().getStringExtra("mealId");
-        if (mealId != null) {
-            presenter.getMealDetails(mealId);
-            presenter.checkIsFavorite(mealId);
+        Meal meal = getIntent().getParcelableExtra("meal");
+        if (meal != null) {
+            presenter.getMealDetails(meal);
+            presenter.checkIsFavorite(meal.getIdMeal());
         }
+
 
         binding.toggleGroup.addOnButtonCheckedListener((group, checkedId, isChecked) -> {
             if (isChecked) {
@@ -62,6 +68,38 @@ public class MealDetailsActivity extends AppCompatActivity implements MealDetail
                 }
             }
         });
+
+        binding.btnAddToPlanner.setOnClickListener(v -> {
+            if (currentMeal != null) {
+                showDatePicker();
+            }
+        });
+    }
+
+    private void showDatePicker() {
+        final Calendar c = Calendar.getInstance();
+        int year = c.get(Calendar.YEAR);
+        int month = c.get(Calendar.MONTH);
+        int day = c.get(Calendar.DAY_OF_MONTH);
+
+        DatePickerDialog datePickerDialog = new DatePickerDialog(this,
+                (view, year1, monthOfYear, dayOfMonth) -> {
+                    Calendar selectedDate = Calendar.getInstance();
+                    selectedDate.set(year1, monthOfYear, dayOfMonth);
+                    selectedDate.set(Calendar.HOUR_OF_DAY, 0);
+                    selectedDate.set(Calendar.MINUTE, 0);
+                    selectedDate.set(Calendar.SECOND, 0);
+                    selectedDate.set(Calendar.MILLISECOND, 0);
+                    
+                    presenter.addToPlan(currentMeal, selectedDate.getTimeInMillis());
+                }, year, month, day);
+
+        datePickerDialog.getDatePicker().setMinDate(c.getTimeInMillis());
+        
+        c.add(Calendar.DAY_OF_YEAR, 6);
+        datePickerDialog.getDatePicker().setMaxDate(c.getTimeInMillis());
+
+        datePickerDialog.show();
     }
 
     private void setupToolbar() {
@@ -75,6 +113,7 @@ public class MealDetailsActivity extends AppCompatActivity implements MealDetail
     private void setupRecyclerView() {
         ingredientsAdapter = new IngredientAdapter(null);
         binding.rvIngredients.setLayoutManager(new LinearLayoutManager(this));
+        ingredientsAdapter.setList(null);
         binding.rvIngredients.setAdapter(ingredientsAdapter);
     }
 
@@ -103,19 +142,36 @@ public class MealDetailsActivity extends AppCompatActivity implements MealDetail
         );
         
         binding.cvYoutube.setVisibility(View.VISIBLE);
+        binding.nestedScrollView.setVisibility(View.VISIBLE);
+        binding.btnAddToPlanner.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void showError(String message) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+        Snackbar snackbar = Snackbar.make(binding.getRoot(), message, Snackbar.LENGTH_LONG);
+        snackbar.setBackgroundTint(ContextCompat.getColor(this, R.color.primary));
+        snackbar.setTextColor(ContextCompat.getColor(this, R.color.white));
+        snackbar.show();
+    }
+
+    @Override
+    public void showSuccess(String message) {
+        Snackbar snackbar = Snackbar.make(binding.getRoot(), message, Snackbar.LENGTH_LONG);
+        snackbar.setBackgroundTint(ContextCompat.getColor(this, R.color.primary));
+        snackbar.setTextColor(ContextCompat.getColor(this, R.color.white));
+        snackbar.show();
     }
 
     @Override
     public void showLoading() {
+        binding.pbMealDetails.setVisibility(View.VISIBLE);
+        binding.nestedScrollView.setVisibility(View.GONE);
+        binding.btnAddToPlanner.setVisibility(View.GONE);
     }
 
     @Override
     public void hideLoading() {
+        binding.pbMealDetails.setVisibility(View.GONE);
     }
 
     @Override

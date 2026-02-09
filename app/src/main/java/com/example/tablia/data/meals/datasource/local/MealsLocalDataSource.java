@@ -53,6 +53,10 @@ public class MealsLocalDataSource {
         return mealDao.getAllAppointments();
     }
 
+    public Observable<List<MealAppointment>> getAppointmentsByDate(long timestamp) {
+        return mealDao.getAppointmentsByDate(timestamp);
+    }
+
     public Completable insertAppointment(MealAppointment appointment) {
         return mealDao.insertAppointment(appointment);
     }
@@ -73,7 +77,5 @@ public class MealsLocalDataSource {
         return mealDao.clearAllAppointments();
     }
 
-    public Observable<List<MealAppointment>> getAppointmentsForMeal(String mealId) {
-        return mealDao.getAppointmentsForMeal(mealId);
-    }
+
 }

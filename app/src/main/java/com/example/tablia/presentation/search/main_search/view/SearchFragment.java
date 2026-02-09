@@ -36,6 +36,7 @@ public class SearchFragment extends Fragment implements com.example.tablia.prese
     private FragmentSearchBinding binding;
     private SearchPresenter presenter;
     private PopularMealAdapter searchAdapter;
+    private MealsRepository repository;
 
     @Nullable
     @Override
@@ -48,28 +49,11 @@ public class SearchFragment extends Fragment implements com.example.tablia.prese
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        initPresenter();
-        setupRecyclerView();
-        setupClickListeners();
-        setupSearchView();
-
-        presenter.getCategories();
-        presenter.getAreas();
-        presenter.getIngredients();
-    }
-
-    private void initPresenter() {
-        MealsRepository repository = MealsRepository.getInstance(getContext());
+ repository= MealsRepository.getInstance(getContext());
         presenter = new SearchPresenterImpl(this, repository);
-    }
-
-    private void setupRecyclerView() {
         searchAdapter = new PopularMealAdapter(this);
         binding.rvSearchResults.setLayoutManager(new GridLayoutManager(requireContext(), 2));
         binding.rvSearchResults.setAdapter(searchAdapter);
-    }
-
-    private void setupClickListeners() {
         binding.cvCategoriesSearch.setOnClickListener(v -> navigateToExplore("category"));
         binding.cvCountriesSearch.setOnClickListener(v -> navigateToExplore("area"));
         binding.cvIngredientsSearch.setOnClickListener(v -> navigateToExplore("ingredient"));
@@ -77,7 +61,15 @@ public class SearchFragment extends Fragment implements com.example.tablia.prese
             binding.searchView.setQuery("", false);
             showExploreMode();
         });
+
+        setupSearchView();
+
+        presenter.getCategories();
+        presenter.getAreas();
+        presenter.getIngredients();
     }
+
+
 
     private void setupSearchView() {
         binding.searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -221,7 +213,7 @@ public class SearchFragment extends Fragment implements com.example.tablia.prese
     @Override
     public void onMealClick(Meal meal) {
         Intent intent = new Intent(requireContext(), MealDetailsActivity.class);
-        intent.putExtra("mealId", meal.getIdMeal());
+        intent.putExtra("meal", meal);
         startActivity(intent);
     }
 
