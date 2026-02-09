@@ -148,7 +148,7 @@ public class MealListFragment extends Fragment implements MealListView, PopularM
     @Override
     public void onMealClick(Meal meal) {
         Intent intent = new Intent(requireContext(), MealDetailsActivity.class);
-        intent.putExtra("mealId", meal.getIdMeal());
+        intent.putExtra("meal", meal);
         startActivity(intent);
     }
 
