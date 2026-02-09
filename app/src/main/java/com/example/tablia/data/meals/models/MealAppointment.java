@@ -11,27 +11,21 @@ public class MealAppointment implements Parcelable {
     @PrimaryKey
     @NonNull
     private String id;
-    private String mealId;
-    private String mealName;
-    private String mealThumb;
+    private Meal meal;
     private long dateTimestamp;
 
     public MealAppointment() {
     }
 
-    public MealAppointment(@NonNull String id, String mealId, String mealName, String mealThumb, long dateTimestamp) {
+    public MealAppointment(@NonNull String id, Meal meal, long dateTimestamp) {
         this.id = id;
-        this.mealId = mealId;
-        this.mealName = mealName;
-        this.mealThumb = mealThumb;
+        this.meal = meal;
         this.dateTimestamp = dateTimestamp;
     }
 
     protected MealAppointment(Parcel in) {
         id = in.readString();
-        mealId = in.readString();
-        mealName = in.readString();
-        mealThumb = in.readString();
+        meal = in.readParcelable(Meal.class.getClassLoader());
         dateTimestamp = in.readLong();
     }
 
@@ -55,9 +49,7 @@ public class MealAppointment implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(id);
-        dest.writeString(mealId);
-        dest.writeString(mealName);
-        dest.writeString(mealThumb);
+        dest.writeParcelable(meal, flags);
         dest.writeLong(dateTimestamp);
     }
 
@@ -65,14 +57,8 @@ public class MealAppointment implements Parcelable {
     public String getId() { return id; }
     public void setId(@NonNull String id) { this.id = id; }
 
-    public String getMealId() { return mealId; }
-    public void setMealId(String mealId) { this.mealId = mealId; }
-
-    public String getMealName() { return mealName; }
-    public void setMealName(String mealName) { this.mealName = mealName; }
-
-    public String getMealThumb() { return mealThumb; }
-    public void setMealThumb(String mealThumb) { this.mealThumb = mealThumb; }
+    public Meal getMeal() { return meal; }
+    public void setMeal(Meal meal) { this.meal = meal; }
 
     public long getDateTimestamp() { return dateTimestamp; }
     public void setDateTimestamp(long dateTimestamp) { this.dateTimestamp = dateTimestamp; }

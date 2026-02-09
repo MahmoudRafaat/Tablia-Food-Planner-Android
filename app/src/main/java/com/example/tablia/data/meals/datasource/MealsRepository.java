@@ -96,17 +96,17 @@ public class MealsRepository {
         return localDataSource.isMealFavorite(id);
     }
 
-    public Single<Meal> getFavMealById(String id) {
-        return localDataSource.getFavMealById(id);
-    }
 
     public Completable clearAllFavorites() {
         return localDataSource.clearAllFavorites();
     }
 
-    // Local & Remote methods (Appointments)
     public Observable<List<MealAppointment>> getAllAppointments() {
         return localDataSource.getAllAppointments();
+    }
+
+    public Observable<List<MealAppointment>> getAppointmentsByDate(long timestamp) {
+        return localDataSource.getAppointmentsByDate(timestamp);
     }
 
     public Completable insertAppointment(MealAppointment appointment) {
@@ -123,9 +123,7 @@ public class MealsRepository {
         return localDataSource.clearAllAppointments();
     }
 
-    public Observable<List<MealAppointment>> getAppointmentsForMeal(String mealId) {
-        return localDataSource.getAppointmentsForMeal(mealId);
-    }
+
 
     // Sync methods
     public Completable syncFavoritesWithRemote() {
