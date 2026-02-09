@@ -5,7 +5,8 @@ import com.example.tablia.data.meals.models.Meal;
 public interface HomePresenter {
     void getRandomMeal();
     void getPopularMeals();
-    void onMealClick(String mealId);
+    void addToFavorite(Meal meal);
+    void removeFromFavorite(Meal meal);
     void toggleFavorite(Meal meal);
     void checkIsFavorite(Meal meal);
 }

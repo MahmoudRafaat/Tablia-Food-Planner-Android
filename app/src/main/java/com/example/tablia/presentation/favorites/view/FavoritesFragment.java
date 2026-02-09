@@ -107,7 +107,7 @@ public class FavoritesFragment extends Fragment implements FavoritesView, Favori
     @Override
     public void onMealClick(Meal meal) {
         Intent intent = new Intent(requireContext(), MealDetailsActivity.class);
-        intent.putExtra("mealId", meal.getIdMeal());
+        intent.putExtra("meal", meal);
         startActivity(intent);
     }
 

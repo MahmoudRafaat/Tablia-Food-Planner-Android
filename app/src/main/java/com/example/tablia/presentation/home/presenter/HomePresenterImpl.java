@@ -52,10 +52,7 @@ public class HomePresenterImpl implements HomePresenter {
                 ));
     }
 
-    @Override
-    public void onMealClick(String mealId) {
-        // Navigate to details
-    }
+
 
     @Override
     public void toggleFavorite(Meal meal) {
@@ -73,8 +70,8 @@ public class HomePresenterImpl implements HomePresenter {
                         throwable -> view.showError(throwable.getMessage())
                 ));
     }
-
-    private void addToFavorite(Meal meal) {
+    @Override
+     public void addToFavorite(Meal meal) {
         meal.setFavorite(true);
         disposable.add(repository.insertFavMeal(meal)
                 .subscribeOn(Schedulers.io())
@@ -87,8 +84,9 @@ public class HomePresenterImpl implements HomePresenter {
                         throwable -> view.showError(throwable.getMessage())
                 ));
     }
+    @Override
 
-    private void removeFromFavorite(Meal meal) {
+     public void removeFromFavorite(Meal meal) {
         meal.setFavorite(false);
         disposable.add(repository.deleteFavMeal(meal)
                 .subscribeOn(Schedulers.io())

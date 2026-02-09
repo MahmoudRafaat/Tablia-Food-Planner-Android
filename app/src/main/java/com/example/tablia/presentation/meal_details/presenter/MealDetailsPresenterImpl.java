@@ -2,7 +2,10 @@ package com.example.tablia.presentation.meal_details.presenter;
 
 import com.example.tablia.data.meals.datasource.MealsRepository;
 import com.example.tablia.data.meals.models.Meal;
+import com.example.tablia.data.meals.models.MealAppointment;
 import com.example.tablia.presentation.meal_details.view.MealDetailsView;
+
+import java.util.UUID;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
@@ -20,25 +23,34 @@ public class MealDetailsPresenterImpl implements MealDetailsPresenter {
     }
 
     @Override
-    public void getMealDetails(String mealId) {
+    public void getMealDetails(Meal meal) {
+        if (meal == null) return;
+        
         view.showLoading();
-        disposable.add(repository.getMealById(mealId)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                        response -> {
-                            view.hideLoading();
-                            if (response.getMeals() != null && !response.getMeals().isEmpty()) {
-                                view.showMealDetails(response.getMeals().get(0));
-                            } else {
-                                view.showError("Meal not found");
+        
+        // If the meal already has instructions, it's likely a full meal object
+        if (meal.getStrInstructions() != null && !meal.getStrInstructions().isEmpty()) {
+            view.showMealDetails(meal);
+            view.hideLoading();
+        } else {
+            disposable.add(repository.getMealById(meal.getIdMeal())
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(
+                            response -> {
+                                view.hideLoading();
+                                if (response != null && response.getMeals() != null && !response.getMeals().isEmpty()) {
+                                    view.showMealDetails(response.getMeals().get(0));
+                                } else {
+                                    view.showError("Meal details not found");
+                                }
+                            },
+                            throwable -> {
+                                view.hideLoading();
+                                view.showError(throwable.getMessage());
                             }
-                        },
-                        throwable -> {
-                            view.hideLoading();
-                            view.showError(throwable.getMessage());
-                        }
-                ));
+                    ));
+        }
     }
 
     @Override
@@ -70,6 +82,22 @@ public class MealDetailsPresenterImpl implements MealDetailsPresenter {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         view::onFavoriteStatusChanged,
+                        throwable -> view.showError(throwable.getMessage())
+                ));
+    }
+
+    @Override
+    public void addToPlan(Meal meal, long timestamp) {
+        MealAppointment appointment = new MealAppointment(
+                UUID.randomUUID().toString(),
+                meal,
+                timestamp
+        );
+        disposable.add(repository.insertAppointment(appointment)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        () -> view.showSuccess("Meal added to plan"),
                         throwable -> view.showError(throwable.getMessage())
                 ));
     }
