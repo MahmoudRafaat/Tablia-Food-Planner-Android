@@ -58,8 +58,9 @@
 
     <fragment
         android:id="@+id/navigation_calendar"
-        android:name="com.example.tablia.presentation.home.view.HomeFragment"
-        android:label="Planner" />
+        android:name="com.example.tablia.presentation.planner.view.PlannerFragment"
+        android:label="Planner"
+        tools:layout="@layout/fragment_planner" />
 
     <fragment
         android:id="@+id/navigation_profile"
