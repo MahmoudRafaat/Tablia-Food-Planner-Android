@@ -4,13 +4,17 @@ import android.content.Context;
 import android.net.Uri;
 
 import com.example.tablia.data.auth.AuthRepository;
-import com.example.tablia.data.auth.datasource.remote.AuthNetworkCallback;
 import com.example.tablia.presentation.auth.signup.view.SignUpView;
 
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.disposables.CompositeDisposable;
+import io.reactivex.rxjava3.schedulers.Schedulers;
+
 public class SignUpPresenterImp implements SignUpPresenter {
-    private SignUpView view;
-    private AuthRepository repository;
-    private Context context;
+    private final SignUpView view;
+    private final AuthRepository repository;
+    private final Context context;
+    private final CompositeDisposable disposables = new CompositeDisposable();
 
     public SignUpPresenterImp(SignUpView view, Context context) {
         this.view = view;
@@ -38,24 +42,26 @@ public class SignUpPresenterImp implements SignUpPresenter {
         }
 
         view.showLoading();
-        repository.register(email, password, fullName, imageUri, context, new AuthNetworkCallback() {
-            @Override
-            public void onSuccess() {
-                repository.setLoggedIn(true);
-                repository.setFirstRun(false);
-                view.hideLoading();
-                view.onSignUpSuccess();
-            }
-
-            @Override
-            public void onFailure(String errorMessage) {
-                view.hideLoading();
-                parseError(errorMessage);
-            }
-        });
+        disposables.add(repository.register(email, password, fullName, imageUri, context)
+                .flatMapCompletable(user -> repository.saveUser(user)
+                        .andThen(repository.setLoggedIn(true))
+                        .andThen(repository.setFirstRun(false)))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        () -> {
+                            view.hideLoading();
+                            view.onSignUpSuccess();
+                        },
+                        throwable -> {
+                            view.hideLoading();
+                            parseError(throwable.getMessage());
+                        }
+                ));
     }
 
     private void parseError(String errorMessage) {
+        if (errorMessage == null) return;
         String lowerMsg = errorMessage.toLowerCase();
         if (lowerMsg.contains("email") && lowerMsg.contains("already")) {
             view.showEmailError("This email is already registered.");
@@ -66,5 +72,9 @@ public class SignUpPresenterImp implements SignUpPresenter {
         } else {
             view.showGeneralError(errorMessage);
         }
+    }
+
+    public void detach() {
+        disposables.clear();
     }
 }
