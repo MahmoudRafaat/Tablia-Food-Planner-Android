@@ -88,6 +88,9 @@ public class LoginFragment extends Fragment implements LoginView {
     private void clearErrors() {
         binding.layoutEmail.setError(null);
         binding.layoutPassword.setError(null);
+        binding.layoutEmail.setErrorEnabled(false);
+        binding.layoutPassword.setErrorEnabled(false);
+
     }
 
     @Override
@@ -148,11 +151,11 @@ public class LoginFragment extends Fragment implements LoginView {
     @Override
     public void onLoginSuccess() {
         hideLoading();
-        Log.d("LOGIN_SUCCESS", "Login successful. Navigating to home...");
         Intent intent = new Intent(getActivity(), HomeActivity.class);
         startActivity(intent);
         getActivity().finish();
     }
+
 
     @Override
     public void navigateToSignUp() {

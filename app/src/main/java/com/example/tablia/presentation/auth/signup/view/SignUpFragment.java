@@ -52,11 +52,6 @@ public class SignUpFragment extends Fragment implements SignUpView {
         super.onViewCreated(view, savedInstanceState);
         presenter = new SignUpPresenterImp(this, requireContext());
 
-        setupClickListeners();
-        setupTextWatchers();
-    }
-
-    private void setupClickListeners() {
         binding.btnCreateAccount.setOnClickListener(v -> {
             clearErrors();
             presenter.signUp(
@@ -66,7 +61,6 @@ public class SignUpFragment extends Fragment implements SignUpView {
                     selectedImageUri
             );
         });
-
         binding.tvSignInLink.setOnClickListener(v -> {
             if (getView() != null) {
                 Navigation.findNavController(getView()).navigateUp();
@@ -76,9 +70,6 @@ public class SignUpFragment extends Fragment implements SignUpView {
         binding.fabAddImage.setOnClickListener(v -> {
             pickMedia.launch("image/*");
         });
-    }
-
-    private void setupTextWatchers() {
         TextWatcher watcher = new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
@@ -91,8 +82,9 @@ public class SignUpFragment extends Fragment implements SignUpView {
         };
         binding.etFullName.addTextChangedListener(watcher);
         binding.etSignUpEmail.addTextChangedListener(watcher);
-        binding.etSignUpPassword.addTextChangedListener(watcher);
-    }
+        binding.etSignUpPassword.addTextChangedListener(watcher);    }
+
+
 
     private void clearErrors() {
         binding.layoutFullName.setError(null);
