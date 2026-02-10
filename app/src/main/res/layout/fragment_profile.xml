@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true"
@@ -12,23 +11,18 @@
         android:layout_height="wrap_content"
         android:paddingBottom="24dp">
 
-        <View
-            android:id="@+id/header_background"
-            android:layout_width="match_parent"
-            android:layout_height="180dp"
-            android:background="@drawable/gradient_orange_red"
-            app:layout_constraintTop_toTopOf="parent" />
-
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/profile_image_container"
-            android:layout_width="120dp"
-            android:layout_height="120dp"
-            app:cardCornerRadius="60dp"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="32dp"
+            app:cardCornerRadius="100dp"
             app:cardElevation="4dp"
-            app:layout_constraintBottom_toBottomOf="@id/header_background"
+            app:layout_constraintDimensionRatio="1:1"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/header_background"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_percent="0.35"
             app:strokeColor="@color/white"
             app:strokeWidth="4dp">
 
@@ -38,8 +32,8 @@
                 android:layout_height="match_parent"
                 android:scaleType="centerCrop"
                 android:src="@drawable/ic_person_placeholder" />
-        </com.google.android.material.card.MaterialCardView>
 
+        </com.google.android.material.card.MaterialCardView>
         <TextView
             android:id="@+id/tv_user_name"
             android:layout_width="wrap_content"
@@ -59,7 +53,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/tablia_font_family"
-            android:text="@string/user_email_placeholder"
+            android:text=""
             android:textColor="@color/text_grey"
             android:textSize="14sp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -103,7 +97,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
                         android:fontFamily="@font/tablia_font_family"
-                        android:text="24"
+                        android:text=""
                         android:textColor="@color/navy_foreground"
                         android:textSize="20sp"
                         android:textStyle="bold" />
@@ -146,7 +140,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
                         android:fontFamily="@font/tablia_font_family"
-                        android:text="12"
+                        android:text=""
                         android:textColor="@color/navy_foreground"
                         android:textSize="20sp"
                         android:textStyle="bold" />
