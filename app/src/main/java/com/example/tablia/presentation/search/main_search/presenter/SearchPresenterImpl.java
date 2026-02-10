@@ -1,9 +1,13 @@
 package com.example.tablia.presentation.search.main_search.presenter;
 
+import android.content.Context;
+import android.util.Log;
+
 import com.example.tablia.data.meals.datasource.MealsRepository;
 import com.example.tablia.data.meals.models.Meal;
 import com.example.tablia.data.meals.models.MealResponse;
 import com.example.tablia.presentation.search.main_search.view.SearchView;
+import com.example.tablia.utils.NetworkUtil;
 
 import java.util.Collections;
 import java.util.concurrent.TimeUnit;
@@ -19,6 +23,7 @@ public class SearchPresenterImpl implements SearchPresenter {
     private final MealsRepository repository;
     private final CompositeDisposable disposable = new CompositeDisposable();
     private final PublishSubject<String> searchSubject = PublishSubject.create();
+    private boolean isConnected = true;
 
     public SearchPresenterImpl(SearchView view, MealsRepository repository) {
         this.view = view;
@@ -35,12 +40,16 @@ public class SearchPresenterImpl implements SearchPresenter {
                     if (query.trim().isEmpty()) {
                         view.showExploreMode();
                     } else {
+                        if (!isConnected) {
+                            view.showNoInternet();
+                            return;
+                        }
                         view.showSearchMode();
                         view.showLoading();
-                        view.showMeals(Collections.emptyList()); 
+                        view.showMeals(Collections.emptyList());
                     }
                 })
-                .filter(query -> !query.trim().isEmpty())
+                .filter(query -> !query.trim().isEmpty() && isConnected)
                 .switchMap(query -> repository.searchMealsByName(query)
                         .subscribeOn(Schedulers.io())
                         .onErrorReturn(throwable -> new MealResponse()))
@@ -63,7 +72,30 @@ public class SearchPresenterImpl implements SearchPresenter {
     }
 
     @Override
+    public void observeNetwork(Context context) {
+        disposable.add(
+                NetworkUtil.observeNetwork(context)
+                        .distinctUntilChanged()
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(connected -> {
+                            this.isConnected = connected;
+                            if (!connected) {
+                                view.showNoInternet();
+                            } else {
+                                view.hideNoInternet();
+                                getCategories();
+                                getAreas();
+                                getIngredients();
+                            }
+                        }, throwable -> {
+                            Log.e("SearchPresenter", "Network error", throwable);
+                        })
+        );
+    }
+
+    @Override
     public void getCategories() {
+        if (!isConnected) return;
         view.showLoading();
         disposable.add(repository.listCategories()
                 .subscribeOn(Schedulers.io())
@@ -82,6 +114,7 @@ public class SearchPresenterImpl implements SearchPresenter {
 
     @Override
     public void getAreas() {
+        if (!isConnected) return;
         disposable.add(repository.listAreas()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -93,6 +126,7 @@ public class SearchPresenterImpl implements SearchPresenter {
 
     @Override
     public void getIngredients() {
+        if (!isConnected) return;
         disposable.add(repository.listIngredients()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

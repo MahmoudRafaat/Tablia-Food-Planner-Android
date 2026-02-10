@@ -8,6 +8,7 @@ public interface HomeView {
     void showPopularMeals(List<Meal> meals);
     void showError(String message);
     void showNoInternet();
+    void hideNoInternet();
     void showLoading();
     void hideLoading();
     void onMealAddedToFavorites(String message);

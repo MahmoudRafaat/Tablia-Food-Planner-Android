@@ -31,15 +31,6 @@ public class PlannerPresenterImpl implements PlannerPresenter {
     }
 
     @Override
-    public void removeMealFromPlan(String appointmentId) {
-        // We first need the full object to delete from Room if we use @Delete, 
-        // but since we have the ID, we can handle it via repository.
-        // For simplicity here, assuming repository has a delete by ID or we fetch first.
-        
-        // As per current repo structure: deleteAppointment(MealAppointment)
-        // I'll assume we pass the object from the adapter.
-    }
-
     public void removeMealFromPlan(MealAppointment appointment) {
         disposable.add(repository.deleteAppointment(appointment)
                 .subscribeOn(Schedulers.io())

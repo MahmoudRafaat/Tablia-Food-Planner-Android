@@ -36,7 +36,6 @@ public class SearchFragment extends Fragment implements com.example.tablia.prese
     private FragmentSearchBinding binding;
     private SearchPresenter presenter;
     private PopularMealAdapter searchAdapter;
-    private MealsRepository repository;
 
     @Nullable
     @Override
@@ -49,7 +48,7 @@ public class SearchFragment extends Fragment implements com.example.tablia.prese
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
- repository= MealsRepository.getInstance(getContext());
+        MealsRepository repository = MealsRepository.getInstance(getContext());
         presenter = new SearchPresenterImpl(this, repository);
         searchAdapter = new PopularMealAdapter(this);
         binding.rvSearchResults.setLayoutManager(new GridLayoutManager(requireContext(), 2));
@@ -63,13 +62,8 @@ public class SearchFragment extends Fragment implements com.example.tablia.prese
         });
 
         setupSearchView();
-
-        presenter.getCategories();
-        presenter.getAreas();
-        presenter.getIngredients();
+        presenter.observeNetwork(requireContext());
     }
-
-
 
     private void setupSearchView() {
         binding.searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -196,6 +190,23 @@ public class SearchFragment extends Fragment implements com.example.tablia.prese
         binding.scrollExplore.setVisibility(View.VISIBLE);
         binding.rvSearchResults.setVisibility(View.GONE);
         binding.btnBackToExplore.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void showNoInternet() {
+        if(binding != null) {
+            binding.layoutNoInternetSearch.noInternetOverlay.setVisibility(View.VISIBLE);
+            binding.scrollExplore.setVisibility(View.GONE);
+            binding.rvSearchResults.setVisibility(View.GONE);
+        }
+    }
+
+    @Override
+    public void hideNoInternet() {
+        if(binding != null) {
+            binding.layoutNoInternetSearch.noInternetOverlay.setVisibility(View.GONE);
+            showExploreMode();
+        }
     }
 
     @Override

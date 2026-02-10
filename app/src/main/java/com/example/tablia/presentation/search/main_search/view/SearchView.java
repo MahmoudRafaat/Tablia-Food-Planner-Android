@@ -18,4 +18,7 @@ public interface SearchView {
     void hideLoading();
     void showSearchMode();
     void showExploreMode();
+    void showNoInternet();
+    void hideNoInternet();
+
 }

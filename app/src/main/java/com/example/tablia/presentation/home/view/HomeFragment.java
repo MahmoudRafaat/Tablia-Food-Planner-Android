@@ -48,9 +48,8 @@ public class HomeFragment extends Fragment implements HomeView, PopularMealAdapt
 
         initViews();
         initRecyclerViews();
-
-        presenter.getRandomMeal();
-        presenter.getPopularMeals();
+        
+        presenter.observeNetwork(getContext());
     }
 
     private void initViews() {
@@ -106,8 +105,17 @@ public class HomeFragment extends Fragment implements HomeView, PopularMealAdapt
 
     @Override
     public void showNoInternet() {
-        if (getActivity() != null) {
-            CustomAlertDialog.showNoInternet(getActivity());
+        if (binding != null) {
+            binding.layoutNoInternet.noInternetOverlay.setVisibility(View.VISIBLE);
+            binding.homeContent.setVisibility(View.GONE);
+        }
+    }
+
+    @Override
+    public void hideNoInternet() {
+        if (binding != null) {
+            binding.layoutNoInternet.noInternetOverlay.setVisibility(View.GONE);
+            binding.homeContent.setVisibility(View.VISIBLE);
         }
     }
 
@@ -172,14 +180,9 @@ public class HomeFragment extends Fragment implements HomeView, PopularMealAdapt
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        if (presenter instanceof HomePresenterImpl) {
-            ((HomePresenterImpl) presenter).dispose();
+        if (presenter != null) {
+            presenter.dispose();
         }
         binding = null;
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
     }
 }
