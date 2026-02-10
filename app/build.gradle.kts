@@ -27,10 +27,10 @@ android {
         versionName = "1.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
-        buildConfigField("String", "API_KEY", localProperties.getProperty("API_KEY") ?: "\"1\"")
-        buildConfigField("String", "BASE_URL", localProperties.getProperty("BASE_URL") ?: "\"https://www.themealdb.com/api/json/v1/\"")
-        buildConfigField("String", "WEB_CLIENT_ID", localProperties.getProperty("WEB_CLIENT_ID") ?: "\"\"")
-        buildConfigField("String", "PREF_NAME", localProperties.getProperty("PREF_NAME") ?: "\"TabliaPrefs\"")
+        buildConfigField("String", "API_KEY", localProperties.getProperty("API_KEY") )
+        buildConfigField("String", "BASE_URL", localProperties.getProperty("BASE_URL") )
+        buildConfigField("String", "WEB_CLIENT_ID", localProperties.getProperty("WEB_CLIENT_ID") )
+        buildConfigField("String", "PREF_NAME", localProperties.getProperty("PREF_NAME"))
     }
 
     buildTypes {
