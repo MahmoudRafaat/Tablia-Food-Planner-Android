@@ -11,6 +11,9 @@
     <color name="featured_orange">#F39C12</color>
     <color name="card_background">#FFFFFF</color>
     <color name="search_bar_background">#F0F3F4</color>
+    <color name="profile_card_background">#E0E0E0</color>
+    <color name="surface_light">#F8F9FA</color>
+    <color name="divider_color">#EEEEEE</color>
 
     <color name="primary">@color/tomato_red</color>
     <color name="primary_variant">@color/tomato_red_dark</color>

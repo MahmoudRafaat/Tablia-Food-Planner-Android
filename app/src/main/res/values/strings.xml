@@ -64,4 +64,11 @@
     <string name="no_recipes_found">No Recipes Found</string>
 
     <string name="no_internet_message">Please check your internet connection and try again.</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="edit_profile">Edit Profile</string>
+    <string name="logout">Logout</string>
+    <string name="planned">Planned</string>
+    <string name="user_name_placeholder">John Doe</string>
+    <string name="user_email_placeholder">john.doe@example.com</string>
 </resources>
