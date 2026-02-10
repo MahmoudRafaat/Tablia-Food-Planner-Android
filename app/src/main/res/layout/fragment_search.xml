@@ -99,8 +99,8 @@
                         app:layout_constraintTop_toBottomOf="@id/tvCatTitle" />
 
                     <ImageView
-                        android:layout_width="60dp"
-                        android:layout_height="60dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:background="@drawable/circle_gradient_orange"
                         android:padding="12dp"
                         android:src="@drawable/ic_chef_hat"
@@ -155,11 +155,12 @@
                         app:layout_constraintTop_toBottomOf="@id/tvCountryTitle" />
 
                     <ImageView
-                        android:layout_width="60dp"
-                        android:layout_height="60dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:background="@drawable/circle_gradient_blue"
                         android:padding="12dp"
                         android:src="@drawable/ic_chef_hat"
+                        app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
@@ -212,8 +213,8 @@
                         app:layout_constraintTop_toBottomOf="@id/tvIngredientTitle" />
 
                     <ImageView
-                        android:layout_width="60dp"
-                        android:layout_height="60dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:background="@drawable/circle_gradient_green"
                         android:padding="12dp"
                         android:src="@drawable/ic_chef_hat"
@@ -242,6 +243,15 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@id/btnBackToExplore"
         tools:listitem="@layout/item_popular_meal" />
+
+    <include
+        android:id="@+id/layoutNoInternetSearch"
+        layout="@layout/layout_no_internet"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/cvSearch" />
 
     <TextView
         android:id="@+id/tvNoResults"
