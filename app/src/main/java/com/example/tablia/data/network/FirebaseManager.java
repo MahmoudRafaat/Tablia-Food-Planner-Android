@@ -36,7 +36,22 @@ public class FirebaseManager {
     }
 
     public String getUserId() { return mAuth.getUid(); }
-
+    public Single<User> getUserProfile() {
+        String userId = getUserId();
+        if (userId == null) return Single.error(new Exception("Not logged in"));
+        return Single.create(emitter -> {
+            db.collection("users").document(userId).get()
+                    .addOnSuccessListener(documentSnapshot -> {
+                        User user = documentSnapshot.toObject(User.class);
+                        if (user != null) {
+                            emitter.onSuccess(user);
+                        } else {
+                            emitter.onError(new Exception("User profile not found"));
+                        }
+                    })
+                    .addOnFailureListener(emitter::onError);
+        });
+    }
     public Completable addFavorite(Meal meal) {
         String userId = getUserId();
         Log.d("TAG", "addFavorite: "+userId);

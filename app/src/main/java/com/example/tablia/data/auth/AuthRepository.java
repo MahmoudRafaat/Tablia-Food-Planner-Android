@@ -5,6 +5,7 @@ import android.net.Uri;
 
 import com.example.tablia.data.auth.datasource.local.AuthLocalDataSource;
 import com.example.tablia.data.auth.datasource.remote.*;
+import com.example.tablia.data.auth.models.User;
 
 import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Single;
@@ -18,16 +19,16 @@ public class AuthRepository {
         this.local = AuthLocalDataSource.getInstance(context);
     }
 
-    public void loginWithEmail(String email, String password, AuthNetworkCallback callback) {
-        remote.loginWithEmail(email, password, callback);
+    public Single<User> loginWithEmail(String email, String password) {
+        return remote.loginWithEmail(email, password);
     }
 
-    public void register(String email, String password, String name, Uri imageUri, Context context , AuthNetworkCallback callback) {
-        remote.registerWithEmail(email, password, name, imageUri, context, callback);
+    public Single<User> register(String email, String password, String name, Uri imageUri, Context context) {
+        return remote.registerWithEmail(email, password, name, imageUri, context);
     }
 
-    public void loginWithGoogle(String token, AuthNetworkCallback callback) {
-        remote.loginWithGoogle(token, callback);
+    public Single<User> loginWithGoogle(String token) {
+        return remote.loginWithGoogle(token);
     }
 
     public Single<Boolean> isLoggedIn() { return local.isLoggedIn(); }
@@ -35,4 +36,12 @@ public class AuthRepository {
     public Single<Boolean> isFirstRun() { return local.isFirstRun(); }
     public Completable setFirstRun(boolean value) { return local.setFirstRun(value); }
     public Completable logout() { return local.clear(); }
+
+    public Completable saveUser(User user) {
+        return local.saveUser(user);
+    }
+
+    public Single<User> getUser() {
+        return local.getUser();
+    }
 }

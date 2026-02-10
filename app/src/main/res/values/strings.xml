@@ -15,7 +15,7 @@
     <string name="continue_as_a_guest">Continue as a guest</string>
     <string name="or_continue_with">——————— or continue with ———————</string>
     <string name="create_account">Create Account</string>
-    <string name="join_tablia_and_start_planning">Join Tablia and start planning!</string>
+    <string name="join_tablia_and_start_planning">Guest</string>
     <string name="full_name">Full Name</string>
     <string name="by_creating_an_account_you_agree_to_our_terms_and_privacy_policy">By creating an account, you agree to our Terms and Privacy Policy</string>
     <string name="already_have_an_account">Already have an account?</string>
@@ -64,4 +64,10 @@
     <string name="no_recipes_found">No Recipes Found</string>
 
     <string name="no_internet_message">Please check your internet connection and try again.</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="edit_profile">Edit Profile</string>
+    <string name="logout">Logout</string>
+    <string name="planned">Planned</string>
+    <string name="user_name_placeholder">guest</string>
 </resources>

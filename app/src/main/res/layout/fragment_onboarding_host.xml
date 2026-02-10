@@ -30,7 +30,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="32dp"
-        app:dotsColor="#E0E0E0"
+        app:dotsColor="@color/profile_card_background"
         app:selectedDotColor="@color/tomato_red"
         app:dotsSize="10dp"
         app:dotsSpacing="8dp"

@@ -3,12 +3,17 @@ package com.example.tablia.presentation.auth.login.presenter;
 import android.content.Context;
 
 import com.example.tablia.data.auth.AuthRepository;
-import com.example.tablia.data.auth.datasource.remote.AuthNetworkCallback;
+import com.example.tablia.data.auth.models.User;
 import com.example.tablia.presentation.auth.login.view.LoginView;
 
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.disposables.CompositeDisposable;
+import io.reactivex.rxjava3.schedulers.Schedulers;
+
 public class LoginPresenterImp implements LoginPresenter {
-    private AuthRepository repository;
-    private LoginView view;
+    private final AuthRepository repository;
+    private final LoginView view;
+    private final CompositeDisposable disposables = new CompositeDisposable();
 
     public LoginPresenterImp(LoginView view, Context context) {
         this.view = view;
@@ -27,41 +32,56 @@ public class LoginPresenterImp implements LoginPresenter {
         }
         
         view.showLoading();
-        repository.loginWithEmail(email, password, createCallback());
+        disposables.add(repository.loginWithEmail(email, password)
+                .flatMapCompletable(user -> repository.saveUser(user)
+                        .andThen(repository.setLoggedIn(true))
+                        .andThen(repository.setFirstRun(false)))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        () -> {
+                            view.hideLoading();
+                            view.onLoginSuccess();
+                        },
+                        throwable -> {
+                            view.hideLoading();
+                            parseError(throwable.getMessage());
+                        }
+                ));
     }
 
     @Override
     public void loginWithGoogle(String idToken) {
         view.showLoading();
-        repository.loginWithGoogle(idToken, createCallback());
+        disposables.add(repository.loginWithGoogle(idToken)
+                .flatMapCompletable(user -> repository.saveUser(user)
+                        .andThen(repository.setLoggedIn(true))
+                        .andThen(repository.setFirstRun(false)))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        () -> {
+                            view.hideLoading();
+                            view.onLoginSuccess();
+                        },
+                        throwable -> {
+                            view.hideLoading();
+                            parseError(throwable.getMessage());
+                        }
+                ));
     }
 
     @Override
     public void loginAsGuest() {
-        repository.setLoggedIn(true);
-        repository.setFirstRun(false);
-        view.onLoginSuccess();
-    }
-
-    private AuthNetworkCallback createCallback() {
-        return new AuthNetworkCallback() {
-            @Override
-            public void onSuccess() {
-                repository.setLoggedIn(true);
-                repository.setFirstRun(false);
-                view.hideLoading();
-                view.onLoginSuccess();
-            }
-
-            @Override
-            public void onFailure(String errorMessage) {
-                view.hideLoading();
-                parseError(errorMessage);
-            }
-        };
+        disposables.add(repository.setLoggedIn(true)
+                .andThen(repository.setFirstRun(false))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(view::onLoginSuccess));
     }
 
     private void parseError(String errorMessage) {
+        if (errorMessage == null) return;
         String lowerMsg = errorMessage.toLowerCase();
         
         if (lowerMsg.contains("credential") || lowerMsg.contains("wrong-password") || lowerMsg.contains("incorrect")) {
@@ -75,5 +95,9 @@ public class LoginPresenterImp implements LoginPresenter {
         } else {
             view.showGeneralError(errorMessage);
         }
+    }
+
+    public void detach() {
+        disposables.clear();
     }
 }
