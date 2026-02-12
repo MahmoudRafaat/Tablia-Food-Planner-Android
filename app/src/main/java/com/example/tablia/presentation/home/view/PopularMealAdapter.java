@@ -34,7 +34,11 @@ public class PopularMealAdapter extends RecyclerView.Adapter<PopularMealAdapter.
     }
 
     public void setList(List<Meal> meals) {
-        this.meals = meals;
+        if (meals != null) {
+            this.meals = meals;
+        } else {
+            this.meals = new ArrayList<>();
+        }
         notifyDataSetChanged();
     }
 
@@ -71,15 +75,17 @@ public class PopularMealAdapter extends RecyclerView.Adapter<PopularMealAdapter.
 
     @Override
     public int getItemCount() {
-        return meals.size();
+        return meals != null ? meals.size() : 0;
     }
 
     public void updateFavoriteStatus(String mealId, boolean isFavorite) {
-        for (int i = 0; i < meals.size(); i++) {
-            if (meals.get(i).getIdMeal().equals(mealId)) {
-                meals.get(i).setFavorite(isFavorite);
-                notifyItemChanged(i);
-                break;
+        if (meals != null) {
+            for (int i = 0; i < meals.size(); i++) {
+                if (meals.get(i).getIdMeal().equals(mealId)) {
+                    meals.get(i).setFavorite(isFavorite);
+                    notifyItemChanged(i);
+                    break;
+                }
             }
         }
     }

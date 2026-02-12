@@ -22,7 +22,7 @@ public class MealsRepository {
 
     private final MealsLocalDataSource localDataSource;
     private final MealsRemoteDataSoucre remoteDataSource;
-    private static MealsRepository instance = null;
+    private static MealsRepository instance ;
 
     private MealsRepository(Context context) {
         this.localDataSource = MealsLocalDataSource.getInstance(AppDatabase.getInstance(context).mealDao());
@@ -129,6 +129,6 @@ public class MealsRepository {
 
     public Completable syncAppointmentsWithRemote() {
         return remoteDataSource.getAppointments()
-                .flatMapCompletable(localDataSource::insertAllAppointments);
+                .flatMapCompletable(appointments -> localDataSource.insertAllAppointments(appointments));
     }
 }

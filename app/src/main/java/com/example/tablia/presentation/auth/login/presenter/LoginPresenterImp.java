@@ -35,8 +35,7 @@ public class LoginPresenterImp implements LoginPresenter {
                 .flatMapCompletable(user -> repository.saveUser(user)
                         .andThen(repository.setLoggedIn(true))
                         .andThen(mealsRepository.syncAppointmentsWithRemote())
-                        .andThen(mealsRepository.syncFavoritesWithRemote())
-                        .andThen(repository.setFirstRun(false)))
+                        .andThen(mealsRepository.syncFavoritesWithRemote()))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
@@ -58,8 +57,7 @@ public class LoginPresenterImp implements LoginPresenter {
                 .flatMapCompletable(user -> repository.saveUser(user)
                         .andThen(mealsRepository.syncFavoritesWithRemote())
                         .andThen(mealsRepository.syncAppointmentsWithRemote())
-                        .andThen(repository.setLoggedIn(true))
-                        .andThen(repository.setFirstRun(false)))
+                        .andThen(repository.setLoggedIn(true)))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(

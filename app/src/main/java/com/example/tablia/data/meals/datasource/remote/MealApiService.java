@@ -23,7 +23,7 @@ public interface MealApiService {
     @GET("search.php")
     Observable<MealResponse> searchMealsByFirstLetter(@Query("f") String firstLetter);
 
-    @GET("list.php?c=list")
+    @GET("categories.php")
     Single<CategoryResponse> listCategories();
 
     @GET("list.php?a=list")

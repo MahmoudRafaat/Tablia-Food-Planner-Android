@@ -117,7 +117,6 @@
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.cardview.widget.CardView>
 
-            <!-- Countries Card -->
             <androidx.cardview.widget.CardView
                 android:id="@+id/cvCountriesSearch"
                 android:layout_width="match_parent"
@@ -160,7 +159,6 @@
                         android:background="@drawable/circle_gradient_blue"
                         android:padding="12dp"
                         android:src="@drawable/ic_chef_hat"
-                        app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
@@ -174,7 +172,7 @@
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.cardview.widget.CardView>
 
-            <!-- Ingredients Card -->
+
             <androidx.cardview.widget.CardView
                 android:id="@+id/cvIngredientsSearch"
                 android:layout_width="match_parent"

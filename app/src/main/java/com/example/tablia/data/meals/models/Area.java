@@ -18,8 +18,8 @@ public class Area {
 
     public void setStrArea(String strArea) {
         this.strArea = strArea;
-    }
 
+    }
     public String getFlagUrl() {
         return "https://www.themealdb.com/images/icons/flags/big/64/" + getCountryCode(strArea) + ".png";
     }

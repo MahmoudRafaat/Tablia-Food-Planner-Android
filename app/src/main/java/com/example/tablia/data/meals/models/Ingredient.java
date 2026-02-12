@@ -14,6 +14,13 @@ public class Ingredient {
 
     @SerializedName("strType")
     private String strType;
+    @SerializedName("strThumb")
+    private String imageUrl;
+
+
+
+
+
 
     public String getIdIngredient() {
         return idIngredient;
@@ -45,5 +52,13 @@ public class Ingredient {
 
     public void setStrType(String strType) {
         this.strType = strType;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 }

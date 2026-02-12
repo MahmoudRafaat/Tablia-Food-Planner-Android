@@ -46,7 +46,7 @@ public class ExploreAdapter extends RecyclerView.Adapter<ExploreAdapter.ViewHold
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Object item = items.get(position);
-        String name = "";
+        String name;
         String imageUrl = "";
 
         if (item instanceof Category) {
@@ -56,26 +56,25 @@ public class ExploreAdapter extends RecyclerView.Adapter<ExploreAdapter.ViewHold
         } else if (item instanceof Area) {
             Area area = (Area) item;
             name = area.getStrArea();
-            imageUrl = "https://www.themealdb.com/images/ingredients/" + name + ".png";
+            imageUrl = area.getFlagUrl();
         } else if (item instanceof Ingredient) {
             Ingredient ing = (Ingredient) item;
             name = ing.getStrIngredient();
-            imageUrl = "https://www.themealdb.com/images/ingredients/" + name + ".png";
+            imageUrl = ing.getImageUrl();
+        } else {
+            name = "";
         }
 
         holder.tvName.setText(name);
-        
-        if (item instanceof Area) {
-             holder.ivIcon.setImageResource(R.drawable.ic_chef_hat);
-        } else {
+
+
             Glide.with(holder.itemView.getContext())
                     .load(imageUrl)
-                    .placeholder(R.drawable.ic_chef_hat)
+                    .placeholder(R.drawable.ic_utensils)
                     .into(holder.ivIcon);
-        }
 
-        final String finalName = name;
-        holder.itemView.setOnClickListener(v -> listener.onItemClick(finalName));
+
+        holder.itemView.setOnClickListener(v -> listener.onItemClick(name));
     }
 
     @Override

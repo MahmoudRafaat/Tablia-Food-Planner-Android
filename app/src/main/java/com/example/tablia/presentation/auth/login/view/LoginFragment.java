@@ -168,5 +168,6 @@ public class LoginFragment extends Fragment implements LoginView {
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
+
     }
 }
