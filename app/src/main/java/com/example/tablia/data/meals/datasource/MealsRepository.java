@@ -22,7 +22,7 @@ public class MealsRepository {
 
     private final MealsLocalDataSource localDataSource;
     private final MealsRemoteDataSoucre remoteDataSource;
-    private static MealsRepository instance = null;
+    private static MealsRepository instance ;
 
     private MealsRepository(Context context) {
         this.localDataSource = MealsLocalDataSource.getInstance(AppDatabase.getInstance(context).mealDao());
@@ -35,8 +35,6 @@ public class MealsRepository {
         }
         return instance;
     }
-
-    // Remote methods (TheMealDB)
     public Single<MealResponse> getRandomMeal() {
         return remoteDataSource.getRandomMeal();
     }
@@ -77,7 +75,6 @@ public class MealsRepository {
     }
 
 
-    // Local & Remote methods (Favorites)
     public Observable<List<Meal>> getAllFavMeals() {
         return localDataSource.getAllFavMeals();
     }
@@ -125,7 +122,6 @@ public class MealsRepository {
 
 
 
-    // Sync methods
     public Completable syncFavoritesWithRemote() {
         return remoteDataSource.getFavorites()
                 .flatMapCompletable(localDataSource::insertAllFavMeals);
@@ -133,6 +129,6 @@ public class MealsRepository {
 
     public Completable syncAppointmentsWithRemote() {
         return remoteDataSource.getAppointments()
-                .flatMapCompletable(localDataSource::insertAllAppointments);
+                .flatMapCompletable(appointments -> localDataSource.insertAllAppointments(appointments));
     }
 }

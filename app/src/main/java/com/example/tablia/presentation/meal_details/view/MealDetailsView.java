@@ -9,4 +9,6 @@ public interface MealDetailsView {
     void showLoading();
     void hideLoading();
     void onFavoriteStatusChanged(boolean isFavorite);
+    void showNoInternet();
+
 }

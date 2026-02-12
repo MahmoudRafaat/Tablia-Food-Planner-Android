@@ -1,9 +1,13 @@
 package com.example.tablia.presentation.meal_details.presenter;
 
+import android.content.Context;
+import android.util.Log;
+
 import com.example.tablia.data.meals.datasource.MealsRepository;
 import com.example.tablia.data.meals.models.Meal;
 import com.example.tablia.data.meals.models.MealAppointment;
 import com.example.tablia.presentation.meal_details.view.MealDetailsView;
+import com.example.tablia.utils.NetworkUtil;
 
 import java.util.UUID;
 
@@ -16,10 +20,25 @@ public class MealDetailsPresenterImpl implements MealDetailsPresenter {
     private final MealsRepository repository;
     private final MealDetailsView view;
     private final CompositeDisposable disposable = new CompositeDisposable();
+    private boolean isConnected = true;
 
     public MealDetailsPresenterImpl(MealsRepository repository, MealDetailsView view) {
         this.repository = repository;
         this.view = view;
+    }
+
+    @Override
+    public void observeNetwork(Context context) {
+        disposable.add(
+                NetworkUtil.observeNetwork(context)
+                        .distinctUntilChanged()
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(connected -> {
+                            this.isConnected = connected;
+                        }, throwable -> {
+                            Log.e("MealDetailsPresenter", "Network error", throwable);
+                        })
+        );
     }
 
     @Override
@@ -33,6 +52,11 @@ public class MealDetailsPresenterImpl implements MealDetailsPresenter {
             view.showMealDetails(meal);
             view.hideLoading();
         } else {
+            if (!isConnected) {
+                view.hideLoading();
+                view.showNoInternet();
+                return;
+            }
             disposable.add(repository.getMealById(meal.getIdMeal())
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
@@ -88,6 +112,10 @@ public class MealDetailsPresenterImpl implements MealDetailsPresenter {
 
     @Override
     public void addToPlan(Meal meal, long timestamp) {
+        if (!isConnected) {
+            view.showNoInternet();
+            return;
+        }
         MealAppointment appointment = new MealAppointment(
                 UUID.randomUUID().toString(),
                 meal,

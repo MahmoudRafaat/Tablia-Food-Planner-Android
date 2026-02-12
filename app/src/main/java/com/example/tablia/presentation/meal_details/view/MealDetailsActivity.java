@@ -3,7 +3,6 @@ package com.example.tablia.presentation.meal_details.view;
 import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -14,6 +13,7 @@ import com.example.tablia.data.meals.models.Meal;
 import com.example.tablia.databinding.ActivityMealDetailsBinding;
 import com.example.tablia.presentation.meal_details.presenter.MealDetailsPresenter;
 import com.example.tablia.presentation.meal_details.presenter.MealDetailsPresenterImpl;
+import com.example.tablia.utils.CustomAlertDialog;
 import com.example.tablia.utils.VideoHelper;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -34,6 +34,7 @@ public class MealDetailsActivity extends AppCompatActivity implements MealDetail
         setContentView(binding.getRoot());
 
         presenter = new MealDetailsPresenterImpl(MealsRepository.getInstance(this), this);
+        presenter.observeNetwork(this);
 
         setupToolbar();
         setupRecyclerView();
@@ -182,6 +183,11 @@ public class MealDetailsActivity extends AppCompatActivity implements MealDetail
         } else {
             binding.fabFav.setImageResource(R.drawable.ic_heart);
         }
+    }
+
+    @Override
+    public void showNoInternet() {
+        CustomAlertDialog.showNoInternet(this);
     }
 
     @Override

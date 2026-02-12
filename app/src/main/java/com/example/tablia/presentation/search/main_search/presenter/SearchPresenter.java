@@ -1,5 +1,6 @@
 package com.example.tablia.presentation.search.main_search.presenter;
 
+import android.content.Context;
 import com.example.tablia.data.meals.models.Meal;
 
 public interface SearchPresenter {
@@ -9,5 +10,6 @@ public interface SearchPresenter {
     void searchMeals(String query);
     void addToFavorite(Meal meal);
     void removeFromFavorite(Meal meal);
+    void observeNetwork(Context context);
     void dispose();
 }

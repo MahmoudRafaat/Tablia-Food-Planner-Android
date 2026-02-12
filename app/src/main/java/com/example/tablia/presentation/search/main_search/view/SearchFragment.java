@@ -36,7 +36,6 @@ public class SearchFragment extends Fragment implements com.example.tablia.prese
     private FragmentSearchBinding binding;
     private SearchPresenter presenter;
     private PopularMealAdapter searchAdapter;
-    private MealsRepository repository;
 
     @Nullable
     @Override
@@ -49,7 +48,7 @@ public class SearchFragment extends Fragment implements com.example.tablia.prese
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
- repository= MealsRepository.getInstance(getContext());
+        MealsRepository repository = MealsRepository.getInstance(getContext());
         presenter = new SearchPresenterImpl(this, repository);
         searchAdapter = new PopularMealAdapter(this);
         binding.rvSearchResults.setLayoutManager(new GridLayoutManager(requireContext(), 2));
@@ -63,13 +62,8 @@ public class SearchFragment extends Fragment implements com.example.tablia.prese
         });
 
         setupSearchView();
-
-        presenter.getCategories();
-        presenter.getAreas();
-        presenter.getIngredients();
+        presenter.observeNetwork(requireContext());
     }
-
-
 
     private void setupSearchView() {
         binding.searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -116,6 +110,7 @@ public class SearchFragment extends Fragment implements com.example.tablia.prese
 
     @Override
     public void showCategories(List<Category> categories) {
+        if (binding == null) return;
         binding.cgCategories.removeAllViews();
         int limit = Math.min(categories.size(), 5);
         for (int i = 0; i < limit; i++) {
@@ -129,6 +124,7 @@ public class SearchFragment extends Fragment implements com.example.tablia.prese
 
     @Override
     public void showAreas(List<Area> areas) {
+        if (binding == null) return;
         binding.cgCountries.removeAllViews();
         int limit = Math.min(areas.size(), 5);
         for (int i = 0; i < limit; i++) {
@@ -142,6 +138,7 @@ public class SearchFragment extends Fragment implements com.example.tablia.prese
 
     @Override
     public void showIngredients(List<Ingredient> ingredients) {
+        if (binding == null) return;
         binding.cgIngredients.removeAllViews();
         int limit = Math.min(ingredients.size(), 5);
         for (int i = 0; i < limit; i++) {
@@ -155,6 +152,7 @@ public class SearchFragment extends Fragment implements com.example.tablia.prese
 
     @Override
     public void showMeals(List<Meal> meals) {
+        if (binding == null) return;
         binding.tvNoResults.setVisibility(View.GONE);
         binding.rvSearchResults.setVisibility(View.VISIBLE);
         searchAdapter.setList(meals);
@@ -162,6 +160,7 @@ public class SearchFragment extends Fragment implements com.example.tablia.prese
 
     @Override
     public void showEmptyView() {
+        if (binding == null) return;
         searchAdapter.setList(Collections.emptyList());
         binding.rvSearchResults.setVisibility(View.GONE);
         binding.tvNoResults.setVisibility(View.VISIBLE);
@@ -174,17 +173,21 @@ public class SearchFragment extends Fragment implements com.example.tablia.prese
 
     @Override
     public void showLoading() {
+        if (binding == null) return;
         binding.tvNoResults.setVisibility(View.GONE);
         binding.progressBarSearch.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void hideLoading() {
-        binding.progressBarSearch.setVisibility(View.GONE);
+        if (binding != null) {
+            binding.progressBarSearch.setVisibility(View.GONE);
+        }
     }
 
     @Override
     public void showSearchMode() {
+        if (binding == null) return;
         binding.scrollExplore.setVisibility(View.GONE);
         binding.rvSearchResults.setVisibility(View.VISIBLE);
         binding.btnBackToExplore.setVisibility(View.VISIBLE);
@@ -192,10 +195,28 @@ public class SearchFragment extends Fragment implements com.example.tablia.prese
 
     @Override
     public void showExploreMode() {
+        if (binding == null) return;
         binding.tvNoResults.setVisibility(View.GONE);
         binding.scrollExplore.setVisibility(View.VISIBLE);
         binding.rvSearchResults.setVisibility(View.GONE);
         binding.btnBackToExplore.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void showNoInternet() {
+        if(binding != null) {
+            binding.layoutNoInternetSearch.noInternetOverlay.setVisibility(View.VISIBLE);
+            binding.scrollExplore.setVisibility(View.GONE);
+            binding.rvSearchResults.setVisibility(View.GONE);
+        }
+    }
+
+    @Override
+    public void hideNoInternet() {
+        if(binding != null) {
+            binding.layoutNoInternetSearch.noInternetOverlay.setVisibility(View.GONE);
+            showExploreMode();
+        }
     }
 
     @Override
@@ -217,11 +238,6 @@ public class SearchFragment extends Fragment implements com.example.tablia.prese
         startActivity(intent);
     }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        binding = null;
-    }
 
     @Override
     public void onDestroy() {

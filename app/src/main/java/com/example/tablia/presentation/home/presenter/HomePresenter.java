@@ -1,5 +1,6 @@
 package com.example.tablia.presentation.home.presenter;
 
+import android.content.Context;
 import com.example.tablia.data.meals.models.Meal;
 
 public interface HomePresenter {
@@ -9,4 +10,6 @@ public interface HomePresenter {
     void removeFromFavorite(Meal meal);
     void toggleFavorite(Meal meal);
     void checkIsFavorite(Meal meal);
+    void observeNetwork(Context context);
+    void dispose();
 }

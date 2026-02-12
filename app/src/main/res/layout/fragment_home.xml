@@ -7,6 +7,7 @@
     android:background="@color/background">
 
     <androidx.core.widget.NestedScrollView
+        android:id="@+id/homeContent"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -167,6 +168,13 @@
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
+
+    <include
+        android:id="@+id/layoutNoInternet"
+        layout="@layout/layout_no_internet"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone" />
 
     <ProgressBar
         android:id="@+id/progressBar"

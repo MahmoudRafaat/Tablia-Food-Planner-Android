@@ -32,7 +32,6 @@ public class MealsRemoteDataSoucre {
         return instance;
     }
 
-    // TheMealDB API methods
     public Single<MealResponse> getRandomMeal() {
         return apiService.getRandomMeal();
     }
@@ -72,7 +71,6 @@ public class MealsRemoteDataSoucre {
         return apiService.searchMealsByName(name);
     }
 
-    // Firebase Firestore methods
     public Completable addFavorite(Meal meal) {
         return firebaseManager.addFavorite(meal);
     }

@@ -1,22 +1,21 @@
 package com.example.tablia.presentation.auth.login.presenter;
-
 import android.content.Context;
-
 import com.example.tablia.data.auth.AuthRepository;
-import com.example.tablia.data.auth.models.User;
+import com.example.tablia.data.meals.datasource.MealsRepository;
 import com.example.tablia.presentation.auth.login.view.LoginView;
-
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class LoginPresenterImp implements LoginPresenter {
     private final AuthRepository repository;
+    private final MealsRepository mealsRepository;
     private final LoginView view;
     private final CompositeDisposable disposables = new CompositeDisposable();
 
     public LoginPresenterImp(LoginView view, Context context) {
         this.view = view;
+        this.mealsRepository = MealsRepository.getInstance(context);
         this.repository = new AuthRepository(context);
     }
 
@@ -35,7 +34,8 @@ public class LoginPresenterImp implements LoginPresenter {
         disposables.add(repository.loginWithEmail(email, password)
                 .flatMapCompletable(user -> repository.saveUser(user)
                         .andThen(repository.setLoggedIn(true))
-                        .andThen(repository.setFirstRun(false)))
+                        .andThen(mealsRepository.syncAppointmentsWithRemote())
+                        .andThen(mealsRepository.syncFavoritesWithRemote()))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
@@ -55,8 +55,9 @@ public class LoginPresenterImp implements LoginPresenter {
         view.showLoading();
         disposables.add(repository.loginWithGoogle(idToken)
                 .flatMapCompletable(user -> repository.saveUser(user)
-                        .andThen(repository.setLoggedIn(true))
-                        .andThen(repository.setFirstRun(false)))
+                        .andThen(mealsRepository.syncFavoritesWithRemote())
+                        .andThen(mealsRepository.syncAppointmentsWithRemote())
+                        .andThen(repository.setLoggedIn(true)))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
@@ -73,11 +74,7 @@ public class LoginPresenterImp implements LoginPresenter {
 
     @Override
     public void loginAsGuest() {
-        disposables.add(repository.setLoggedIn(true)
-                .andThen(repository.setFirstRun(false))
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(view::onLoginSuccess));
+        view.onLoginSuccess();
     }
 
     private void parseError(String errorMessage) {
