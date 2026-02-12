@@ -6,6 +6,13 @@ Built with a focus on **Reactive Programming** and **Clean Architecture principl
 
 ---
 
+## 📥 Download App
+You can download the latest version of the Tablia APK from the link below:
+
+[**Download Tablia APK**](https://drive.google.com/drive/folders/14hdHnKtfar36Nr_9Q-KUz4b9Eoatl3nx?usp=sharing)
+
+---
+
 ## 📸 App Screenshots
 
 <table style="width: 100%; text-align: center;">
@@ -77,6 +84,9 @@ com.example.tablia
 └── utils             # Network observers & UI helpers
 ```
 
+---
 
 
-Developed with ❤️ by [Mahmoud Raafat](https://github.com/MahmoudRafaat)
+---
+
+Developed with ❤️ by [Mahmoud Raafat](https://github.com/MahmoudRaafat)
