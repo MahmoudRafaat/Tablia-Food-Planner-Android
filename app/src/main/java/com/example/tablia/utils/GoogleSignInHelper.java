@@ -14,6 +14,7 @@ import androidx.credentials.GetCredentialResponse;
 import androidx.credentials.exceptions.ClearCredentialException;
 import androidx.credentials.exceptions.GetCredentialException;
 import androidx.credentials.exceptions.GetCredentialCancellationException;
+import androidx.credentials.exceptions.NoCredentialException;
 
 import com.example.tablia.BuildConfig;
 import com.google.android.libraries.identity.googleid.GetGoogleIdOption;
@@ -71,6 +72,9 @@ public class GoogleSignInHelper {
                     @Override
                     public void onError(GetCredentialException e) {
                         if (e instanceof GetCredentialCancellationException) {
+                            // User cancelled
+                        } else if (e instanceof NoCredentialException) {
+                            callback.onFailure("no_credential_error");
                         } else {
                             callback.onFailure(e.getClass().getSimpleName() + ": " + e.getMessage());
                         }

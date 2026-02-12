@@ -9,6 +9,11 @@
         <item name="cornerSize">50%</item>
     </style>
 
+    <style name="circleImageView">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item>
+    </style>
+
     <style name="CustomCalendarTheme" parent="Theme.MaterialComponents.Light">
         <item name="colorAccent">@color/primary</item>
         <item name="colorPrimary">@color/primary</item>

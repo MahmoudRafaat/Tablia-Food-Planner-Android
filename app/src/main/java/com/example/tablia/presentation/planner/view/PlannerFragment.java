@@ -45,18 +45,16 @@ public class PlannerFragment extends Fragment implements PlannerView, PlannerAda
         super.onViewCreated(view, savedInstanceState);
 
         AuthRepository authRepository = new AuthRepository(getContext());
-        presenter = new PlannerPresenterImpl(MealsRepository.getInstance(getContext()), authRepository, this);
-        setupRecyclerView();
-        setupCalendar();
-
-        presenter.getMealsForDate(Calendar.getInstance().getTimeInMillis());
-    }
-
-    private void setupRecyclerView() {
-        adapter = new PlannerAdapter(this);
+        presenter = new PlannerPresenterImpl(MealsRepository.getInstance(getContext()), authRepository, this);adapter = new PlannerAdapter(this);
         binding.rvPlannedMeals.setLayoutManager(new LinearLayoutManager(requireContext()));
         binding.rvPlannedMeals.setAdapter(adapter);
+        setupCalendar();
+        loadMealsForDate(Calendar.getInstance());
+
     }
+
+
+
 
     private void setupCalendar() {
         binding.calendarView.setOnDateChangeListener((view, year, month, dayOfMonth) -> {

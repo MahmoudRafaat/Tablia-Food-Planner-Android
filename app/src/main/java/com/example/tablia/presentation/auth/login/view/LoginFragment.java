@@ -61,7 +61,11 @@ public class LoginFragment extends Fragment implements LoginView {
 
                 @Override
                 public void onFailure(String error) {
-                    showGeneralError(getString(R.string.sign_in_failed_prefix, error));
+                    if ("no_credential_error".equals(error)) {
+                        showGeneralError("No internet connection. Please check your network.");
+                    } else {
+                        showGeneralError(getString(R.string.sign_in_failed_prefix, error));
+                    }
                 }
             });
         });

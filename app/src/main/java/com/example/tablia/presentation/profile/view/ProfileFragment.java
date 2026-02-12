@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.bumptech.glide.Glide;
 import com.example.tablia.R;
 import com.example.tablia.data.auth.models.User;
 import com.example.tablia.databinding.FragmentProfileBinding;
@@ -44,7 +45,6 @@ public class ProfileFragment extends Fragment implements ProfileView {
 
     @Override
     public void showUserInfo(User user) {
-        // Reset visibility for logged-in user
         binding.btnLogout.setVisibility(View.VISIBLE);
         binding.btnSignin.setVisibility(View.GONE);
         binding.cvEditProfile.setVisibility(View.VISIBLE);
@@ -53,10 +53,24 @@ public class ProfileFragment extends Fragment implements ProfileView {
         binding.tvUserEmail.setText(user.getEmail());
 
         if (user.getProfilePicture() != null && !user.getProfilePicture().isEmpty()) {
-            Bitmap bitmap = ImageUtils.base64ToBitmap(user.getProfilePicture());
-            if (bitmap != null) {
-                binding.ivProfileImage.setImageBitmap(bitmap);
+            if (user.getProfilePicture().startsWith("http")) {
+                Glide.with(this)
+                        .load(user.getProfilePicture())
+                        .placeholder(R.drawable.ic_person)
+                        .into(binding.ivProfileImage);
+            } else {
+                Bitmap bitmap = ImageUtils.base64ToBitmap(user.getProfilePicture());
+                if (bitmap != null) {
+                    Glide.with(this)
+                            .load(bitmap)
+                            .placeholder(R.drawable.ic_person)
+                            .into(binding.ivProfileImage);
+                } else {
+                    Glide.with(this).load(R.drawable.ic_person).into(binding.ivProfileImage);
+                }
             }
+        } else {
+            Glide.with(this).load(R.drawable.ic_person).into(binding.ivProfileImage);
         }
     }
 
@@ -94,11 +108,11 @@ public class ProfileFragment extends Fragment implements ProfileView {
     @Override
     public void showGuestAlert() {
         if (getContext() != null) {
-            // UI for Guest
             binding.tvUserName.setText(R.string.join_tablia_and_start_planning);
             binding.tvUserEmail.setText("");
             binding.tvFavoritesCount.setText("0");
             binding.tvPlannedCount.setText("0");
+            Glide.with(this).load(R.drawable.ic_person).into(binding.ivProfileImage);
 
             binding.btnLogout.setVisibility(View.GONE);
             binding.btnSignin.setVisibility(View.VISIBLE);

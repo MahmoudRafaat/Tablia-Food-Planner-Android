@@ -10,4 +10,8 @@ public interface ExploreListView {
     void showLoading();
 
     void hideLoading();
+
+    void showNoInternet();
+
+    void hideNoInternet();
 }

@@ -6,6 +6,12 @@
     android:layout_height="match_parent"
     android:background="@color/background">
 
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/groupExploreContent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:constraint_referenced_ids="btnBack,tvExploreTitle,cvSearch,rvExplore" />
+
     <ImageButton
         android:id="@+id/btnBack"
         android:layout_width="40dp"
@@ -63,14 +69,24 @@
         app:layout_constraintTop_toBottomOf="@id/cvSearch"
         tools:listitem="@layout/item_explore_grid" />
 
-    <ProgressBar
+    <include
+        android:id="@+id/layoutNoInternetExplore"
+        layout="@layout/layout_no_internet"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone" />
+
+    <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/progressBarExplore"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"
+        app:lottie_rawRes="@raw/liquid_loader_01" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

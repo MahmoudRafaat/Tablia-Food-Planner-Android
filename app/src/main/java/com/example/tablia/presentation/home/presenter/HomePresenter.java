@@ -9,5 +9,7 @@ public interface HomePresenter {
 
     void observeNetwork(Context context);
 
+    void getUserData();
+
     void dispose();
 }

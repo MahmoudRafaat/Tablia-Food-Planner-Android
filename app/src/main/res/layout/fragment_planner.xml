@@ -21,6 +21,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/tablia_font_family"
                 android:text="Your Schedule Plans"
                 android:textColor="@color/onBackground"
                 android:textSize="24sp"
@@ -49,6 +50,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:fontFamily="@font/tablia_font_family"
         android:text="No meals planned for this day"
         android:textColor="@color/text_grey"
         android:visibility="gone" />

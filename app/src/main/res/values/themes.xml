@@ -1,6 +1,5 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <style name="Base.Theme.Tablia" parent="Theme.Material3.DayNight.NoActionBar">
-        <item name="android:windowBackground">@drawable/splash_gradient</item>
+    <style name="Base.Theme.Tablia" parent="Theme.Material3.Light.NoActionBar">
         <item name="android:statusBarColor">@color/primary</item>
     </style>
 
@@ -8,11 +7,15 @@
 
     <style name="Theme.App.Starting" parent="Theme.SplashScreen">
         <item name="windowSplashScreenBackground">@drawable/splash_gradient</item>
-
-        <item name="windowSplashScreenAnimatedIcon">@android:color/transparent</item>
-
-        <item name="windowSplashScreenAnimationDuration">0</item>
-
+        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_utensils</item>
+        <item name="windowSplashScreenAnimationDuration">1000</item>
         <item name="postSplashScreenTheme">@style/Theme.Tablia</item>
+    </style>
+
+    <style name="CustomDatePickerDialog" parent="Theme.Material3.Light.Dialog">
+        <item name="colorPrimary">@color/tomato_red</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorSecondary">@color/basil_green</item>
+        <item name="android:colorAccent">@color/tomato_red</item>
     </style>
 </resources>
