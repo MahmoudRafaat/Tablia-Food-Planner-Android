@@ -5,20 +5,25 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
+
 import com.example.tablia.R;
+import com.example.tablia.data.auth.AuthRepository;
 import com.example.tablia.data.meals.datasource.MealsRepository;
 import com.example.tablia.data.meals.models.Meal;
 import com.example.tablia.data.meals.models.MealAppointment;
 import com.example.tablia.databinding.FragmentPlannerBinding;
+import com.example.tablia.presentation.auth.AuthActivity;
 import com.example.tablia.presentation.meal_details.view.MealDetailsActivity;
 import com.example.tablia.presentation.planner.presenter.PlannerPresenterImpl;
+import com.example.tablia.utils.CustomAlertDialog;
 import com.google.android.material.snackbar.Snackbar;
+
 import java.util.Calendar;
 import java.util.List;
 
@@ -32,17 +37,19 @@ public class PlannerFragment extends Fragment implements PlannerView, PlannerAda
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentPlannerBinding.inflate(inflater, container, false);
-        return binding.getRoot();    }
+        return binding.getRoot();
+    }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        presenter = new PlannerPresenterImpl(MealsRepository.getInstance(requireContext()), this);
+        AuthRepository authRepository = new AuthRepository(getContext());
+        presenter = new PlannerPresenterImpl(MealsRepository.getInstance(getContext()), authRepository, this);
         setupRecyclerView();
         setupCalendar();
 
-        loadMealsForDate(Calendar.getInstance());
+        presenter.getMealsForDate(Calendar.getInstance().getTimeInMillis());
     }
 
     private void setupRecyclerView() {
@@ -88,30 +95,49 @@ public class PlannerFragment extends Fragment implements PlannerView, PlannerAda
 
     @Override
     public void onRemoveClick(MealAppointment appointment) {
-        new AlertDialog.Builder(requireContext())
-                .setTitle("Remove Plan")
-                .setMessage("Are you sure you want to remove this meal from your plan?")
-                .setPositiveButton("Yes", (dialog, which) -> presenter.removeMealFromPlan(appointment))
-                .setNegativeButton("No", null)
-                .show();
+        CustomAlertDialog.showConfirmation(
+                requireContext(),
+                getString(R.string.remove_plan),
+                getString(R.string.are_you_sure_you_want_to_remove_this_meal_from_your_plan),
+                () -> presenter.removeMealFromPlan(appointment)
+        );
     }
 
     @Override
     public void showError(String message) {
-        Snackbar.make(binding.getRoot(), message, Snackbar.LENGTH_LONG).show();
+        if (binding != null) {
+            Snackbar.make(binding.getRoot(), message, Snackbar.LENGTH_LONG).show();
+        }
     }
 
     @Override
     public void showSuccess(String message) {
-        Snackbar snackbar = Snackbar.make(binding.getRoot(), message, Snackbar.LENGTH_LONG);
-        snackbar.setBackgroundTint(ContextCompat.getColor(requireContext(), R.color.primary));
-        snackbar.show();
+        if (binding != null) {
+            Snackbar snackbar = Snackbar.make(binding.getRoot(), message, Snackbar.LENGTH_LONG);
+            snackbar.setBackgroundTint(ContextCompat.getColor(requireContext(), R.color.primary));
+            snackbar.show();
+        }
+    }
+
+    @Override
+    public void showGuestAlert() {
+        if (getContext() != null) {
+            CustomAlertDialog.showGuestModeAlert(requireContext(), () -> {
+                Intent intent = new Intent(requireActivity(), AuthActivity.class);
+                intent.putExtra("destination", "login");
+                startActivity(intent);
+                requireActivity().finish();
+            });
+            showPlannedMeals(java.util.Collections.emptyList());
+        }
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        presenter.dispose();
+        if (presenter != null) {
+            presenter.dispose();
+        }
         binding = null;
     }
 }

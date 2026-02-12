@@ -17,11 +17,14 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.tablia.R;
+import com.example.tablia.data.auth.AuthRepository;
 import com.example.tablia.data.meals.datasource.MealsRepository;
 import com.example.tablia.data.meals.models.Meal;
+import com.example.tablia.presentation.auth.AuthActivity;
 import com.example.tablia.presentation.favorites.presenter.FavoritesPresenter;
 import com.example.tablia.presentation.favorites.presenter.FavoritesPresenterImpl;
 import com.example.tablia.presentation.meal_details.view.MealDetailsActivity;
+import com.example.tablia.utils.CustomAlertDialog;
 
 import java.util.List;
 
@@ -43,30 +46,20 @@ public class FavoritesFragment extends Fragment implements FavoritesView, Favori
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        initViews(view);
-        setupRecyclerView();
-        initPresenter();
-        presenter.loadFavorites();
-    }
-
-    private void initViews(View view) {
         rvFavorites = view.findViewById(R.id.rv_favorites);
         tvSavedMealsCount = view.findViewById(R.id.tv_saved_meals_count);
         progressBar = view.findViewById(R.id.progress_bar);
         layoutEmptyState = view.findViewById(R.id.layout_empty_state);
-    }
-
-    private void setupRecyclerView() {
         adapter = new FavoriteMealAdapter();
         adapter.setOnFavoriteClickListener(this);
         rvFavorites.setLayoutManager(new GridLayoutManager(getContext(), 2));
         rvFavorites.setAdapter(adapter);
+        MealsRepository repository = MealsRepository.getInstance(getContext());
+        AuthRepository authRepository = new AuthRepository(requireContext());
+        presenter = new FavoritesPresenterImpl(this, repository, authRepository);
+        presenter.loadFavorites();
     }
 
-    private void initPresenter() {
-        MealsRepository repository = MealsRepository.getInstance(getContext());
-        presenter = new FavoritesPresenterImpl(this, repository);
-    }
 
     @Override
     public void showLoading() {
@@ -113,12 +106,30 @@ public class FavoritesFragment extends Fragment implements FavoritesView, Favori
 
     @Override
     public void onRemoveClick(Meal meal) {
-        presenter.removeFavorite(meal);
+        CustomAlertDialog.showConfirmation(
+                requireContext(),
+                getString(R.string.remove_from_favorites),
+                getString(R.string.are_you_sure_you_want_to_delete_from_favorites),
+                () -> presenter.removeFavorite(meal)
+        );
+    }
+
+    @Override
+    public void showGuestAlert() {
+        CustomAlertDialog.showGuestModeAlert(requireContext(), () -> {
+            Intent intent = new Intent(requireActivity(), AuthActivity.class);
+            intent.putExtra("destination", "login");
+            startActivity(intent);
+            requireActivity().finish();
+        });
+        showEmptyMessage();
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        presenter.detachView();
+        if (presenter != null) {
+            presenter.detachView();
+        }
     }
 }

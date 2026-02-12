@@ -1,8 +1,11 @@
 package com.example.tablia.presentation.auth.login.presenter;
+
 import android.content.Context;
+
 import com.example.tablia.data.auth.AuthRepository;
 import com.example.tablia.data.meals.datasource.MealsRepository;
 import com.example.tablia.presentation.auth.login.view.LoginView;
+
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
@@ -29,7 +32,7 @@ public class LoginPresenterImp implements LoginPresenter {
             view.showPasswordError("Password is required");
             return;
         }
-        
+
         view.showLoading();
         disposables.add(repository.loginWithEmail(email, password)
                 .flatMapCompletable(user -> repository.saveUser(user)
@@ -80,7 +83,7 @@ public class LoginPresenterImp implements LoginPresenter {
     private void parseError(String errorMessage) {
         if (errorMessage == null) return;
         String lowerMsg = errorMessage.toLowerCase();
-        
+
         if (lowerMsg.contains("credential") || lowerMsg.contains("wrong-password") || lowerMsg.contains("incorrect")) {
             view.showFullAuthError("Invalid email or password. Please try again.");
         } else if (lowerMsg.contains("user-not-found") || lowerMsg.contains("no user record")) {

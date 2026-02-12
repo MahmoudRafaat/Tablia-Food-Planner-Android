@@ -40,7 +40,7 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.Vi
         Pair<String, String> ingredient = ingredients.get(position);
         holder.tvName.setText(ingredient.first);
         holder.tvMeasure.setText(ingredient.second);
-        
+
         String imageUrl = "https://www.themealdb.com/images/ingredients/" + ingredient.first + ".png";
         Glide.with(holder.itemView.getContext())
                 .load(imageUrl)

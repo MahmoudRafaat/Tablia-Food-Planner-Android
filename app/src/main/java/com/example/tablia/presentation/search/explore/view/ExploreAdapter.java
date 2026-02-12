@@ -20,12 +20,8 @@ import java.util.List;
 
 public class ExploreAdapter extends RecyclerView.Adapter<ExploreAdapter.ViewHolder> {
 
-    private List<Object> items = new ArrayList<>();
     private final OnItemClickListener listener;
-
-    public interface OnItemClickListener {
-        void onItemClick(String name);
-    }
+    private List<Object> items = new ArrayList<>();
 
     public ExploreAdapter(OnItemClickListener listener) {
         this.listener = listener;
@@ -68,10 +64,10 @@ public class ExploreAdapter extends RecyclerView.Adapter<ExploreAdapter.ViewHold
         holder.tvName.setText(name);
 
 
-            Glide.with(holder.itemView.getContext())
-                    .load(imageUrl)
-                    .placeholder(R.drawable.ic_utensils)
-                    .into(holder.ivIcon);
+        Glide.with(holder.itemView.getContext())
+                .load(imageUrl)
+                .placeholder(R.drawable.ic_utensils)
+                .into(holder.ivIcon);
 
 
         holder.itemView.setOnClickListener(v -> listener.onItemClick(name));
@@ -80,6 +76,10 @@ public class ExploreAdapter extends RecyclerView.Adapter<ExploreAdapter.ViewHold
     @Override
     public int getItemCount() {
         return items.size();
+    }
+
+    public interface OnItemClickListener {
+        void onItemClick(String name);
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {

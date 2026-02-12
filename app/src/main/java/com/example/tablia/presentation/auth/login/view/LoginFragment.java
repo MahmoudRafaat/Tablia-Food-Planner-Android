@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -52,7 +51,7 @@ public class LoginFragment extends Fragment implements LoginView {
         });
 
         binding.btnGust.setOnClickListener(v -> presenter.loginAsGuest());
-        
+
         binding.btnGoogle.setOnClickListener(v -> {
             GoogleSignInHelper.signIn(requireActivity(), new GoogleSignInHelper.CredentialCallback() {
                 @Override
@@ -73,13 +72,17 @@ public class LoginFragment extends Fragment implements LoginView {
     private void setupTextWatchers() {
         TextWatcher textWatcher = new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 clearErrors();
             }
+
             @Override
-            public void afterTextChanged(Editable s) {}
+            public void afterTextChanged(Editable s) {
+            }
         };
         binding.etEmail.addTextChangedListener(textWatcher);
         binding.etPassword.addTextChangedListener(textWatcher);
@@ -127,7 +130,7 @@ public class LoginFragment extends Fragment implements LoginView {
         binding.layoutPassword.setError(message);
         binding.layoutPassword.requestFocus();
     }
-    
+
     @Override
     public void showFullAuthError(String message) {
         hideLoading();
@@ -141,9 +144,7 @@ public class LoginFragment extends Fragment implements LoginView {
         hideLoading();
         if (getView() != null) {
             Snackbar.make(getView(), message, Snackbar.LENGTH_LONG)
-                    .setBackgroundTint(getResources().getColor(R.color.tomato_red, requireContext().getTheme()))
-                    .setAction("Retry", v -> binding.btnSignIn.performClick())
-                    .setActionTextColor(getResources().getColor(R.color.white, requireContext().getTheme()))
+                    .setBackgroundTint(getResources().getColor(R.color.tomato_red,requireContext().getTheme()))
                     .show();
         }
     }

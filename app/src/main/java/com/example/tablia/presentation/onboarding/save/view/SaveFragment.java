@@ -9,6 +9,7 @@ import android.view.animation.OvershootInterpolator;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+
 import com.example.tablia.R;
 import com.example.tablia.databinding.FragmentOnBoardingBinding;
 
@@ -50,7 +51,7 @@ public class SaveFragment extends Fragment {
                 .scaleX(1f)
                 .rotation(0f)
                 .setDuration(600)
-                .setInterpolator(new OvershootInterpolator()) // Mimics spring
+                .setInterpolator(new OvershootInterpolator())
                 .start();
 
         binding.tvOnboardingTitle.animate()

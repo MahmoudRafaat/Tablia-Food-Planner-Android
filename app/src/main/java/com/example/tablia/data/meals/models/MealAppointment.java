@@ -2,12 +2,24 @@ package com.example.tablia.data.meals.models;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+
 import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 @Entity(tableName = "meal_appointments")
 public class MealAppointment implements Parcelable {
+    public static final Creator<MealAppointment> CREATOR = new Creator<MealAppointment>() {
+        @Override
+        public MealAppointment createFromParcel(Parcel in) {
+            return new MealAppointment(in);
+        }
+
+        @Override
+        public MealAppointment[] newArray(int size) {
+            return new MealAppointment[size];
+        }
+    };
     @PrimaryKey
     @NonNull
     private String id;
@@ -29,18 +41,6 @@ public class MealAppointment implements Parcelable {
         dateTimestamp = in.readLong();
     }
 
-    public static final Creator<MealAppointment> CREATOR = new Creator<MealAppointment>() {
-        @Override
-        public MealAppointment createFromParcel(Parcel in) {
-            return new MealAppointment(in);
-        }
-
-        @Override
-        public MealAppointment[] newArray(int size) {
-            return new MealAppointment[size];
-        }
-    };
-
     @Override
     public int describeContents() {
         return 0;
@@ -54,12 +54,27 @@ public class MealAppointment implements Parcelable {
     }
 
     @NonNull
-    public String getId() { return id; }
-    public void setId(@NonNull String id) { this.id = id; }
+    public String getId() {
+        return id;
+    }
 
-    public Meal getMeal() { return meal; }
-    public void setMeal(Meal meal) { this.meal = meal; }
+    public void setId(@NonNull String id) {
+        this.id = id;
+    }
 
-    public long getDateTimestamp() { return dateTimestamp; }
-    public void setDateTimestamp(long dateTimestamp) { this.dateTimestamp = dateTimestamp; }
+    public Meal getMeal() {
+        return meal;
+    }
+
+    public void setMeal(Meal meal) {
+        this.meal = meal;
+    }
+
+    public long getDateTimestamp() {
+        return dateTimestamp;
+    }
+
+    public void setDateTimestamp(long dateTimestamp) {
+        this.dateTimestamp = dateTimestamp;
+    }
 }

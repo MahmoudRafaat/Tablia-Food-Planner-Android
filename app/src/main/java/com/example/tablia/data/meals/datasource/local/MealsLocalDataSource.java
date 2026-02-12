@@ -11,8 +11,8 @@ import io.reactivex.rxjava3.core.Single;
 
 public class MealsLocalDataSource {
 
-    private final MealDao mealDao;
     private static MealsLocalDataSource instance = null;
+    private final MealDao mealDao;
 
     private MealsLocalDataSource(MealDao mealDao) {
         this.mealDao = mealDao;

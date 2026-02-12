@@ -119,7 +119,8 @@ public class MealListPresenterImpl implements MealListPresenter {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        () -> {},
+                        () -> {
+                        },
                         throwable -> view.showError(throwable.getMessage())
                 ));
     }
@@ -130,7 +131,8 @@ public class MealListPresenterImpl implements MealListPresenter {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        () -> {},
+                        () -> {
+                        },
                         throwable -> view.showError(throwable.getMessage())
                 ));
     }

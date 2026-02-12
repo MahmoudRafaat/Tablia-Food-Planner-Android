@@ -20,9 +20,9 @@ import io.reactivex.rxjava3.core.Single;
 
 public class MealsRepository {
 
+    private static MealsRepository instance;
     private final MealsLocalDataSource localDataSource;
     private final MealsRemoteDataSoucre remoteDataSource;
-    private static MealsRepository instance ;
 
     private MealsRepository(Context context) {
         this.localDataSource = MealsLocalDataSource.getInstance(AppDatabase.getInstance(context).mealDao());
@@ -35,6 +35,7 @@ public class MealsRepository {
         }
         return instance;
     }
+
     public Single<MealResponse> getRandomMeal() {
         return remoteDataSource.getRandomMeal();
     }
@@ -70,6 +71,7 @@ public class MealsRepository {
     public Observable<MealResponse> filterByArea(String area) {
         return remoteDataSource.filterByArea(area);
     }
+
     public Observable<MealResponse> searchMealsByName(String name) {
         return remoteDataSource.searchMealsByName(name);
     }
@@ -119,7 +121,6 @@ public class MealsRepository {
     public Completable clearAllAppointments() {
         return localDataSource.clearAllAppointments();
     }
-
 
 
     public Completable syncFavoritesWithRemote() {

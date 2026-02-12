@@ -204,7 +204,7 @@ public class SearchFragment extends Fragment implements com.example.tablia.prese
 
     @Override
     public void showNoInternet() {
-        if(binding != null) {
+        if (binding != null) {
             binding.layoutNoInternetSearch.noInternetOverlay.setVisibility(View.VISIBLE);
             binding.scrollExplore.setVisibility(View.GONE);
             binding.rvSearchResults.setVisibility(View.GONE);
@@ -213,23 +213,12 @@ public class SearchFragment extends Fragment implements com.example.tablia.prese
 
     @Override
     public void hideNoInternet() {
-        if(binding != null) {
+        if (binding != null) {
             binding.layoutNoInternetSearch.noInternetOverlay.setVisibility(View.GONE);
             showExploreMode();
         }
     }
 
-    @Override
-    public void onFavoriteClick(Meal meal) {
-        if (meal.isFavorite()) {
-            presenter.removeFromFavorite(meal);
-            meal.setFavorite(false);
-        } else {
-            presenter.addToFavorite(meal);
-            meal.setFavorite(true);
-        }
-        searchAdapter.notifyDataSetChanged();
-    }
 
     @Override
     public void onMealClick(Meal meal) {

@@ -7,11 +7,12 @@ import android.os.Looper;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.splashscreen.SplashScreen;
 
-import com.example.tablia.presentation.auth.AuthActivity;
 import com.example.tablia.databinding.ActivitySplashBinding;
+import com.example.tablia.presentation.auth.AuthActivity;
 import com.example.tablia.presentation.home.view.HomeActivity;
 import com.example.tablia.presentation.splash.presenter.SplashPresenter;
 import com.example.tablia.presentation.splash.presenter.SplashPresenterImp;
@@ -29,7 +30,7 @@ public class SplashActivity extends AppCompatActivity implements SplashView {
         binding = ActivitySplashBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        presenter = new SplashPresenterImp(this,getApplication());
+        presenter = new SplashPresenterImp(this, getApplication());
 
         startAnimations();
 
@@ -39,7 +40,6 @@ public class SplashActivity extends AppCompatActivity implements SplashView {
     }
 
     public void startAnimations() {
-        // Initial States
         binding.plateCircle.setScaleX(0f);
         binding.plateCircle.setScaleY(0f);
         binding.plateCircle.setRotation(-180f);

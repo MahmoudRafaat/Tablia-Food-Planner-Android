@@ -88,17 +88,6 @@
                         android:layout_height="match_parent"
                         android:background="@drawable/gradient_black_overlay" />
 
-                    <ImageButton
-                        android:id="@+id/btnFavMealOfDay"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:layout_gravity="top|end"
-                        android:layout_margin="16dp"
-                        android:background="@drawable/white_circle_shadow"
-                        android:padding="8dp"
-                        android:src="@drawable/ic_heart"
-                        app:tint="@color/tomato_red" />
-
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"

@@ -4,7 +4,6 @@ import android.content.Context;
 import android.util.Log;
 
 import com.example.tablia.data.meals.datasource.MealsRepository;
-import com.example.tablia.data.meals.models.Meal;
 import com.example.tablia.data.meals.models.MealResponse;
 import com.example.tablia.presentation.search.main_search.view.SearchView;
 import com.example.tablia.utils.NetworkUtil;
@@ -141,23 +140,6 @@ public class SearchPresenterImpl implements SearchPresenter {
         searchSubject.onNext(query);
     }
 
-    @Override
-    public void addToFavorite(Meal meal) {
-        disposable.add(repository.insertFavMeal(meal)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(() -> {
-                }, throwable -> view.showError(throwable.getMessage())));
-    }
-
-    @Override
-    public void removeFromFavorite(Meal meal) {
-        disposable.add(repository.deleteFavMeal(meal)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(() -> {
-                }, throwable -> view.showError(throwable.getMessage())));
-    }
 
     @Override
     public void dispose() {

@@ -1,6 +1,7 @@
 package com.example.tablia.data.db;
 
 import androidx.room.TypeConverter;
+
 import com.example.tablia.data.meals.models.Meal;
 import com.google.gson.Gson;
 

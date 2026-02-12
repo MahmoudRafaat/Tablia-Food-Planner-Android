@@ -1,13 +1,13 @@
 package com.example.tablia.presentation.favorites.view;
 
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.tablia.R;
 import com.example.tablia.data.meals.models.Meal;
 import com.example.tablia.databinding.ItemPopularMealBinding;
 
@@ -46,6 +46,12 @@ public class FavoriteMealAdapter extends RecyclerView.Adapter<FavoriteMealAdapte
         return favorites.size();
     }
 
+    public interface OnFavoriteClickListener {
+        void onMealClick(Meal meal);
+
+        void onRemoveClick(Meal meal);
+    }
+
     class ViewHolder extends RecyclerView.ViewHolder {
 
         private final ItemPopularMealBinding binding;
@@ -56,16 +62,16 @@ public class FavoriteMealAdapter extends RecyclerView.Adapter<FavoriteMealAdapte
 
             itemView.setOnClickListener(v -> {
                 if (listener != null) {
-                    int position = getAdapterPosition();
+                    int position = getBindingAdapterPosition();
                     if (position != RecyclerView.NO_POSITION) {
                         listener.onMealClick(favorites.get(position));
                     }
                 }
             });
 
-            binding.btnFavPopular.setOnClickListener(v -> {
+            binding.btnRemoveFavorite.setOnClickListener(v -> {
                 if (listener != null) {
-                    int position = getAdapterPosition();
+                    int position = getBindingAdapterPosition();
                     if (position != RecyclerView.NO_POSITION) {
                         listener.onRemoveClick(favorites.get(position));
                     }
@@ -78,12 +84,7 @@ public class FavoriteMealAdapter extends RecyclerView.Adapter<FavoriteMealAdapte
             Glide.with(itemView.getContext())
                     .load(meal.getStrMealThumb())
                     .into(binding.ivPopularMeal);
-            binding.btnFavPopular.setImageResource(R.drawable.ic_heart_filled);
+            binding.btnRemoveFavorite.setVisibility(View.VISIBLE);
         }
-    }
-
-    public interface OnFavoriteClickListener {
-        void onMealClick(Meal meal);
-        void onRemoveClick(Meal meal);
     }
 }

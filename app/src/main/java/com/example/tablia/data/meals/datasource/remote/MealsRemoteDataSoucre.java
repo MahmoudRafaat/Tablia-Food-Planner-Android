@@ -17,9 +17,9 @@ import io.reactivex.rxjava3.core.Single;
 
 public class MealsRemoteDataSoucre {
 
+    private static MealsRemoteDataSoucre instance;
     private final MealApiService apiService;
     private final FirebaseManager firebaseManager = FirebaseManager.getInstance();
-    private static MealsRemoteDataSoucre instance;
 
     private MealsRemoteDataSoucre() {
         this.apiService = RetrofitClient.getClient().create(MealApiService.class);
@@ -67,6 +67,7 @@ public class MealsRemoteDataSoucre {
     public Observable<MealResponse> filterByArea(String area) {
         return apiService.filterByArea(area);
     }
+
     public Observable<MealResponse> searchMealsByName(String name) {
         return apiService.searchMealsByName(name);
     }

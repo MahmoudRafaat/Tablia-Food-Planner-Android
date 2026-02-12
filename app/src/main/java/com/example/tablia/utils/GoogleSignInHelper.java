@@ -1,30 +1,27 @@
 package com.example.tablia.utils;
 
-import android.content.Context;
 import android.app.Activity;
+import android.content.Context;
+import android.os.CancellationSignal;
 import android.util.Log;
+
+import androidx.core.content.ContextCompat;
 import androidx.credentials.CredentialManager;
 import androidx.credentials.CredentialManagerCallback;
+import androidx.credentials.CustomCredential;
 import androidx.credentials.GetCredentialRequest;
 import androidx.credentials.GetCredentialResponse;
-import androidx.credentials.CustomCredential;
+import androidx.credentials.exceptions.ClearCredentialException;
+import androidx.credentials.exceptions.GetCredentialException;
+import androidx.credentials.exceptions.GetCredentialCancellationException;
 
 import com.example.tablia.BuildConfig;
 import com.google.android.libraries.identity.googleid.GetGoogleIdOption;
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential;
-import java.util.concurrent.Executor;
-import androidx.core.content.ContextCompat;
-import androidx.credentials.exceptions.ClearCredentialException;
-import androidx.credentials.exceptions.GetCredentialException;
 
-import android.os.CancellationSignal;
+import java.util.concurrent.Executor;
 
 public class GoogleSignInHelper {
-
-    public interface CredentialCallback {
-        void onSuccess(String idToken);
-        void onFailure(String error);
-    }
 
     public static void signIn(Activity activity, CredentialCallback callback) {
         CredentialManager credentialManager = CredentialManager.create(activity);
@@ -73,8 +70,10 @@ public class GoogleSignInHelper {
 
                     @Override
                     public void onError(GetCredentialException e) {
-                        Log.e("GoogleSignIn", "Sign In Failed", e);
-                        callback.onFailure(e.getClass().getSimpleName() + ": " + e.getMessage());
+                        if (e instanceof GetCredentialCancellationException) {
+                        } else {
+                            callback.onFailure(e.getClass().getSimpleName() + ": " + e.getMessage());
+                        }
                     }
                 }
         );
@@ -96,5 +95,11 @@ public class GoogleSignInHelper {
                     public void onError(ClearCredentialException e) {
                     }
                 });
+    }
+
+    public interface CredentialCallback {
+        void onSuccess(String idToken);
+
+        void onFailure(String error);
     }
 }
