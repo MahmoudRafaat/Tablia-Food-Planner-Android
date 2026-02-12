@@ -77,22 +77,6 @@ com.example.tablia
 └── utils             # Network observers & UI helpers
 ```
 
----
 
-## 🚀 Getting Started
 
-### Prerequisites
-- Android Studio Iguana or newer.
-- Firebase project credentials (`google-services.json`).
-
-### Installation
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/MahmoudRaafat/Tablia.git
-   ```
-2. Place your `google-services.json` in the `app/` directory.
-3. Build the project and run on an emulator or physical device.
-
----
-
-Developed with ❤️ by [Mahmoud Raafat](https://github.com/MahmoudRaafat)
+Developed with ❤️ by [Mahmoud Raafat](https://github.com/MahmoudRafaat)
