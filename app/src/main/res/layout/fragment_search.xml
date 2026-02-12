@@ -6,6 +6,12 @@
     android:layout_height="match_parent"
     android:background="@color/background">
 
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/groupSearchContent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:constraint_referenced_ids="cvSearch,btnBackToExplore,scrollExplore,rvSearchResults,tvNoResults" />
+
     <androidx.cardview.widget.CardView
         android:id="@+id/cvSearch"
         android:layout_width="0dp"
@@ -33,6 +39,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
+        android:fontFamily="@font/tablia_font_family"
         android:text="@string/filters"
         android:visibility="gone"
         android:textColor="@color/basil_green"
@@ -56,10 +63,11 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/nunito_bold"
+                android:fontFamily="@font/tablia_font_family"
                 android:text="@string/explore_by"
                 android:textColor="@color/onBackground"
-                android:textSize="20sp" />
+                android:textSize="20sp"
+                android:textStyle="bold" />
 
             <!-- Categories Card -->
             <androidx.cardview.widget.CardView
@@ -79,10 +87,11 @@
                         android:id="@+id/tvCatTitle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:fontFamily="@font/nunito_bold"
+                        android:fontFamily="@font/tablia_font_family"
                         android:text="@string/categories"
                         android:textColor="@color/onBackground"
                         android:textSize="18sp"
+                        android:textStyle="bold"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
@@ -91,7 +100,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
-                        android:fontFamily="@font/nunito"
+                        android:fontFamily="@font/tablia_font_family"
                         android:text="@string/browse_by_food_type"
                         android:textColor="@color/text_grey"
                         android:textSize="14sp"
@@ -134,10 +143,11 @@
                         android:id="@+id/tvCountryTitle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:fontFamily="@font/nunito_bold"
+                        android:fontFamily="@font/tablia_font_family"
                         android:text="@string/countries"
                         android:textColor="@color/onBackground"
                         android:textSize="18sp"
+                        android:textStyle="bold"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
@@ -146,7 +156,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
-                        android:fontFamily="@font/nunito"
+                        android:fontFamily="@font/tablia_font_family"
                         android:text="@string/discover_cuisines_worldwide"
                         android:textColor="@color/text_grey"
                         android:textSize="14sp"
@@ -191,10 +201,11 @@
                         android:id="@+id/tvIngredientTitle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:fontFamily="@font/nunito_bold"
+                        android:fontFamily="@font/tablia_font_family"
                         android:text="@string/ingredients"
                         android:textColor="@color/onBackground"
                         android:textSize="18sp"
+                        android:textStyle="bold"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
@@ -203,7 +214,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
-                        android:fontFamily="@font/nunito"
+                        android:fontFamily="@font/tablia_font_family"
                         android:text="@string/search_by_what_you_have"
                         android:textColor="@color/text_grey"
                         android:textSize="14sp"
@@ -246,33 +257,35 @@
         android:id="@+id/layoutNoInternetSearch"
         layout="@layout/layout_no_internet"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/cvSearch" />
+        android:layout_height="match_parent"
+        android:visibility="gone" />
 
     <TextView
         android:id="@+id/tvNoResults"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/nunito_bold"
+        android:fontFamily="@font/tablia_font_family"
         android:text="@string/no_recipes_found"
         android:textColor="@color/text_grey"
         android:textSize="18sp"
+        android:textStyle="bold"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/cvSearch" />
 
-    <ProgressBar
+    <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/progressBarSearch"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"
+        app:lottie_rawRes="@raw/liquid_loader_01" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

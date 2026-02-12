@@ -27,6 +27,12 @@ public class HomeActivity extends AppCompatActivity {
             NavController navController = navHostFragment.getNavController();
             BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);
             NavigationUI.setupWithNavController(bottomNavigationView, navController);
+
+            navController.addOnDestinationChangedListener((controller, destination, arguments) -> {
+                if (destination.getId() == R.id.exploreListFragment || destination.getId() == R.id.mealListFragment) {
+                    bottomNavigationView.getMenu().findItem(R.id.navigation_search).setChecked(true);
+                }
+            });
         }
     }
 }

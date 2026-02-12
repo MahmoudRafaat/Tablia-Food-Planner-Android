@@ -42,6 +42,7 @@ public class ExploreListFragment extends Fragment implements ExploreListView, Ex
     private ExploreAdapter adapter;
     private String type;
     private List<Object> originalData = new ArrayList<>();
+    private boolean isNetworkAvailable = true;
 
     @Nullable
     @Override
@@ -58,17 +59,6 @@ public class ExploreListFragment extends Fragment implements ExploreListView, Ex
             type = getArguments().getString("type");
         }
 
-        initViews();
-        setupRecyclerView();
-        setupSearch();
-
-        MealsRepository repository = MealsRepository.getInstance(getContext());
-        presenter = new ExploreListPresenterImpl(this, repository);
-
-        loadData();
-    }
-
-    private void initViews() {
         binding.btnBack.setOnClickListener(v -> Navigation.findNavController(v).navigateUp());
 
         if ("category".equals(type)) {
@@ -91,21 +81,27 @@ public class ExploreListFragment extends Fragment implements ExploreListView, Ex
                 return true;
             }
         });
-    }
-
-    private void setupSearch() {
+        binding.rvExplore.setLayoutManager(new GridLayoutManager(requireContext(), 2));
+        adapter = new ExploreAdapter(this);
+        binding.rvExplore.setAdapter(adapter);
         disposables.add(searchSubject
                 .debounce(300, TimeUnit.MILLISECONDS)
                 .distinctUntilChanged()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::filterData, throwable -> Log.e(TAG, "Search error", throwable)));
+
+        MealsRepository repository = MealsRepository.getInstance(getContext());
+        presenter = new ExploreListPresenterImpl(this, repository);
+        presenter.observeNetwork(requireContext());
+
+        loadData();
     }
 
-    private void setupRecyclerView() {
-        binding.rvExplore.setLayoutManager(new GridLayoutManager(requireContext(), 2));
-        adapter = new ExploreAdapter(this);
-        binding.rvExplore.setAdapter(adapter);
-    }
+
+
+
+
+
 
     private void loadData() {
         if ("category".equals(type)) {
@@ -158,19 +154,42 @@ public class ExploreListFragment extends Fragment implements ExploreListView, Ex
 
     @Override
     public void showError(String message) {
-        if (getActivity() != null) {
+        if (isNetworkAvailable && getActivity() != null) {
             CustomAlertDialog.showError(getActivity(), message);
         }
     }
 
     @Override
     public void showLoading() {
-        binding.progressBarExplore.setVisibility(View.VISIBLE);
+        if (binding != null) {
+            binding.progressBarExplore.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
     public void hideLoading() {
-        binding.progressBarExplore.setVisibility(View.GONE);
+        if (binding != null) {
+            binding.progressBarExplore.setVisibility(View.GONE);
+        }
+    }
+
+    @Override
+    public void showNoInternet() {
+        isNetworkAvailable = false;
+        if (binding != null) {
+            binding.layoutNoInternetExplore.noInternetOverlay.setVisibility(View.VISIBLE);
+            binding.groupExploreContent.setVisibility(View.GONE);
+        }
+    }
+
+    @Override
+    public void hideNoInternet() {
+        isNetworkAvailable = true;
+        if (binding != null) {
+            binding.layoutNoInternetExplore.noInternetOverlay.setVisibility(View.GONE);
+            binding.groupExploreContent.setVisibility(View.VISIBLE);
+            loadData();
+        }
     }
 
     @Override
@@ -191,8 +210,8 @@ public class ExploreListFragment extends Fragment implements ExploreListView, Ex
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (presenter instanceof ExploreListPresenterImpl) {
-            ((ExploreListPresenterImpl) presenter).dispose();
+        if (presenter != null) {
+            presenter.dispose();
         }
     }
 }

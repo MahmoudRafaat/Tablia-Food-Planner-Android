@@ -3,35 +3,43 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="120dp"
     android:layout_margin="8dp"
     app:cardCornerRadius="16dp"
-    app:cardElevation="2dp">
+    app:cardElevation="4dp">
 
-    <LinearLayout
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:padding="16dp">
+        android:layout_height="match_parent">
 
         <ImageView
             android:id="@+id/ivExploreIcon"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:scaleType="centerInside"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
             tools:src="@tools:sample/avatars" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/gradient_black_overlay" />
 
         <TextView
             android:id="@+id/tvExploreName"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:fontFamily="@font/nunito_bold"
+            android:layout_gravity="bottom|center_horizontal"
+            android:layout_margin="8dp"
+            android:fontFamily="@font/tablia_font_family"
             android:textAlignment="center"
-            android:textColor="@color/onBackground"
+            android:textColor="@color/white"
             android:textSize="16sp"
+            android:textStyle="bold"
+            android:shadowColor="@color/black"
+            android:shadowDx="1"
+            android:shadowDy="1"
+            android:shadowRadius="2"
             tools:text="Category Name" />
 
-    </LinearLayout>
+    </FrameLayout>
 </androidx.cardview.widget.CardView>

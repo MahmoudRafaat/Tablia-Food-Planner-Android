@@ -43,9 +43,15 @@ public class MealDetailsActivity extends AppCompatActivity implements MealDetail
         presenter = new MealDetailsPresenterImpl(MealsRepository.getInstance(getApplication()), authRepository, this);
         presenter.observeNetwork(getApplication());
 
-        setupToolbar();
-        setupRecyclerView();
-
+        setSupportActionBar(binding.toolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+        binding.toolbar.setNavigationOnClickListener(v -> finish());
+        ingredientsAdapter = new IngredientAdapter(null);
+        binding.rvIngredients.setLayoutManager(new LinearLayoutManager(this));
+        ingredientsAdapter.setList(null);
+        binding.rvIngredients.setAdapter(ingredientsAdapter);
         getLifecycle().addObserver(binding.youtubePlayerView);
 
         Meal meal = getIntent().getParcelableExtra("meal");
@@ -91,6 +97,7 @@ public class MealDetailsActivity extends AppCompatActivity implements MealDetail
         int day = c.get(Calendar.DAY_OF_MONTH);
 
         DatePickerDialog datePickerDialog = new DatePickerDialog(this,
+                R.style.CustomDatePickerDialog,
                 (view, year1, monthOfYear, dayOfMonth) -> {
                     Calendar selectedDate = Calendar.getInstance();
                     selectedDate.set(year1, monthOfYear, dayOfMonth);
@@ -110,20 +117,6 @@ public class MealDetailsActivity extends AppCompatActivity implements MealDetail
         datePickerDialog.show();
     }
 
-    private void setupToolbar() {
-        setSupportActionBar(binding.toolbar);
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        }
-        binding.toolbar.setNavigationOnClickListener(v -> onBackPressed());
-    }
-
-    private void setupRecyclerView() {
-        ingredientsAdapter = new IngredientAdapter(null);
-        binding.rvIngredients.setLayoutManager(new LinearLayoutManager(this));
-        ingredientsAdapter.setList(null);
-        binding.rvIngredients.setAdapter(ingredientsAdapter);
-    }
 
     @Override
     public void showMealDetails(Meal meal) {
@@ -172,14 +165,14 @@ public class MealDetailsActivity extends AppCompatActivity implements MealDetail
 
     @Override
     public void showLoading() {
-        binding.pbMealDetails.setVisibility(View.VISIBLE);
-        binding.nestedScrollView.setVisibility(View.GONE);
-        binding.btnAddToPlanner.setVisibility(View.GONE);
+        binding.loadingOverlay.setVisibility(View.VISIBLE);
+        // Hide only content that shouldn't be seen behind loading if needed
+        // but typically a semi-transparent overlay is better
     }
 
     @Override
     public void hideLoading() {
-        binding.pbMealDetails.setVisibility(View.GONE);
+        binding.loadingOverlay.setVisibility(View.GONE);
     }
 
     @Override

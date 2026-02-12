@@ -4,10 +4,6 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
-import com.example.tablia.presentation.onboarding.discover.view.DiscoverFragment;
-import com.example.tablia.presentation.onboarding.plan.view.PlanFragment;
-import com.example.tablia.presentation.onboarding.plan.view.SaveFragment;
-
 public class OnboardingAdapter extends FragmentStateAdapter {
     public OnboardingAdapter(@NonNull OnboardingFragment fragmentActivity) {
         super(fragmentActivity);

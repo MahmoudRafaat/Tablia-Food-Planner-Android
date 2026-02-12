@@ -8,6 +8,7 @@ import com.example.tablia.data.network.FirebaseManager;
 import com.example.tablia.utils.ImageUtils;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
 import io.reactivex.rxjava3.core.Single;
@@ -52,7 +53,20 @@ public class AuthRemoteDataSource {
             AuthCredential credential = GoogleAuthProvider.getCredential(idToken, null);
             mAuth.signInWithCredential(credential).addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
-                    fetchUserProfile().subscribe(emitter::onSuccess, emitter::onError);
+                    FirebaseUser firebaseUser = mAuth.getCurrentUser();
+                    if (firebaseUser != null) {
+                        String name = firebaseUser.getDisplayName();
+                        String email = firebaseUser.getEmail();
+                        String profilePictureUrl = firebaseUser.getPhotoUrl() != null ? firebaseUser.getPhotoUrl().toString() : "";
+
+                        User user = new User(firebaseUser.getUid(), name, email, profilePictureUrl);
+
+                        // Always save/update the user profile to ensure it's up-to-date.
+                        firebaseManager.saveUserProfile(user)
+                                .subscribe(() -> emitter.onSuccess(user), emitter::onError);
+                    } else {
+                        emitter.onError(new Exception("Firebase user is null after Google login"));
+                    }
                 } else {
                     emitter.onError(new Exception("Google login failed"));
                 }

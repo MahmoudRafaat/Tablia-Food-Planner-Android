@@ -1,4 +1,4 @@
-package com.example.tablia.presentation.onboarding.plan.view;
+package com.example.tablia.presentation.onboarding.view;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -13,7 +13,7 @@ import androidx.fragment.app.Fragment;
 import com.example.tablia.R;
 import com.example.tablia.databinding.FragmentOnBoardingBinding;
 
-public class SaveFragment extends Fragment {
+public class DiscoverFragment extends Fragment {
     private FragmentOnBoardingBinding binding;
 
     @Nullable
@@ -32,10 +32,10 @@ public class SaveFragment extends Fragment {
     }
 
     public void showPlanData() {
-        binding.cardOnboardingIcon.setCardBackgroundColor(getResources().getColor(R.color.onboarding_yellow_end, null));
-        binding.imgOnboarding.setImageResource(R.drawable.ic_heart);
-        binding.tvOnboardingTitle.setText("Save & Organize Favorites");
-        binding.tvOnboardingSubtitle.setText("Access meals anytime, even offline");
+        binding.cardOnboardingIcon.setCardBackgroundColor(getResources().getColor(R.color.onboarding_green_end, null));
+        binding.imgOnboarding.setImageResource(R.drawable.ic_calendar);
+        binding.tvOnboardingTitle.setText("Discover Delicious Recipes");
+        binding.tvOnboardingSubtitle.setText("Search by country, category, or ingredient");
         binding.cardOnboardingIcon.setAlpha(0f);
         binding.cardOnboardingIcon.setScaleX(0.8f);
         binding.cardOnboardingIcon.setRotation(-10f);

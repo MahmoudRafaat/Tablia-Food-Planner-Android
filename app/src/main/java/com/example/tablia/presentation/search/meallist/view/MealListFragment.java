@@ -70,6 +70,10 @@ public class MealListFragment extends Fragment implements MealListView, PopularM
         }
 
         binding.chipFilter.setOnCloseIconClickListener(v -> Navigation.findNavController(v).navigateUp());
+
+        binding.btnFilters.setOnClickListener(v -> {
+            Navigation.findNavController(v).popBackStack(R.id.navigation_search, false);
+        });
     }
 
     private void setupRecyclerView() {

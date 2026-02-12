@@ -76,6 +76,7 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:background="@drawable/bg_category_chip"
+                android:fontFamily="@font/tablia_font_family"
                 android:paddingHorizontal="12dp"
                 android:paddingVertical="4dp"
                 android:textColor="@color/white"
@@ -88,6 +89,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="16dp"
                 android:layout_marginTop="8dp"
+                android:fontFamily="@font/tablia_font_family"
                 android:textColor="@color/onBackground"
                 android:textSize="24sp"
                 android:textStyle="bold"
@@ -129,7 +131,7 @@
                         <View
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:background="#40000000" />
+                            android:background="@color/transparent_black_40" />
 
                         <LinearLayout
                             android:layout_width="wrap_content"
@@ -148,6 +150,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="8dp"
+                                android:fontFamily="@font/tablia_font_family"
                                 android:text="Watch Cooking Video"
                                 android:textColor="@color/white"
                                 android:textSize="18sp"
@@ -160,6 +163,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
+                        android:fontFamily="@font/tablia_font_family"
                         android:text="No Video Available"
                         android:textColor="@color/text_grey"
                         android:visibility="gone" />
@@ -183,6 +187,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:fontFamily="@font/tablia_font_family"
                     android:text="@string/ingredients"
                     app:cornerRadius="16dp" />
 
@@ -192,6 +197,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:fontFamily="@font/tablia_font_family"
                     android:text="@string/instructions"
                     app:cornerRadius="16dp" />
             </com.google.android.material.button.MaterialButtonToggleGroup>
@@ -211,6 +217,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="24dp"
                 android:layout_marginTop="16dp"
+                android:fontFamily="@font/tablia_font_family"
                 android:lineSpacingExtra="4dp"
                 android:textColor="@color/onBackground"
                 android:textSize="16sp"
@@ -220,11 +227,25 @@
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 
-    <ProgressBar
-        android:id="@+id/pb_meal_details"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center" />
+    <FrameLayout
+        android:id="@+id/loading_overlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/transparent_white_80"
+        android:clickable="true"
+        android:focusable="true"
+        android:visibility="gone">
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/pb_meal_details"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_gravity="center"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            app:lottie_rawRes="@raw/liquid_loader_01" />
+
+    </FrameLayout>
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_add_to_planner"
@@ -234,6 +255,7 @@
         android:layout_marginHorizontal="16dp"
         android:layout_marginBottom="16dp"
         android:backgroundTint="@color/primary"
+        android:fontFamily="@font/tablia_font_family"
         android:text="@string/add_to_planner"
         android:textAllCaps="false"
         android:textSize="18sp"

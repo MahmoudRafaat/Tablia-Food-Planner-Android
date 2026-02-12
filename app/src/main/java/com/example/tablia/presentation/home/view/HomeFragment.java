@@ -1,6 +1,7 @@
 package com.example.tablia.presentation.home.view;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +13,9 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.bumptech.glide.Glide;
+import com.example.tablia.R;
+import com.example.tablia.data.auth.AuthRepository;
+import com.example.tablia.data.auth.models.User;
 import com.example.tablia.data.meals.datasource.MealsRepository;
 import com.example.tablia.data.meals.models.Meal;
 import com.example.tablia.databinding.FragmentHomeBinding;
@@ -19,6 +23,7 @@ import com.example.tablia.presentation.home.presenter.HomePresenter;
 import com.example.tablia.presentation.home.presenter.HomePresenterImpl;
 import com.example.tablia.presentation.meal_details.view.MealDetailsActivity;
 import com.example.tablia.utils.CustomAlertDialog;
+import com.example.tablia.utils.ImageUtils;
 
 import java.util.List;
 
@@ -40,23 +45,23 @@ public class HomeFragment extends Fragment implements HomeView, PopularMealAdapt
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         MealsRepository repository = MealsRepository.getInstance(getContext());
-        presenter = new HomePresenterImpl(this, repository);
+        AuthRepository authRepository = new AuthRepository(getContext());
+        presenter = new HomePresenterImpl(this, repository, authRepository);
 
         binding.cvMealOfTheDay.setOnClickListener(v -> {
             if (currentRandomMeal != null) {
                 navigateToDetails(currentRandomMeal);
             }
         });
-        initRecyclerViews();
-
-        presenter.observeNetwork(getContext());
-    }
-
-    private void initRecyclerViews() {
         binding.rvPopularMeals.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false));
         popularMealAdapter = new PopularMealAdapter(this);
         binding.rvPopularMeals.setAdapter(popularMealAdapter);
+
+        presenter.observeNetwork(getContext());
+        presenter.getUserData();
     }
+
+
 
     private void navigateToDetails(Meal meal) {
         Intent intent = new Intent(requireContext(), MealDetailsActivity.class);
@@ -79,6 +84,43 @@ public class HomeFragment extends Fragment implements HomeView, PopularMealAdapt
     public void showPopularMeals(List<Meal> meals) {
         if (binding == null) return;
         popularMealAdapter.setList(meals);
+    }
+
+    @Override
+    public void showUserData(User user) {
+        if (binding == null) return;
+        binding.tvUserName.setText(user.getFullName());
+        if (isAdded()) {
+            if (user.getProfilePicture() != null && !user.getProfilePicture().isEmpty()) {
+                if (user.getProfilePicture().startsWith("http")) {
+                    Glide.with(this)
+                            .load(user.getProfilePicture())
+                            .placeholder(R.drawable.ic_person)
+                            .into(binding.ivUserProfile);
+                } else {
+                    Bitmap bitmap = ImageUtils.base64ToBitmap(user.getProfilePicture());
+                    if (bitmap != null) {
+                        Glide.with(this)
+                                .load(bitmap)
+                                .placeholder(R.drawable.ic_person)
+                                .into(binding.ivUserProfile);
+                    } else {
+                        Glide.with(this).load(R.drawable.ic_person).into(binding.ivUserProfile);
+                    }
+                }
+            } else {
+                Glide.with(this).load(R.drawable.ic_person).into(binding.ivUserProfile);
+            }
+        }
+    }
+
+    @Override
+    public void showGuestUser() {
+        if (binding == null) return;
+        binding.tvUserName.setText("Guest");
+        if (isAdded()) {
+            Glide.with(this).load(R.drawable.ic_person).into(binding.ivUserProfile);
+        }
     }
 
     @Override

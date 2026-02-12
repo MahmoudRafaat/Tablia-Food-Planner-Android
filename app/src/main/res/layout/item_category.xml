@@ -27,9 +27,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:fontFamily="@font/nunito_bold"
+            android:fontFamily="@font/tablia_font_family"
             android:textColor="@color/onBackground"
             android:textSize="14sp"
+            android:textStyle="bold"
             tools:text="Italian" />
 
     </LinearLayout>

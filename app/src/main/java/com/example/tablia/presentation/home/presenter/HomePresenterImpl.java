@@ -3,6 +3,7 @@ package com.example.tablia.presentation.home.presenter;
 import android.content.Context;
 import android.util.Log;
 
+import com.example.tablia.data.auth.AuthRepository;
 import com.example.tablia.data.meals.datasource.MealsRepository;
 import com.example.tablia.data.meals.models.Meal;
 import com.example.tablia.presentation.home.view.HomeView;
@@ -16,12 +17,14 @@ public class HomePresenterImpl implements HomePresenter {
 
     private final HomeView view;
     private final MealsRepository repository;
+    private final AuthRepository authRepository;
     private final CompositeDisposable disposable = new CompositeDisposable();
     private boolean isConnected = true;
 
-    public HomePresenterImpl(HomeView view, MealsRepository repository) {
+    public HomePresenterImpl(HomeView view, MealsRepository repository, AuthRepository authRepository) {
         this.view = view;
         this.repository = repository;
+        this.authRepository = authRepository;
     }
 
     @Override
@@ -79,6 +82,23 @@ public class HomePresenterImpl implements HomePresenter {
                 .subscribe(
                         response -> view.showPopularMeals(response.getMeals()),
                         throwable -> handleError(throwable)
+                ));
+    }
+
+    @Override
+    public void getUserData() {
+        disposable.add(authRepository.getUser()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        user -> {
+                            if (user.getId() != null) {
+                                view.showUserData(user);
+                            } else {
+                                view.showGuestUser();
+                            }
+                        },
+                        throwable -> view.showGuestUser()
                 ));
     }
 

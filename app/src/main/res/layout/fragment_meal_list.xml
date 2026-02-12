@@ -37,7 +37,7 @@
             android:background="@color/white"
             app:iconifiedByDefault="false"
             app:queryBackground="@android:color/transparent"
-            app:queryHint="@string/search_hint" />
+            app:queryHint="@string/search_by_what_you_have" />
     </androidx.cardview.widget.CardView>
 
     <com.google.android.material.chip.Chip
@@ -48,7 +48,7 @@
         android:layout_marginTop="8dp"
         app:chipIcon="@drawable/ic_chef_hat"
         app:closeIconEnabled="true"
-        app:chipBackgroundColor="#FFEAEA"
+        app:chipBackgroundColor="@color/chip_background_light_red"
         app:chipIconTint="@color/tomato_red"
         app:closeIconTint="@color/tomato_red"
         android:textColor="@color/tomato_red"
@@ -62,7 +62,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="24dp"
-        android:fontFamily="@font/nunito"
+        android:fontFamily="@font/tablia_font_family"
         android:textColor="@color/text_grey"
         android:textSize="14sp"
         app:layout_constraintStart_toStartOf="parent"
@@ -75,6 +75,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
+        android:fontFamily="@font/tablia_font_family"
         android:text="@string/filters"
         android:textAllCaps="false"
         android:textColor="@color/onBackground"
@@ -96,14 +97,17 @@
         app:layout_constraintTop_toBottomOf="@id/tvFoundCount"
         tools:listitem="@layout/item_popular_meal" />
 
-    <ProgressBar
+    <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/progressBarMeals"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"
+        app:lottie_rawRes="@raw/liquid_loader_01" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

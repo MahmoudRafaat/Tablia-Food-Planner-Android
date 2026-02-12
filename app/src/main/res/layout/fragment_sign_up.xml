@@ -11,24 +11,26 @@
         android:layout_height="wrap_content"
         android:paddingBottom="40dp">
 
-        <ProgressBar
+        <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/progressBarSignUp"
-            style="?android:attr/progressBarStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
             android:visibility="gone"
             android:elevation="10dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            app:lottie_rawRes="@raw/liquid_loader_01" />
 
         <TextView
             android:id="@+id/tvSignUpTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="48dp"
-            android:fontFamily="@font/nunito_bold"
+            android:fontFamily="@font/tablia_font_family"
             android:text="@string/create_account"
             android:textColor="@color/navy_foreground"
             android:textSize="32sp"
@@ -42,7 +44,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:alpha="0.6"
-            android:fontFamily="@font/nunito"
+            android:fontFamily="@font/tablia_font_family"
             android:text="@string/join_tablia_and_start_planning"
             android:textColor="@color/navy_foreground"
             app:layout_constraintEnd_toEndOf="parent"
@@ -109,7 +111,7 @@
                 android:id="@+id/etFullName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/nunito"
+                android:fontFamily="@font/tablia_font_family"
                 android:inputType="textPersonName"
                 android:paddingStart="40dp"
                 android:paddingEnd="40dp"/>
@@ -139,7 +141,7 @@
                 android:id="@+id/etSignUpEmail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/nunito"
+                android:fontFamily="@font/tablia_font_family"
                 android:inputType="textEmailAddress"
                 android:paddingStart="40dp"
                 android:paddingEnd="40dp"/>
@@ -170,7 +172,7 @@
                 android:id="@+id/etSignUpPassword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/nunito"
+                android:fontFamily="@font/tablia_font_family"
                 android:inputType="textPassword"
                 android:paddingStart="40dp"
                 android:paddingEnd="40dp"/>
@@ -181,7 +183,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:fontFamily="@font/nunito"
+            android:fontFamily="@font/tablia_font_family"
             android:gravity="center"
             android:text="@string/by_creating_an_account_you_agree_to_our_terms_and_privacy_policy"
             android:textColor="@color/navy_foreground"
@@ -196,7 +198,7 @@
             android:layout_height="60dp"
             android:layout_marginTop="20dp"
             android:backgroundTint="@color/primary"
-            android:fontFamily="@font/nunito_bold"
+            android:fontFamily="@font/tablia_font_family"
             android:text="@string/create_account"
             android:textAllCaps="false"
             android:textSize="18sp"
@@ -218,7 +220,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/nunito"
+                android:fontFamily="@font/tablia_font_family"
                 android:text="@string/already_have_an_account"
                 android:textColor="@color/navy_foreground" />
 
@@ -226,9 +228,10 @@
                 android:id="@+id/tvSignInLink"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/nunito_bold"
+                android:fontFamily="@font/tablia_font_family"
                 android:text="@string/sign_in"
-                android:textColor="@color/primary" />
+                android:textColor="@color/primary"
+                android:textStyle="bold" />
         </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

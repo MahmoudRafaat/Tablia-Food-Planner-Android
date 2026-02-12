@@ -6,7 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -16,6 +15,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.example.tablia.R;
 import com.example.tablia.data.auth.AuthRepository;
 import com.example.tablia.data.meals.datasource.MealsRepository;
@@ -32,7 +32,7 @@ public class FavoritesFragment extends Fragment implements FavoritesView, Favori
 
     private RecyclerView rvFavorites;
     private TextView tvSavedMealsCount;
-    private ProgressBar progressBar;
+    private LottieAnimationView progressBar;
     private LinearLayout layoutEmptyState;
     private FavoriteMealAdapter adapter;
     private FavoritesPresenter presenter;
@@ -64,11 +64,13 @@ public class FavoritesFragment extends Fragment implements FavoritesView, Favori
     @Override
     public void showLoading() {
         progressBar.setVisibility(View.VISIBLE);
+        progressBar.playAnimation();
     }
 
     @Override
     public void hideLoading() {
         progressBar.setVisibility(View.GONE);
+        progressBar.pauseAnimation();
     }
 
     @Override

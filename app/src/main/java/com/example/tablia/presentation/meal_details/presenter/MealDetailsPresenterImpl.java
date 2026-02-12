@@ -104,7 +104,10 @@ public class MealDetailsPresenterImpl implements MealDetailsPresenter {
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(
-                            () -> view.onFavoriteStatusChanged(true),
+                            () -> {
+                                view.onFavoriteStatusChanged(true);
+                                view.showSuccess("Meal added to favorites");
+                            },
                             throwable -> view.showError(throwable.getMessage())
                     ));
         });
@@ -122,7 +125,10 @@ public class MealDetailsPresenterImpl implements MealDetailsPresenter {
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(
-                            () -> view.onFavoriteStatusChanged(false),
+                            () -> {
+                                view.onFavoriteStatusChanged(false);
+                                view.showSuccess("Meal removed from favorites");
+                            },
                             throwable -> view.showError(throwable.getMessage())
                     ));
         });

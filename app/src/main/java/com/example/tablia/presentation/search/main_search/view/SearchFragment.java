@@ -36,6 +36,7 @@ public class SearchFragment extends Fragment implements com.example.tablia.prese
     private FragmentSearchBinding binding;
     private SearchPresenter presenter;
     private PopularMealAdapter searchAdapter;
+    private boolean isNetworkAvailable = true;
 
     @Nullable
     @Override
@@ -61,11 +62,6 @@ public class SearchFragment extends Fragment implements com.example.tablia.prese
             showExploreMode();
         });
 
-        setupSearchView();
-        presenter.observeNetwork(requireContext());
-    }
-
-    private void setupSearchView() {
         binding.searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -79,7 +75,10 @@ public class SearchFragment extends Fragment implements com.example.tablia.prese
                 return true;
             }
         });
+        presenter.observeNetwork(requireContext());
     }
+
+
 
     private void navigateToExplore(String type) {
         Bundle bundle = new Bundle();
@@ -168,7 +167,9 @@ public class SearchFragment extends Fragment implements com.example.tablia.prese
 
     @Override
     public void showError(String message) {
-        Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
+        if (isNetworkAvailable) {
+            Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
@@ -187,7 +188,7 @@ public class SearchFragment extends Fragment implements com.example.tablia.prese
 
     @Override
     public void showSearchMode() {
-        if (binding == null) return;
+        if (binding == null || !isNetworkAvailable) return;
         binding.scrollExplore.setVisibility(View.GONE);
         binding.rvSearchResults.setVisibility(View.VISIBLE);
         binding.btnBackToExplore.setVisibility(View.VISIBLE);
@@ -195,7 +196,7 @@ public class SearchFragment extends Fragment implements com.example.tablia.prese
 
     @Override
     public void showExploreMode() {
-        if (binding == null) return;
+        if (binding == null || !isNetworkAvailable) return;
         binding.tvNoResults.setVisibility(View.GONE);
         binding.scrollExplore.setVisibility(View.VISIBLE);
         binding.rvSearchResults.setVisibility(View.GONE);
@@ -204,17 +205,19 @@ public class SearchFragment extends Fragment implements com.example.tablia.prese
 
     @Override
     public void showNoInternet() {
+        isNetworkAvailable = false;
         if (binding != null) {
             binding.layoutNoInternetSearch.noInternetOverlay.setVisibility(View.VISIBLE);
-            binding.scrollExplore.setVisibility(View.GONE);
-            binding.rvSearchResults.setVisibility(View.GONE);
+            binding.groupSearchContent.setVisibility(View.GONE);
         }
     }
 
     @Override
     public void hideNoInternet() {
+        isNetworkAvailable = true;
         if (binding != null) {
             binding.layoutNoInternetSearch.noInternetOverlay.setVisibility(View.GONE);
+            binding.groupSearchContent.setVisibility(View.VISIBLE);
             showExploreMode();
         }
     }
