@@ -1,6 +1,9 @@
 package com.example.tablia.data.meals.datasource.remote;
 
-import com.example.tablia.data.meals.models.*;
+import com.example.tablia.data.meals.models.AreaResponse;
+import com.example.tablia.data.meals.models.CategoryResponse;
+import com.example.tablia.data.meals.models.IngredientResponse;
+import com.example.tablia.data.meals.models.MealResponse;
 
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.core.Single;
@@ -13,7 +16,7 @@ public interface MealApiService {
 
     @GET("filter.php")
     Single<MealResponse> getMealsByIngredient(@Query("i") String ingredient);
-    
+
     @GET("lookup.php")
     Single<MealResponse> getMealById(@Query("i") String id);
 

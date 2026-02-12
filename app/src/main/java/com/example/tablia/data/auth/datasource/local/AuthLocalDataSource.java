@@ -14,9 +14,8 @@ public class AuthLocalDataSource {
     private static final String KEY_IS_LOGGED_IN = "isLoggedIn";
     private static final String KEY_IS_FIRST_RUN = "isFirstRun";
     private static final String KEY_USER_DATA = "userData";
-
+    private static AuthLocalDataSource instance;
     private final SharedPreferences prefs;
-    private static AuthLocalDataSource instance ;
     private final Gson gson;
 
     private AuthLocalDataSource(Context context) {
@@ -36,8 +35,8 @@ public class AuthLocalDataSource {
     }
 
     public Completable setLoggedIn(boolean value) {
-        return Completable.fromAction(() -> 
-            prefs.edit().putBoolean(KEY_IS_LOGGED_IN, value).apply()
+        return Completable.fromAction(() ->
+                prefs.edit().putBoolean(KEY_IS_LOGGED_IN, value).apply()
         );
     }
 
@@ -46,8 +45,8 @@ public class AuthLocalDataSource {
     }
 
     public Completable setFirstRun(boolean value) {
-        return Completable.fromAction(() -> 
-            prefs.edit().putBoolean(KEY_IS_FIRST_RUN, value).apply()
+        return Completable.fromAction(() ->
+                prefs.edit().putBoolean(KEY_IS_FIRST_RUN, value).apply()
         );
     }
 
@@ -69,11 +68,11 @@ public class AuthLocalDataSource {
     }
 
     public Completable clear() {
-        return Completable.fromAction(() -> 
-            prefs.edit()
-                .remove(KEY_IS_LOGGED_IN)
-                .remove(KEY_USER_DATA)
-                .apply()
+        return Completable.fromAction(() ->
+                prefs.edit()
+                        .remove(KEY_IS_LOGGED_IN)
+                        .remove(KEY_USER_DATA)
+                        .apply()
         );
     }
 }

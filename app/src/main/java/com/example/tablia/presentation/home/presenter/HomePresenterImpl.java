@@ -60,7 +60,6 @@ public class HomePresenterImpl implements HomePresenter {
                             view.hideLoading();
                             if (response.getMeals() != null && !response.getMeals().isEmpty()) {
                                 Meal meal = response.getMeals().get(0);
-                                checkIsFavorite(meal);
                                 view.showRandomMeal(meal);
                             }
                         },
@@ -80,64 +79,6 @@ public class HomePresenterImpl implements HomePresenter {
                 .subscribe(
                         response -> view.showPopularMeals(response.getMeals()),
                         throwable -> handleError(throwable)
-                ));
-    }
-
-    @Override
-    public void toggleFavorite(Meal meal) {
-        disposable.add(repository.isMealFavorite(meal.getIdMeal())
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                        isFav -> {
-                            if (isFav) {
-                                removeFromFavorite(meal);
-                            } else {
-                                addToFavorite(meal);
-                            }
-                        },
-                        throwable -> view.showError(throwable.getMessage())
-                ));
-    }
-
-    @Override
-    public void addToFavorite(Meal meal) {
-        meal.setFavorite(true);
-        disposable.add(repository.insertFavMeal(meal)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                        () -> {
-                            view.onMealAddedToFavorites("Added to favorites successfully");
-                            view.updateFavoriteStatus(meal.getIdMeal(), true);
-                        },
-                        throwable -> view.showError(throwable.getMessage())
-                ));
-    }
-
-    @Override
-    public void removeFromFavorite(Meal meal) {
-        meal.setFavorite(false);
-        disposable.add(repository.deleteFavMeal(meal)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                        () -> {
-                            view.onMealRemovedFromFavorites("Removed from favorites");
-                            view.updateFavoriteStatus(meal.getIdMeal(), false);
-                        },
-                        throwable -> view.showError(throwable.getMessage())
-                ));
-    }
-
-    @Override
-    public void checkIsFavorite(Meal meal) {
-        disposable.add(repository.isMealFavorite(meal.getIdMeal())
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                        isFav -> view.updateFavoriteStatus(meal.getIdMeal(), isFav),
-                        throwable -> {}
                 ));
     }
 

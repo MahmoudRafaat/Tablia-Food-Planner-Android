@@ -1,6 +1,6 @@
-
 package com.example.tablia.presentation.favorites.presenter;
 
+import com.example.tablia.data.auth.AuthRepository;
 import com.example.tablia.data.meals.datasource.MealsRepository;
 import com.example.tablia.data.meals.models.Meal;
 import com.example.tablia.presentation.favorites.view.FavoritesView;
@@ -11,23 +11,38 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class FavoritesPresenterImpl implements FavoritesPresenter {
 
-    private FavoritesView view;
     private final MealsRepository repository;
+    private final AuthRepository authRepository;
     private final CompositeDisposable disposables = new CompositeDisposable();
+    private FavoritesView view;
 
-    public FavoritesPresenterImpl(FavoritesView view, MealsRepository repository) {
+    public FavoritesPresenterImpl(FavoritesView view, MealsRepository repository, AuthRepository authRepository) {
         this.view = view;
         this.repository = repository;
+        this.authRepository = authRepository;
     }
 
     @Override
     public void loadFavorites() {
-        if (view != null) view.showLoading();
-        disposables.add(repository.syncFavoritesWithRemote()
+        disposables.add(authRepository.isLoggedIn()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .onErrorComplete()
-                .andThen(repository.getAllFavMeals())
+                .subscribe(isLoggedIn -> {
+                    if (isLoggedIn) {
+                        fetchFavorites();
+                    } else {
+                        if (view != null) view.showGuestAlert();
+                    }
+                }, throwable -> {
+                    if (view != null) view.showError(throwable.getMessage());
+                }));
+    }
+
+    private void fetchFavorites() {
+        if (view != null) view.showLoading();
+
+        // 1. Observe local database immediately for reactivity
+        disposables.add(repository.getAllFavMeals()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
@@ -47,6 +62,15 @@ public class FavoritesPresenterImpl implements FavoritesPresenter {
                                 view.showError(throwable.getMessage());
                             }
                         }
+                ));
+
+        // 2. Trigger remote sync in the background
+        disposables.add(repository.syncFavoritesWithRemote()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        () -> { /* Sync done */ },
+                        throwable -> { /* Sync failed */ }
                 ));
     }
 

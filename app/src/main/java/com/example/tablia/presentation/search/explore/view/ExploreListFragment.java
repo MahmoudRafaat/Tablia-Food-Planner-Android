@@ -29,20 +29,19 @@ import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
-import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import io.reactivex.rxjava3.subjects.PublishSubject;
 
 public class ExploreListFragment extends Fragment implements ExploreListView, ExploreAdapter.OnItemClickListener {
 
     private static final String TAG = "ExploreListFragment";
+    private final CompositeDisposable disposables = new CompositeDisposable();
+    private final PublishSubject<String> searchSubject = PublishSubject.create();
     private FragmentExploreListBinding binding;
     private ExploreListPresenter presenter;
     private ExploreAdapter adapter;
     private String type;
     private List<Object> originalData = new ArrayList<>();
-    private final CompositeDisposable disposables = new CompositeDisposable();
-    private final PublishSubject<String> searchSubject = PublishSubject.create();
 
     @Nullable
     @Override

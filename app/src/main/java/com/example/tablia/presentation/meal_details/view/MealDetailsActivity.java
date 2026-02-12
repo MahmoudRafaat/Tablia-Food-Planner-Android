@@ -1,16 +1,22 @@
 package com.example.tablia.presentation.meal_details.view;
 
 import android.app.DatePickerDialog;
+import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.view.View;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
+
 import com.bumptech.glide.Glide;
 import com.example.tablia.R;
+import com.example.tablia.data.auth.AuthRepository;
 import com.example.tablia.data.meals.datasource.MealsRepository;
 import com.example.tablia.data.meals.models.Meal;
 import com.example.tablia.databinding.ActivityMealDetailsBinding;
+import com.example.tablia.presentation.auth.AuthActivity;
 import com.example.tablia.presentation.meal_details.presenter.MealDetailsPresenter;
 import com.example.tablia.presentation.meal_details.presenter.MealDetailsPresenterImpl;
 import com.example.tablia.utils.CustomAlertDialog;
@@ -25,7 +31,7 @@ public class MealDetailsActivity extends AppCompatActivity implements MealDetail
     private MealDetailsPresenter presenter;
     private IngredientAdapter ingredientsAdapter;
     private Meal currentMeal;
-    private boolean isFavorite ;
+    private boolean isFavorite;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -33,8 +39,9 @@ public class MealDetailsActivity extends AppCompatActivity implements MealDetail
         binding = ActivityMealDetailsBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        presenter = new MealDetailsPresenterImpl(MealsRepository.getInstance(this), this);
-        presenter.observeNetwork(this);
+        AuthRepository authRepository = new AuthRepository(getApplication());
+        presenter = new MealDetailsPresenterImpl(MealsRepository.getInstance(getApplication()), authRepository, this);
+        presenter.observeNetwork(getApplication());
 
         setupToolbar();
         setupRecyclerView();
@@ -46,7 +53,6 @@ public class MealDetailsActivity extends AppCompatActivity implements MealDetail
             presenter.getMealDetails(meal);
             presenter.checkIsFavorite(meal.getIdMeal());
         }
-
 
         binding.toggleGroup.addOnButtonCheckedListener((group, checkedId, isChecked) -> {
             if (isChecked) {
@@ -63,18 +69,19 @@ public class MealDetailsActivity extends AppCompatActivity implements MealDetail
         binding.fabFav.setOnClickListener(v -> {
             if (currentMeal != null) {
                 if (isFavorite) {
-                    presenter.removeFromFavorites(currentMeal);
+                    CustomAlertDialog.showConfirmation(
+                            this,
+                            getString(R.string.remove_from_favorites),
+                            getString(R.string.are_you_sure_you_want_to_delete_from_favorites),
+                            () -> presenter.removeFromFavorites(currentMeal)
+                    );
                 } else {
                     presenter.addToFavorites(currentMeal);
                 }
             }
         });
 
-        binding.btnAddToPlanner.setOnClickListener(v -> {
-            if (currentMeal != null) {
-                showDatePicker();
-            }
-        });
+        binding.btnAddToPlanner.setOnClickListener(v -> showDatePicker());
     }
 
     private void showDatePicker() {
@@ -91,12 +98,12 @@ public class MealDetailsActivity extends AppCompatActivity implements MealDetail
                     selectedDate.set(Calendar.MINUTE, 0);
                     selectedDate.set(Calendar.SECOND, 0);
                     selectedDate.set(Calendar.MILLISECOND, 0);
-                    
+
                     presenter.addToPlan(currentMeal, selectedDate.getTimeInMillis());
                 }, year, month, day);
 
         datePickerDialog.getDatePicker().setMinDate(c.getTimeInMillis());
-        
+
         c.add(Calendar.DAY_OF_YEAR, 6);
         datePickerDialog.getDatePicker().setMaxDate(c.getTimeInMillis());
 
@@ -141,7 +148,7 @@ public class MealDetailsActivity extends AppCompatActivity implements MealDetail
                 binding.playerPlaceholder,
                 binding.tvNoVideo
         );
-        
+
         binding.cvYoutube.setVisibility(View.VISIBLE);
         binding.nestedScrollView.setVisibility(View.VISIBLE);
         binding.btnAddToPlanner.setVisibility(View.VISIBLE);
@@ -180,14 +187,26 @@ public class MealDetailsActivity extends AppCompatActivity implements MealDetail
         this.isFavorite = isFavorite;
         if (isFavorite) {
             binding.fabFav.setImageResource(R.drawable.ic_heart_filled);
+            binding.fabFav.setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(this, R.color.tomato_red)));
         } else {
             binding.fabFav.setImageResource(R.drawable.ic_heart);
+            binding.fabFav.setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(this, R.color.text_grey)));
         }
     }
 
     @Override
     public void showNoInternet() {
         CustomAlertDialog.showNoInternet(this);
+    }
+
+    @Override
+    public void showGuestAlert() {
+        CustomAlertDialog.showGuestModeAlert(this, () -> {
+            Intent intent = new Intent(this, AuthActivity.class);
+            intent.putExtra("destination", "login");
+            startActivity(intent);
+            finish();
+        });
     }
 
     @Override

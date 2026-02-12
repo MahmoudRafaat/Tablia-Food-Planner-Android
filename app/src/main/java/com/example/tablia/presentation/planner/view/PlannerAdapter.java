@@ -6,24 +6,22 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.bumptech.glide.Glide;
 import com.example.tablia.R;
 import com.example.tablia.data.meals.models.Meal;
 import com.example.tablia.data.meals.models.MealAppointment;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class PlannerAdapter extends RecyclerView.Adapter<PlannerAdapter.ViewHolder> {
 
-    private List<MealAppointment> appointments = new ArrayList<>();
     private final OnPlannerClickListener listener;
-
-    public interface OnPlannerClickListener {
-        void onMealClick(Meal meal);
-        void onRemoveClick(MealAppointment appointment);
-    }
+    private List<MealAppointment> appointments = new ArrayList<>();
 
     public PlannerAdapter(OnPlannerClickListener listener) {
         this.listener = listener;
@@ -45,7 +43,7 @@ public class PlannerAdapter extends RecyclerView.Adapter<PlannerAdapter.ViewHold
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         MealAppointment appointment = appointments.get(position);
         Meal meal = appointment.getMeal();
-        
+
         if (meal != null) {
             holder.tvName.setText(meal.getStrMeal());
             Glide.with(holder.itemView.getContext())
@@ -62,6 +60,12 @@ public class PlannerAdapter extends RecyclerView.Adapter<PlannerAdapter.ViewHold
     @Override
     public int getItemCount() {
         return appointments != null ? appointments.size() : 0;
+    }
+
+    public interface OnPlannerClickListener {
+        void onMealClick(Meal meal);
+
+        void onRemoveClick(MealAppointment appointment);
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {

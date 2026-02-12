@@ -8,16 +8,19 @@ import com.example.tablia.data.meals.models.MealAppointment;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.SetOptions;
+
 import java.util.List;
+
 import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Single;
 
 public class FirebaseManager {
+    private static FirebaseManager instance;
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
     private final FirebaseAuth mAuth = FirebaseAuth.getInstance();
-    private static FirebaseManager instance ;
 
-    public FirebaseManager() {}
+    public FirebaseManager() {
+    }
 
     public static synchronized FirebaseManager getInstance() {
         if (instance == null) {
@@ -35,7 +38,10 @@ public class FirebaseManager {
         });
     }
 
-    public String getUserId() { return mAuth.getUid(); }
+    public String getUserId() {
+        return mAuth.getUid();
+    }
+
     public Single<User> getUserProfile() {
         String userId = getUserId();
         if (userId == null) return Single.error(new Exception("Not logged in"));
@@ -52,9 +58,10 @@ public class FirebaseManager {
                     .addOnFailureListener(emitter::onError);
         });
     }
+
     public Completable addFavorite(Meal meal) {
         String userId = getUserId();
-        Log.d("TAG", "addFavorite: "+userId);
+        Log.d("TAG", "addFavorite: " + userId);
         if (userId == null) return Completable.complete();
         return Completable.create(emitter -> {
             db.collection("users").document(userId)

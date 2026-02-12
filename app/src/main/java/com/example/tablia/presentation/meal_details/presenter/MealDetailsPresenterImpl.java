@@ -3,6 +3,7 @@ package com.example.tablia.presentation.meal_details.presenter;
 import android.content.Context;
 import android.util.Log;
 
+import com.example.tablia.data.auth.AuthRepository;
 import com.example.tablia.data.meals.datasource.MealsRepository;
 import com.example.tablia.data.meals.models.Meal;
 import com.example.tablia.data.meals.models.MealAppointment;
@@ -18,12 +19,14 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 public class MealDetailsPresenterImpl implements MealDetailsPresenter {
 
     private final MealsRepository repository;
+    private final AuthRepository authRepository;
     private final MealDetailsView view;
     private final CompositeDisposable disposable = new CompositeDisposable();
     private boolean isConnected = true;
 
-    public MealDetailsPresenterImpl(MealsRepository repository, MealDetailsView view) {
+    public MealDetailsPresenterImpl(MealsRepository repository, AuthRepository authRepository, MealDetailsView view) {
         this.repository = repository;
+        this.authRepository = authRepository;
         this.view = view;
     }
 
@@ -41,13 +44,25 @@ public class MealDetailsPresenterImpl implements MealDetailsPresenter {
         );
     }
 
+    private void checkAuth(Runnable onAuthorized) {
+        disposable.add(authRepository.isLoggedIn()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(isLoggedIn -> {
+                    if (isLoggedIn) {
+                        onAuthorized.run();
+                    } else {
+                        view.showGuestAlert();
+                    }
+                }, throwable -> view.showError(throwable.getMessage())));
+    }
+
     @Override
     public void getMealDetails(Meal meal) {
         if (meal == null) return;
-        
+
         view.showLoading();
-        
-        // If the meal already has instructions, it's likely a full meal object
+
         if (meal.getStrInstructions() != null && !meal.getStrInstructions().isEmpty()) {
             view.showMealDetails(meal);
             view.hideLoading();
@@ -79,24 +94,38 @@ public class MealDetailsPresenterImpl implements MealDetailsPresenter {
 
     @Override
     public void addToFavorites(Meal meal) {
-        disposable.add(repository.insertFavMeal(meal)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                        () -> view.onFavoriteStatusChanged(true),
-                        throwable -> view.showError(throwable.getMessage())
-                ));
+        checkAuth(() -> {
+            if (!isConnected) {
+                view.showNoInternet();
+                return;
+            }
+            meal.setFavorite(true);
+            disposable.add(repository.insertFavMeal(meal)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(
+                            () -> view.onFavoriteStatusChanged(true),
+                            throwable -> view.showError(throwable.getMessage())
+                    ));
+        });
     }
 
     @Override
     public void removeFromFavorites(Meal meal) {
-        disposable.add(repository.deleteFavMeal(meal)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                        () -> view.onFavoriteStatusChanged(false),
-                        throwable -> view.showError(throwable.getMessage())
-                ));
+        checkAuth(() -> {
+            if (!isConnected) {
+                view.showNoInternet();
+                return;
+            }
+            meal.setFavorite(false);
+            disposable.add(repository.deleteFavMeal(meal)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(
+                            () -> view.onFavoriteStatusChanged(false),
+                            throwable -> view.showError(throwable.getMessage())
+                    ));
+        });
     }
 
     @Override
@@ -112,22 +141,24 @@ public class MealDetailsPresenterImpl implements MealDetailsPresenter {
 
     @Override
     public void addToPlan(Meal meal, long timestamp) {
-        if (!isConnected) {
-            view.showNoInternet();
-            return;
-        }
-        MealAppointment appointment = new MealAppointment(
-                UUID.randomUUID().toString(),
-                meal,
-                timestamp
-        );
-        disposable.add(repository.insertAppointment(appointment)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                        () -> view.showSuccess("Meal added to plan"),
-                        throwable -> view.showError(throwable.getMessage())
-                ));
+        checkAuth(() -> {
+            if (!isConnected) {
+                view.showNoInternet();
+                return;
+            }
+            MealAppointment appointment = new MealAppointment(
+                    UUID.randomUUID().toString(),
+                    meal,
+                    timestamp
+            );
+            disposable.add(repository.insertAppointment(appointment)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(
+                            () -> view.showSuccess("Meal added to plan"),
+                            throwable -> view.showError(throwable.getMessage())
+                    ));
+        });
     }
 
     @Override

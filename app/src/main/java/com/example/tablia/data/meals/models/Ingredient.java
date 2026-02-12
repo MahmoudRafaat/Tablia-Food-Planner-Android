@@ -18,10 +18,6 @@ public class Ingredient {
     private String imageUrl;
 
 
-
-
-
-
     public String getIdIngredient() {
         return idIngredient;
     }
@@ -45,7 +41,7 @@ public class Ingredient {
     public void setStrDescription(String strDescription) {
         this.strDescription = strDescription;
     }
-    
+
     public String getStrType() {
         return strType;
     }

@@ -61,7 +61,7 @@ public class MealListFragment extends Fragment implements MealListView, PopularM
 
     private void initViews() {
         binding.btnBackMeals.setOnClickListener(v -> Navigation.findNavController(v).navigateUp());
-        
+
         if (filterValue != null) {
             binding.chipFilter.setText(filterValue);
             binding.chipFilter.setVisibility(View.VISIBLE);
@@ -134,33 +134,17 @@ public class MealListFragment extends Fragment implements MealListView, PopularM
     }
 
     @Override
-    public void onFavoriteClick(Meal meal) {
-        if (meal.isFavorite()) {
-            presenter.removeFromFavorite(meal);
-            meal.setFavorite(false);
-        } else {
-            presenter.addToFavorite(meal);
-            meal.setFavorite(true);
-        }
-        adapter.notifyDataSetChanged();
-    }
-
-    @Override
     public void onMealClick(Meal meal) {
         Intent intent = new Intent(requireContext(), MealDetailsActivity.class);
         intent.putExtra("meal", meal);
         startActivity(intent);
     }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        binding = null;
-    }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
+        binding = null;
         if (presenter != null) {
             presenter.dispose();
         }

@@ -9,6 +9,7 @@ import android.view.animation.OvershootInterpolator;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+
 import com.example.tablia.R;
 import com.example.tablia.databinding.FragmentOnBoardingBinding;
 
@@ -32,7 +33,7 @@ public class PlanFragment extends Fragment {
 
     public void showPlanData() {
         binding.cardOnboardingIcon.setCardBackgroundColor(getResources().getColor(R.color.onboarding_red_end, null));
-        binding.imgOnboarding.setImageResource(R.drawable.ic_chef_hat); 
+        binding.imgOnboarding.setImageResource(R.drawable.ic_chef_hat);
         binding.tvOnboardingTitle.setText("Plan Your Meals Easily");
         binding.tvOnboardingSubtitle.setText("Weekly meal planning made simple and delightful");
         binding.cardOnboardingIcon.setAlpha(0f);

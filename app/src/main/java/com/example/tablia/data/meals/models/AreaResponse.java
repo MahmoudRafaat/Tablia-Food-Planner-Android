@@ -1,6 +1,7 @@
 package com.example.tablia.data.meals.models;
 
 import com.google.gson.annotations.SerializedName;
+
 import java.util.List;
 
 public class AreaResponse {

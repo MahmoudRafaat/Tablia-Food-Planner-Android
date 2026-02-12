@@ -9,6 +9,7 @@ import android.view.animation.OvershootInterpolator;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+
 import com.example.tablia.R;
 import com.example.tablia.databinding.FragmentOnBoardingBinding;
 

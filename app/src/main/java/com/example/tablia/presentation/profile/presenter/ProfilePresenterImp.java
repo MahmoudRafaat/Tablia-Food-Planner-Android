@@ -24,6 +24,19 @@ public class ProfilePresenterImp implements ProfilePresenter {
 
     @Override
     public void getProfileDeatails() {
+        disposables.add(authRepository.isLoggedIn()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(isLoggedIn -> {
+                    if (isLoggedIn) {
+                        fetchProfileDetails();
+                    } else {
+                        view.showGuestAlert();
+                    }
+                }, throwable -> view.onLogoutFailure("Failed to check login status")));
+    }
+
+    private void fetchProfileDetails() {
         disposables.add(authRepository.getUser()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -37,7 +50,8 @@ public class ProfilePresenterImp implements ProfilePresenter {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         meals -> view.showFavoritesCount(meals.size()),
-                        throwable -> {}
+                        throwable -> {
+                        }
                 ));
 
         disposables.add(mealsRepository.getAllAppointments()
@@ -45,7 +59,8 @@ public class ProfilePresenterImp implements ProfilePresenter {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         appointments -> view.showPlannedCount(appointments.size()),
-                        throwable -> {}
+                        throwable -> {
+                        }
                 ));
     }
 

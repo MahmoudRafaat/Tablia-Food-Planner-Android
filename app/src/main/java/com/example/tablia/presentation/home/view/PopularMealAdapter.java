@@ -1,6 +1,5 @@
 package com.example.tablia.presentation.home.view;
 
-import android.content.res.ColorStateList;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,7 +8,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -21,13 +19,8 @@ import java.util.List;
 
 public class PopularMealAdapter extends RecyclerView.Adapter<PopularMealAdapter.ViewHolder> {
 
-    private List<Meal> meals = new ArrayList<>();
     private final OnMealClickListener listener;
-
-    public interface OnMealClickListener {
-        void onFavoriteClick(Meal meal);
-        void onMealClick(Meal meal);
-    }
+    private List<Meal> meals = new ArrayList<>();
 
     public PopularMealAdapter(OnMealClickListener listener) {
         this.listener = listener;
@@ -57,20 +50,8 @@ public class PopularMealAdapter extends RecyclerView.Adapter<PopularMealAdapter.
                 .load(meal.getStrMealThumb())
                 .into(holder.ivMeal);
 
-        updateFavoriteUI(holder, meal.isFavorite());
-
-        holder.btnFav.setOnClickListener(v -> listener.onFavoriteClick(meal));
+        holder.btnRemoveFavorite.setVisibility(View.GONE);
         holder.itemView.setOnClickListener(v -> listener.onMealClick(meal));
-    }
-
-    private void updateFavoriteUI(ViewHolder holder, boolean isFavorite) {
-        if (isFavorite) {
-            holder.btnFav.setImageResource(R.drawable.ic_heart_filled);
-            holder.btnFav.setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(holder.itemView.getContext(), R.color.primary)));
-        } else {
-            holder.btnFav.setImageResource(R.drawable.ic_heart);
-            holder.btnFav.setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(holder.itemView.getContext(), R.color.primary)));
-        }
     }
 
     @Override
@@ -78,28 +59,20 @@ public class PopularMealAdapter extends RecyclerView.Adapter<PopularMealAdapter.
         return meals != null ? meals.size() : 0;
     }
 
-    public void updateFavoriteStatus(String mealId, boolean isFavorite) {
-        if (meals != null) {
-            for (int i = 0; i < meals.size(); i++) {
-                if (meals.get(i).getIdMeal().equals(mealId)) {
-                    meals.get(i).setFavorite(isFavorite);
-                    notifyItemChanged(i);
-                    break;
-                }
-            }
-        }
+    public interface OnMealClickListener {
+        void onMealClick(Meal meal);
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         ImageView ivMeal;
         TextView tvName;
-        ImageButton btnFav;
+        ImageButton btnRemoveFavorite;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             ivMeal = itemView.findViewById(R.id.ivPopularMeal);
             tvName = itemView.findViewById(R.id.tvPopularMealName);
-            btnFav = itemView.findViewById(R.id.btnFavPopular);
+            btnRemoveFavorite = itemView.findViewById(R.id.btnRemoveFavorite);
         }
     }
 }
