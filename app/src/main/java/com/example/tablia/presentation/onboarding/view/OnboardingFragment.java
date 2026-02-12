@@ -34,7 +34,6 @@ public class OnboardingFragment extends Fragment implements OnboardingView {
         adapter = new OnboardingAdapter(this);
         binding.viewPager.setAdapter(adapter);
 
-        // Initialize Presenter
         presenter = new OnBoardingPresenterImp(this, getContext());
 
         binding.viewPager.setPageTransformer((page, position) -> {
@@ -47,7 +46,6 @@ public class OnboardingFragment extends Fragment implements OnboardingView {
             @Override
             public void onPageSelected(int position) {
                 super.onPageSelected(position);
-                // Last page is index 2 (for 3 onboarding screens)
                 binding.btnNext.setText(position == 2 ? "Get Started" : "Next");
             }
         });
@@ -66,7 +64,6 @@ public class OnboardingFragment extends Fragment implements OnboardingView {
 
     @Override
     public void navigateToLogin() {
-        // Use getView() as the anchor for navigation
         if (getView() != null) {
             Navigation.findNavController(getView())
                     .navigate(R.id.action_onboardingFragment_to_loginFragment);
@@ -76,6 +73,6 @@ public class OnboardingFragment extends Fragment implements OnboardingView {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        binding = null; // Prevent memory leaks
+        binding = null;
     }
 }

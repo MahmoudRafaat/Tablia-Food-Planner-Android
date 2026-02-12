@@ -144,9 +144,7 @@ public class LoginFragment extends Fragment implements LoginView {
         hideLoading();
         if (getView() != null) {
             Snackbar.make(getView(), message, Snackbar.LENGTH_LONG)
-                    .setBackgroundTint(getResources().getColor(R.color.tomato_red, requireContext().getTheme()))
-                    .setAction("Retry", v -> binding.btnSignIn.performClick())
-                    .setActionTextColor(getResources().getColor(R.color.white, requireContext().getTheme()))
+                    .setBackgroundTint(getResources().getColor(R.color.tomato_red,requireContext().getTheme()))
                     .show();
         }
     }

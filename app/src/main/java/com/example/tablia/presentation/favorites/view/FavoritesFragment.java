@@ -46,31 +46,20 @@ public class FavoritesFragment extends Fragment implements FavoritesView, Favori
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        initViews(view);
-        setupRecyclerView();
-        initPresenter();
-        presenter.loadFavorites();
-    }
-
-    private void initViews(View view) {
         rvFavorites = view.findViewById(R.id.rv_favorites);
         tvSavedMealsCount = view.findViewById(R.id.tv_saved_meals_count);
         progressBar = view.findViewById(R.id.progress_bar);
         layoutEmptyState = view.findViewById(R.id.layout_empty_state);
-    }
-
-    private void setupRecyclerView() {
         adapter = new FavoriteMealAdapter();
         adapter.setOnFavoriteClickListener(this);
         rvFavorites.setLayoutManager(new GridLayoutManager(getContext(), 2));
         rvFavorites.setAdapter(adapter);
-    }
-
-    private void initPresenter() {
         MealsRepository repository = MealsRepository.getInstance(getContext());
         AuthRepository authRepository = new AuthRepository(requireContext());
         presenter = new FavoritesPresenterImpl(this, repository, authRepository);
+        presenter.loadFavorites();
     }
+
 
     @Override
     public void showLoading() {

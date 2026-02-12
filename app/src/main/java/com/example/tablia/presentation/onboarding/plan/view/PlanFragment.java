@@ -51,7 +51,7 @@ public class PlanFragment extends Fragment {
                 .scaleX(1f)
                 .rotation(0f)
                 .setDuration(600)
-                .setInterpolator(new OvershootInterpolator()) // Mimics spring
+                .setInterpolator(new OvershootInterpolator())
                 .start();
 
         binding.tvOnboardingTitle.animate()

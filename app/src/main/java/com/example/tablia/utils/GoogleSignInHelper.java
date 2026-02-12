@@ -13,6 +13,7 @@ import androidx.credentials.GetCredentialRequest;
 import androidx.credentials.GetCredentialResponse;
 import androidx.credentials.exceptions.ClearCredentialException;
 import androidx.credentials.exceptions.GetCredentialException;
+import androidx.credentials.exceptions.GetCredentialCancellationException;
 
 import com.example.tablia.BuildConfig;
 import com.google.android.libraries.identity.googleid.GetGoogleIdOption;
@@ -69,8 +70,10 @@ public class GoogleSignInHelper {
 
                     @Override
                     public void onError(GetCredentialException e) {
-                        Log.e("GoogleSignIn", "Sign In Failed", e);
-                        callback.onFailure(e.getClass().getSimpleName() + ": " + e.getMessage());
+                        if (e instanceof GetCredentialCancellationException) {
+                        } else {
+                            callback.onFailure(e.getClass().getSimpleName() + ": " + e.getMessage());
+                        }
                     }
                 }
         );

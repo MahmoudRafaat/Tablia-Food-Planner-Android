@@ -1,4 +1,4 @@
-package com.example.tablia.presentation.onboarding.plan.view;
+package com.example.tablia.presentation.onboarding.discover.view;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -51,7 +51,7 @@ public class DiscoverFragment extends Fragment {
                 .scaleX(1f)
                 .rotation(0f)
                 .setDuration(600)
-                .setInterpolator(new OvershootInterpolator()) // Mimics spring
+                .setInterpolator(new OvershootInterpolator())
                 .start();
 
         binding.tvOnboardingTitle.animate()

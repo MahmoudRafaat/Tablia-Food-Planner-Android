@@ -41,7 +41,6 @@ public class FavoritesPresenterImpl implements FavoritesPresenter {
     private void fetchFavorites() {
         if (view != null) view.showLoading();
 
-        // 1. Observe local database immediately for reactivity
         disposables.add(repository.getAllFavMeals()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -64,14 +63,7 @@ public class FavoritesPresenterImpl implements FavoritesPresenter {
                         }
                 ));
 
-        // 2. Trigger remote sync in the background
-        disposables.add(repository.syncFavoritesWithRemote()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                        () -> { /* Sync done */ },
-                        throwable -> { /* Sync failed */ }
-                ));
+
     }
 
     @Override

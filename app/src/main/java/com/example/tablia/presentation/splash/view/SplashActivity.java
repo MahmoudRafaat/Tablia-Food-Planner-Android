@@ -40,7 +40,6 @@ public class SplashActivity extends AppCompatActivity implements SplashView {
     }
 
     public void startAnimations() {
-        // Initial States
         binding.plateCircle.setScaleX(0f);
         binding.plateCircle.setScaleY(0f);
         binding.plateCircle.setRotation(-180f);

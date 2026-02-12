@@ -62,7 +62,7 @@ public class FavoriteMealAdapter extends RecyclerView.Adapter<FavoriteMealAdapte
 
             itemView.setOnClickListener(v -> {
                 if (listener != null) {
-                    int position = getAdapterPosition();
+                    int position = getBindingAdapterPosition();
                     if (position != RecyclerView.NO_POSITION) {
                         listener.onMealClick(favorites.get(position));
                     }
@@ -71,7 +71,7 @@ public class FavoriteMealAdapter extends RecyclerView.Adapter<FavoriteMealAdapte
 
             binding.btnRemoveFavorite.setOnClickListener(v -> {
                 if (listener != null) {
-                    int position = getAdapterPosition();
+                    int position = getBindingAdapterPosition();
                     if (position != RecyclerView.NO_POSITION) {
                         listener.onRemoveClick(favorites.get(position));
                     }
