@@ -12,7 +12,7 @@
         android:layout_height="32dp"
         android:layout_marginStart="24dp"
         android:layout_marginTop="32dp"
-        android:src="@drawable/ic_heart"
+        android:src="@drawable/ic_heart_filled"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:tint="@color/primary" />

@@ -108,7 +108,7 @@ public class ProfileFragment extends Fragment implements ProfileView {
     @Override
     public void showGuestAlert() {
         if (getContext() != null) {
-            binding.tvUserName.setText(R.string.join_tablia_and_start_planning);
+            binding.tvUserName.setText(R.string.guest);
             binding.tvUserEmail.setText("");
             binding.tvFavoritesCount.setText("0");
             binding.tvPlannedCount.setText("0");
@@ -116,7 +116,7 @@ public class ProfileFragment extends Fragment implements ProfileView {
 
             binding.btnLogout.setVisibility(View.GONE);
             binding.btnSignin.setVisibility(View.VISIBLE);
-            binding.cvEditProfile.setVisibility(View.GONE); // Guests can't edit profile
+            binding.cvEditProfile.setVisibility(View.GONE);
 
             binding.btnSignin.setOnClickListener(v -> {
                 Intent intent = new Intent(requireActivity(), AuthActivity.class);

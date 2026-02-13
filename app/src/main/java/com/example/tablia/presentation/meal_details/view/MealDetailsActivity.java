@@ -21,6 +21,7 @@ import com.example.tablia.presentation.meal_details.presenter.MealDetailsPresent
 import com.example.tablia.presentation.meal_details.presenter.MealDetailsPresenterImpl;
 import com.example.tablia.utils.CustomAlertDialog;
 import com.example.tablia.utils.VideoHelper;
+import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.Calendar;
@@ -128,7 +129,7 @@ public class MealDetailsActivity extends AppCompatActivity implements MealDetail
 
         Glide.with(this)
                 .load(meal.getStrMealThumb())
-                .placeholder(R.drawable.ic_launcher_background)
+                .placeholder(R.drawable.ic_utensils)
                 .into(binding.ivMealDetails);
 
         ingredientsAdapter.setList(meal.getIngredientsWithMeasures());
@@ -149,25 +150,28 @@ public class MealDetailsActivity extends AppCompatActivity implements MealDetail
 
     @Override
     public void showError(String message) {
-        Snackbar snackbar = Snackbar.make(binding.getRoot(), message, Snackbar.LENGTH_LONG);
-        snackbar.setBackgroundTint(ContextCompat.getColor(this, R.color.primary));
-        snackbar.setTextColor(ContextCompat.getColor(this, R.color.white));
-        snackbar.show();
+        showCustomSnackbar(message, true);
     }
 
     @Override
     public void showSuccess(String message) {
+        showCustomSnackbar(message, false);
+    }
+
+    private void showCustomSnackbar(String message, boolean isError) {
         Snackbar snackbar = Snackbar.make(binding.getRoot(), message, Snackbar.LENGTH_LONG);
-        snackbar.setBackgroundTint(ContextCompat.getColor(this, R.color.primary));
+        if (binding.btnAddToPlanner.getVisibility() == View.VISIBLE) {
+            snackbar.setAnchorView(binding.btnAddToPlanner);
+        }
+        snackbar.setBackgroundTint(ContextCompat.getColor(this, isError ? R.color.tomato_red : R.color.primary));
         snackbar.setTextColor(ContextCompat.getColor(this, R.color.white));
+        snackbar.setAnimationMode(BaseTransientBottomBar.ANIMATION_MODE_SLIDE);
         snackbar.show();
     }
 
     @Override
     public void showLoading() {
         binding.loadingOverlay.setVisibility(View.VISIBLE);
-        // Hide only content that shouldn't be seen behind loading if needed
-        // but typically a semi-transparent overlay is better
     }
 
     @Override
