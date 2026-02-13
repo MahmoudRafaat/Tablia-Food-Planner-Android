@@ -72,7 +72,11 @@
     <string name="planned">Planned</string>
     <string name="user_name_placeholder">guest</string>
     <string name="guest_mode_title">Login Required</string>
+    <string name="guest">Guest</string>
+
     <string name="guest_mode_message">You need to log in to access this feature.</string>
     <string name="go_to_login">Login</string>
     <string name="welcome_back">Welcome back,</string>
+    <string name="no_meals_planned_for_this_day">No meals planned for this day</string>
+    <string name="your_schedule_plans">Your Schedule Plans</string>
 </resources>

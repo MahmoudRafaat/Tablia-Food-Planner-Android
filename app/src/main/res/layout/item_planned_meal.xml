@@ -62,10 +62,10 @@
             android:layout_height="0dp"
             android:layout_margin="8dp"
             android:background="?attr/selectableItemBackgroundBorderless"
-            android:src="@drawable/ic_login"
+            android:src="@drawable/ic_trash"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:tint="@color/tomato_red" />
+            />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

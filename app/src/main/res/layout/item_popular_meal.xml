@@ -31,7 +31,7 @@
             android:layout_margin="8dp"
             android:background="@drawable/white_circle_shadow"
             android:padding="6dp"
-            android:src="@drawable/ic_heart_filled"
+            android:src="@drawable/ic_trash"
             android:visibility="visible"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
