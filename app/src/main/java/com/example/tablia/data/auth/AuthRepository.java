@@ -19,7 +19,7 @@ public class AuthRepository {
         this.local = AuthLocalDataSource.getInstance(context);
     }
 
-    public Single<User> loginWithEmail(String email, String password) {
+    public Completable loginWithEmail(String email, String password) {
         return remote.loginWithEmail(email, password);
     }
 
@@ -53,6 +53,14 @@ public class AuthRepository {
 
     public Completable saveUser(User user) {
         return local.saveUser(user);
+    }
+
+    public Completable saveUserRemote(User user) {
+        return remote.saveUserProfile(user);
+    }
+
+    public Single<User> fetchUserProfileRemote() {
+        return remote.fetchUserProfileRemote();
     }
 
     public Single<User> getUser() {

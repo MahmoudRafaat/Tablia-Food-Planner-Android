@@ -35,6 +35,7 @@ public class LoginPresenterImp implements LoginPresenter {
 
         view.showLoading();
         disposables.add(repository.loginWithEmail(email, password)
+                .andThen(repository.fetchUserProfileRemote())
                 .flatMapCompletable(user -> repository.saveUser(user)
                         .andThen(repository.setLoggedIn(true))
                         .andThen(mealsRepository.syncAppointmentsWithRemote())
@@ -57,7 +58,8 @@ public class LoginPresenterImp implements LoginPresenter {
     public void loginWithGoogle(String idToken) {
         view.showLoading();
         disposables.add(repository.loginWithGoogle(idToken)
-                .flatMapCompletable(user -> repository.saveUser(user)
+                .flatMapCompletable(user -> repository.saveUserRemote(user)
+                        .andThen(repository.saveUser(user))
                         .andThen(mealsRepository.syncFavoritesWithRemote())
                         .andThen(mealsRepository.syncAppointmentsWithRemote())
                         .andThen(repository.setLoggedIn(true)))

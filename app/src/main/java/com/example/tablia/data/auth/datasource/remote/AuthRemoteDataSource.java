@@ -11,6 +11,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
+import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Single;
 
 public class AuthRemoteDataSource {
@@ -27,8 +28,7 @@ public class AuthRemoteDataSource {
                                 base64 = ImageUtils.uriToBase64(context, imageUri);
                             }
                             User user = new User(mAuth.getUid(), name, email, base64);
-                            firebaseManager.saveUserProfile(user)
-                                    .subscribe(() -> emitter.onSuccess(user), emitter::onError);
+                            emitter.onSuccess(user);
                         } else {
                             emitter.onError(task.getException());
                         }
@@ -36,11 +36,11 @@ public class AuthRemoteDataSource {
         });
     }
 
-    public Single<User> loginWithEmail(String email, String password) {
-        return Single.create(emitter -> {
+    public Completable loginWithEmail(String email, String password) {
+        return Completable.create(emitter -> {
             mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
-                    fetchUserProfile().subscribe(emitter::onSuccess, emitter::onError);
+                    emitter.onComplete();
                 } else {
                     emitter.onError(task.getException());
                 }
@@ -58,14 +58,10 @@ public class AuthRemoteDataSource {
                         String name = firebaseUser.getDisplayName();
                         String email = firebaseUser.getEmail();
                         String profilePictureUrl = firebaseUser.getPhotoUrl() != null ? firebaseUser.getPhotoUrl().toString() : "";
-
                         User user = new User(firebaseUser.getUid(), name, email, profilePictureUrl);
-
-                        // Always save/update the user profile to ensure it's up-to-date.
-                        firebaseManager.saveUserProfile(user)
-                                .subscribe(() -> emitter.onSuccess(user), emitter::onError);
+                        emitter.onSuccess(user);
                     } else {
-                        emitter.onError(new Exception("Firebase user is null after Google login"));
+                        emitter.onError(new Exception("login failed"));
                     }
                 } else {
                     emitter.onError(new Exception("Google login failed"));
@@ -74,7 +70,11 @@ public class AuthRemoteDataSource {
         });
     }
 
-    private Single<User> fetchUserProfile() {
+    public Completable saveUserProfile(User user) {
+        return firebaseManager.saveUserProfile(user);
+    }
+
+    public Single<User> fetchUserProfileRemote() {
         return firebaseManager.getUserProfile();
     }
 }

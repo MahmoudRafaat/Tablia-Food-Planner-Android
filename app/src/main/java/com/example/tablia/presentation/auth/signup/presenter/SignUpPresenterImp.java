@@ -43,7 +43,8 @@ public class SignUpPresenterImp implements SignUpPresenter {
 
         view.showLoading();
         disposables.add(repository.register(email, password, fullName, imageUri, context)
-                .flatMapCompletable(user -> repository.saveUser(user)
+                .flatMapCompletable(user -> repository.saveUserRemote(user)
+                        .andThen(repository.saveUser(user))
                         .andThen(repository.setLoggedIn(true))
                         .andThen(repository.setFirstRun(false)))
                 .subscribeOn(Schedulers.io())
