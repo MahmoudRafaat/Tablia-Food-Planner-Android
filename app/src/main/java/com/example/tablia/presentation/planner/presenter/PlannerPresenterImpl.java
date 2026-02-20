@@ -24,6 +24,7 @@ public class PlannerPresenterImpl implements PlannerPresenter {
 
     @Override
     public void getMealsForDate(long timestamp) {
+        if (view != null) view.showLoading();
         disposable.add(authRepository.isLoggedIn()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -31,10 +32,16 @@ public class PlannerPresenterImpl implements PlannerPresenter {
                     if (isLoggedIn) {
                         fetchMealsForDate(timestamp);
                     } else {
-                        if (view != null) view.showGuestAlert();
+                        if (view != null) {
+                            view.hideLoading();
+                            view.showGuestAlert();
+                        }
                     }
                 }, throwable -> {
-                    if (view != null) view.showError(throwable.getMessage());
+                    if (view != null) {
+                        view.hideLoading();
+                        view.showError(throwable.getMessage());
+                    }
                 }));
     }
 
@@ -44,25 +51,38 @@ public class PlannerPresenterImpl implements PlannerPresenter {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         appointments -> {
-                            if (view != null) view.showPlannedMeals(appointments);
+                            if (view != null) {
+                                view.hideLoading();
+                                view.showPlannedMeals(appointments);
+                            }
                         },
                         throwable -> {
-                            if (view != null) view.showError(throwable.getMessage());
+                            if (view != null) {
+                                view.hideLoading();
+                                view.showError(throwable.getMessage());
+                            }
                         }
                 ));
     }
 
     @Override
     public void removeMealFromPlan(MealAppointment appointment) {
+        if (view != null) view.showLoading();
         disposable.add(repository.deleteAppointment(appointment)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         () -> {
-                            if (view != null) view.showSuccess("Meal removed from plan");
+                            if (view != null) {
+                                view.hideLoading();
+                                view.showSuccess("Meal removed from plan");
+                            }
                         },
                         throwable -> {
-                            if (view != null) view.showError(throwable.getMessage());
+                            if (view != null) {
+                                view.hideLoading();
+                                view.showError(throwable.getMessage());
+                            }
                         }
                 ));
     }

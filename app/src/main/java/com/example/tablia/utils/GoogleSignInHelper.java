@@ -29,12 +29,12 @@ public class GoogleSignInHelper {
 
         String clientId = BuildConfig.WEB_CLIENT_ID;
 
-        //Log.d("GoogleSignIn", "Using Client ID: " + clientId);
-
+        // AutoSelectEnabled(true) allows the system to skip the account picker 
+        // if there's only one eligible account or if the user has signed in before.
         GetGoogleIdOption googleIdOption = new GetGoogleIdOption.Builder()
                 .setFilterByAuthorizedAccounts(false)
                 .setServerClientId(clientId)
-                .setAutoSelectEnabled(false)
+                .setAutoSelectEnabled(true)
                 .build();
 
         GetCredentialRequest request = new GetCredentialRequest.Builder()
@@ -72,7 +72,7 @@ public class GoogleSignInHelper {
                     @Override
                     public void onError(GetCredentialException e) {
                         if (e instanceof GetCredentialCancellationException) {
-                            // User cancelled
+                            callback.onFailure("user_cancelled");
                         } else if (e instanceof NoCredentialException) {
                             callback.onFailure("no_credential_error");
                         } else {

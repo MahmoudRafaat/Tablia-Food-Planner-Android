@@ -12,4 +12,8 @@ public interface PlannerView {
     void showSuccess(String message);
 
     void showGuestAlert();
+
+    void showLoading();
+
+    void hideLoading();
 }

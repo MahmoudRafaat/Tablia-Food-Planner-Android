@@ -18,8 +18,7 @@
         android:layout_height="40dp"
         android:layout_margin="16dp"
         android:background="?attr/selectableItemBackgroundBorderless"
-        android:src="@drawable/ic_login"
-        android:rotation="180"
+        android:src="@drawable/ic_back"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:tint="@color/onBackground" />
@@ -29,9 +28,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
-        android:fontFamily="@font/nunito_bold"
+        android:fontFamily="@font/tablia_font_family"
         android:textColor="@color/onBackground"
         android:textSize="20sp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@id/btnBack"
         app:layout_constraintStart_toEndOf="@id/btnBack"
         app:layout_constraintTop_toTopOf="@id/btnBack"
@@ -54,7 +54,7 @@
             android:layout_height="wrap_content"
             app:iconifiedByDefault="false"
             app:queryBackground="@android:color/transparent"
-            app:queryHint="explore more" />
+            app:queryHint="Search..." />
 
     </androidx.cardview.widget.CardView>
 
@@ -65,6 +65,7 @@
         android:layout_height="0dp"
         android:layout_marginTop="8dp"
         android:padding="8dp"
+        android:layoutAnimation="@anim/layout_animation_fall_down"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@id/cvSearch"
         tools:listitem="@layout/item_explore_grid" />
@@ -76,17 +77,24 @@
         android:layout_height="match_parent"
         android:visibility="gone" />
 
-    <com.airbnb.lottie.LottieAnimationView
-        android:id="@+id/progressBarExplore"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:lottie_autoPlay="true"
-        app:lottie_loop="true"
-        app:lottie_rawRes="@raw/liquid_loader_01" />
+    <FrameLayout
+        android:id="@+id/loadingOverlayExplore"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/transparent_white_80"
+        android:clickable="true"
+        android:focusable="true"
+        android:visibility="gone">
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/progressBarExplore"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_gravity="center"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            app:lottie_rawRes="@raw/liquid_loader_01" />
+
+    </FrameLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

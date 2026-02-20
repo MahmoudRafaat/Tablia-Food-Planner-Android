@@ -24,14 +24,17 @@ import com.example.tablia.presentation.planner.presenter.PlannerPresenterImpl;
 import com.example.tablia.utils.CustomAlertDialog;
 import com.google.android.material.snackbar.Snackbar;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 public class PlannerFragment extends Fragment implements PlannerView, PlannerAdapter.OnPlannerClickListener {
 
     private FragmentPlannerBinding binding;
     private PlannerPresenterImpl presenter;
     private PlannerAdapter adapter;
+    private final SimpleDateFormat dateFormat = new SimpleDateFormat("EEEE, MMM dd", Locale.getDefault());
 
     @Nullable
     @Override
@@ -45,23 +48,31 @@ public class PlannerFragment extends Fragment implements PlannerView, PlannerAda
         super.onViewCreated(view, savedInstanceState);
 
         AuthRepository authRepository = new AuthRepository(getContext());
-        presenter = new PlannerPresenterImpl(MealsRepository.getInstance(getContext()), authRepository, this);adapter = new PlannerAdapter(this);
+        presenter = new PlannerPresenterImpl(MealsRepository.getInstance(getContext()), authRepository, this);
+        adapter = new PlannerAdapter(this);
         binding.rvPlannedMeals.setLayoutManager(new LinearLayoutManager(requireContext()));
         binding.rvPlannedMeals.setAdapter(adapter);
+        
         setupCalendar();
-        loadMealsForDate(Calendar.getInstance());
-
+        
+        Calendar today = Calendar.getInstance();
+        updateSelectedDayText(today);
+        loadMealsForDate(today);
     }
-
-
-
 
     private void setupCalendar() {
         binding.calendarView.setOnDateChangeListener((view, year, month, dayOfMonth) -> {
             Calendar selectedDate = Calendar.getInstance();
             selectedDate.set(year, month, dayOfMonth);
+            updateSelectedDayText(selectedDate);
             loadMealsForDate(selectedDate);
         });
+    }
+
+    private void updateSelectedDayText(Calendar calendar) {
+        if (binding != null) {
+            binding.tvSelectedDay.setText(dateFormat.format(calendar.getTime()));
+        }
     }
 
     private void loadMealsForDate(Calendar calendar) {
@@ -76,10 +87,10 @@ public class PlannerFragment extends Fragment implements PlannerView, PlannerAda
     public void showPlannedMeals(List<MealAppointment> appointments) {
         if (appointments.isEmpty()) {
             binding.rvPlannedMeals.setVisibility(View.GONE);
-            binding.tvEmptyState.setVisibility(View.VISIBLE);
+            binding.emptyStateContainer.setVisibility(View.VISIBLE);
         } else {
             binding.rvPlannedMeals.setVisibility(View.VISIBLE);
-            binding.tvEmptyState.setVisibility(View.GONE);
+            binding.emptyStateContainer.setVisibility(View.GONE);
             adapter.setList(appointments);
         }
     }
@@ -89,6 +100,7 @@ public class PlannerFragment extends Fragment implements PlannerView, PlannerAda
         Intent intent = new Intent(requireActivity(), MealDetailsActivity.class);
         intent.putExtra("meal", meal);
         startActivity(intent);
+        requireActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
     }
 
     @Override
@@ -127,6 +139,22 @@ public class PlannerFragment extends Fragment implements PlannerView, PlannerAda
                 requireActivity().finish();
             });
             showPlannedMeals(java.util.Collections.emptyList());
+        }
+    }
+
+    @Override
+    public void showLoading() {
+        if (binding != null) {
+            binding.loadingIndicator.setVisibility(View.VISIBLE);
+            binding.rvPlannedMeals.setVisibility(View.GONE);
+            binding.emptyStateContainer.setVisibility(View.GONE);
+        }
+    }
+
+    @Override
+    public void hideLoading() {
+        if (binding != null) {
+            binding.loadingIndicator.setVisibility(View.GONE);
         }
     }
 

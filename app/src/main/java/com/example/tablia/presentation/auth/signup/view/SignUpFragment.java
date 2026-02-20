@@ -101,15 +101,13 @@ public class SignUpFragment extends Fragment implements SignUpView {
 
     @Override
     public void showLoading() {
-        binding.progressBarSignUp.setVisibility(View.VISIBLE);
-        binding.btnCreateAccount.setEnabled(false);
+        binding.loadingOverlaySignUp.setVisibility(View.VISIBLE);
         setInputsEnabled(false);
     }
 
     @Override
     public void hideLoading() {
-        binding.progressBarSignUp.setVisibility(View.GONE);
-        binding.btnCreateAccount.setEnabled(true);
+        binding.loadingOverlaySignUp.setVisibility(View.GONE);
         setInputsEnabled(true);
     }
 
@@ -118,6 +116,7 @@ public class SignUpFragment extends Fragment implements SignUpView {
         binding.etSignUpEmail.setEnabled(enabled);
         binding.etSignUpPassword.setEnabled(enabled);
         binding.fabAddImage.setEnabled(enabled);
+        binding.btnCreateAccount.setEnabled(enabled);
     }
 
     @Override

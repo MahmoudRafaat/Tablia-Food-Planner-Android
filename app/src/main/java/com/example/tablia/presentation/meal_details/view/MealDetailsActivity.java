@@ -1,11 +1,13 @@
 package com.example.tablia.presentation.meal_details.view;
 
-import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -19,10 +21,13 @@ import com.example.tablia.databinding.ActivityMealDetailsBinding;
 import com.example.tablia.presentation.auth.AuthActivity;
 import com.example.tablia.presentation.meal_details.presenter.MealDetailsPresenter;
 import com.example.tablia.presentation.meal_details.presenter.MealDetailsPresenterImpl;
+import com.example.tablia.presentation.planner.view.CurrentWeekDecorator;
+import com.example.tablia.presentation.planner.view.WeekDayDecorator;
 import com.example.tablia.utils.CustomAlertDialog;
 import com.example.tablia.utils.VideoHelper;
 import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
+import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 
 import java.util.Calendar;
 
@@ -49,14 +54,17 @@ public class MealDetailsActivity extends AppCompatActivity implements MealDetail
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
         binding.toolbar.setNavigationOnClickListener(v -> finish());
+        
         ingredientsAdapter = new IngredientAdapter(null);
         binding.rvIngredients.setLayoutManager(new LinearLayoutManager(this));
-        ingredientsAdapter.setList(null);
         binding.rvIngredients.setAdapter(ingredientsAdapter);
+        
         getLifecycle().addObserver(binding.youtubePlayerView);
 
         Meal meal = getIntent().getParcelableExtra("meal");
         if (meal != null) {
+            currentMeal = meal;
+            showPartialMealDetails(meal);
             presenter.getMealDetails(meal);
             presenter.checkIsFavorite(meal.getIdMeal());
         }
@@ -91,31 +99,76 @@ public class MealDetailsActivity extends AppCompatActivity implements MealDetail
         binding.btnAddToPlanner.setOnClickListener(v -> showDatePicker());
     }
 
+    private void showPartialMealDetails(Meal meal) {
+        binding.collapsingToolbar.setTitle(meal.getStrMeal());
+        binding.tvMealName.setText(meal.getStrMeal());
+        binding.tvCategoryChip.setText(meal.getStrCategory());
+        
+        Glide.with(this)
+                .load(meal.getStrMealThumb())
+                .placeholder(R.drawable.ic_chef_hat)
+                .into(binding.ivMealDetails);
+
+        binding.nestedScrollView.setVisibility(View.VISIBLE);
+        binding.btnAddToPlanner.setVisibility(View.VISIBLE);
+    }
+
     private void showDatePicker() {
-        final Calendar c = Calendar.getInstance();
-        int year = c.get(Calendar.YEAR);
-        int month = c.get(Calendar.MONTH);
-        int day = c.get(Calendar.DAY_OF_MONTH);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.CustomDatePickerDialog);
+        View dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_calendar, null);
+        builder.setView(dialogView);
 
-        DatePickerDialog datePickerDialog = new DatePickerDialog(this,
-                R.style.CustomDatePickerDialog,
-                (view, year1, monthOfYear, dayOfMonth) -> {
-                    Calendar selectedDate = Calendar.getInstance();
-                    selectedDate.set(year1, monthOfYear, dayOfMonth);
-                    selectedDate.set(Calendar.HOUR_OF_DAY, 0);
-                    selectedDate.set(Calendar.MINUTE, 0);
-                    selectedDate.set(Calendar.SECOND, 0);
-                    selectedDate.set(Calendar.MILLISECOND, 0);
+        MaterialCalendarView calendarView = dialogView.findViewById(R.id.calendarView);
+        Button btnCancel = dialogView.findViewById(R.id.btn_cancel);
 
-                    presenter.addToPlan(currentMeal, selectedDate.getTimeInMillis());
-                }, year, month, day);
+        // minDate is TODAY
+        Calendar minDate = Calendar.getInstance();
+        minDate.set(Calendar.HOUR_OF_DAY, 0);
+        minDate.set(Calendar.MINUTE, 0);
+        minDate.set(Calendar.SECOND, 0);
+        minDate.set(Calendar.MILLISECOND, 0);
 
-        datePickerDialog.getDatePicker().setMinDate(c.getTimeInMillis());
+        // maxDate is TODAY + 6 days
+        Calendar maxDate = (Calendar) minDate.clone();
+        maxDate.add(Calendar.DAY_OF_YEAR, 6);
+        maxDate.set(Calendar.HOUR_OF_DAY, 23);
+        maxDate.set(Calendar.MINUTE, 59);
+        maxDate.set(Calendar.SECOND, 59);
+        maxDate.set(Calendar.MILLISECOND, 999);
 
-        c.add(Calendar.DAY_OF_YEAR, 6);
-        datePickerDialog.getDatePicker().setMaxDate(c.getTimeInMillis());
+        calendarView.state().edit()
+                .setMinimumDate(minDate)
+                .setMaximumDate(maxDate)
+                .commit();
 
-        datePickerDialog.show();
+        calendarView.addDecorators(
+                new WeekDayDecorator(this),
+                new CurrentWeekDecorator(this)
+        );
+
+        AlertDialog dialog = builder.create();
+        btnCancel.setOnClickListener(v -> dialog.dismiss());
+
+        calendarView.setOnDateChangedListener((widget, date, selected) -> {
+            if (selected) {
+                Calendar selectedDate = date.getCalendar();
+                // Safety check (redundant because of setMinimumDate)
+                if (selectedDate.before(minDate)) {
+                    showError(getString(R.string.cannot_select_past_date));
+                    return;
+                }
+
+                selectedDate.set(Calendar.HOUR_OF_DAY, 0);
+                selectedDate.set(Calendar.MINUTE, 0);
+                selectedDate.set(Calendar.SECOND, 0);
+                selectedDate.set(Calendar.MILLISECOND, 0);
+
+                presenter.addToPlan(currentMeal, selectedDate.getTimeInMillis());
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
     }
 
 
@@ -129,7 +182,6 @@ public class MealDetailsActivity extends AppCompatActivity implements MealDetail
 
         Glide.with(this)
                 .load(meal.getStrMealThumb())
-                .placeholder(R.drawable.ic_utensils)
                 .into(binding.ivMealDetails);
 
         ingredientsAdapter.setList(meal.getIngredientsWithMeasures());
@@ -144,8 +196,9 @@ public class MealDetailsActivity extends AppCompatActivity implements MealDetail
         );
 
         binding.cvYoutube.setVisibility(View.VISIBLE);
-        binding.nestedScrollView.setVisibility(View.VISIBLE);
-        binding.btnAddToPlanner.setVisibility(View.VISIBLE);
+        binding.toggleGroup.setVisibility(View.VISIBLE);
+        binding.rvIngredients.setVisibility(View.VISIBLE);
+        binding.detailsProgressBar.setVisibility(View.GONE);
     }
 
     @Override
@@ -171,12 +224,17 @@ public class MealDetailsActivity extends AppCompatActivity implements MealDetail
 
     @Override
     public void showLoading() {
-        binding.loadingOverlay.setVisibility(View.VISIBLE);
+        if (currentMeal == null || currentMeal.getStrInstructions() == null || currentMeal.getStrInstructions().isEmpty()) {
+            binding.loadingOverlay.setVisibility(View.VISIBLE);
+        } else {
+            binding.detailsProgressBar.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
     public void hideLoading() {
         binding.loadingOverlay.setVisibility(View.GONE);
+        binding.detailsProgressBar.setVisibility(View.GONE);
     }
 
     @Override

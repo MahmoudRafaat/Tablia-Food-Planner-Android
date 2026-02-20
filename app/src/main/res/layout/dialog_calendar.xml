@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="16dp"
+    app:cardCornerRadius="28dp"
+    app:cardElevation="0dp"
+    app:strokeWidth="0dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:orientation="vertical"
+        android:padding="24dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:fontFamily="@font/tablia_font_family"
+            android:text="@string/select_day"
+            android:textColor="@color/navy_foreground"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <com.prolificinteractive.materialcalendarview.MaterialCalendarView
+            android:id="@+id/calendarView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:mcv_calendarMode="week"
+            app:mcv_selectionColor="@color/primary"
+            app:mcv_showOtherDates="none"
+            app:mcv_headerTextAppearance="@style/CalendarHeader"
+            app:mcv_weekDayTextAppearance="@style/CalendarWeekDay"
+            app:mcv_dateTextAppearance="@style/CalendarDate"
+            app:mcv_allowClickDaysOutsideCurrentMonth="false"
+            />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_cancel"
+            style="@style/Widget.Material3.Button.TextButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginTop="16dp"
+            android:fontFamily="@font/tablia_font_family"
+            android:text="@string/cancel"
+            android:textColor="@color/text_grey" />
+
+    </LinearLayout>
+
+</com.google.android.material.card.MaterialCardView>

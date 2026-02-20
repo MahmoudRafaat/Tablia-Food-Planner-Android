@@ -129,12 +129,16 @@ public class MealListFragment extends Fragment implements MealListView, PopularM
 
     @Override
     public void showLoading() {
-        binding.progressBarMeals.setVisibility(View.VISIBLE);
+        binding.rvMeals.setVisibility(View.GONE);
+        binding.shimmerMeals.setVisibility(View.VISIBLE);
+        binding.shimmerMeals.startShimmer();
     }
 
     @Override
     public void hideLoading() {
-        binding.progressBarMeals.setVisibility(View.GONE);
+        binding.shimmerMeals.stopShimmer();
+        binding.shimmerMeals.setVisibility(View.GONE);
+        binding.rvMeals.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -142,6 +146,7 @@ public class MealListFragment extends Fragment implements MealListView, PopularM
         Intent intent = new Intent(requireContext(), MealDetailsActivity.class);
         intent.putExtra("meal", meal);
         startActivity(intent);
+        requireActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
     }
 
 

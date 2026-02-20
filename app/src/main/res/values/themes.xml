@@ -13,9 +13,32 @@
     </style>
 
     <style name="CustomDatePickerDialog" parent="Theme.Material3.Light.Dialog">
-        <item name="colorPrimary">@color/tomato_red</item>
+        <item name="colorPrimary">@color/primary</item>
         <item name="colorOnPrimary">@color/white</item>
-        <item name="colorSecondary">@color/basil_green</item>
-        <item name="android:colorAccent">@color/tomato_red</item>
+        <item name="colorSecondary">@color/secondary</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowMinWidthMajor">90%</item>
+        <item name="android:windowMinWidthMinor">90%</item>
+    </style>
+
+    <style name="CalendarHeader" parent="TextAppearance.Material3.TitleMedium">
+        <item name="android:textColor">@color/primary</item>
+        <item name="android:fontFamily">@font/tablia_font_family</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="CalendarWeekDay" parent="TextAppearance.Material3.BodySmall">
+        <item name="android:textColor">@color/text_grey</item>
+        <item name="android:fontFamily">@font/tablia_font_family</item>
+    </style>
+
+    <style name="CalendarDate" parent="TextAppearance.Material3.BodyMedium">
+        <item name="android:textColor">@color/navy_foreground</item>
+        <item name="android:fontFamily">@font/tablia_font_family</item>
+    </style>
+
+    <style name="CustomCalendarTheme" parent="Theme.Material3.Light">
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorAccent">@color/primary</item>
     </style>
 </resources>

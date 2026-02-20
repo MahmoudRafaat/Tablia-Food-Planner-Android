@@ -47,7 +47,6 @@ public class ProfileFragment extends Fragment implements ProfileView {
     public void showUserInfo(User user) {
         binding.btnLogout.setVisibility(View.VISIBLE);
         binding.btnSignin.setVisibility(View.GONE);
-        binding.cvEditProfile.setVisibility(View.VISIBLE);
 
         binding.tvUserName.setText(user.getFullName());
         binding.tvUserEmail.setText(user.getEmail());
@@ -95,6 +94,7 @@ public class ProfileFragment extends Fragment implements ProfileView {
         intent.putExtra("destination", "login");
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
+        requireActivity().overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
     }
 
     @Override
@@ -116,12 +116,12 @@ public class ProfileFragment extends Fragment implements ProfileView {
 
             binding.btnLogout.setVisibility(View.GONE);
             binding.btnSignin.setVisibility(View.VISIBLE);
-            binding.cvEditProfile.setVisibility(View.GONE);
 
             binding.btnSignin.setOnClickListener(v -> {
                 Intent intent = new Intent(requireActivity(), AuthActivity.class);
                 intent.putExtra("destination", "login");
                 startActivity(intent);
+                requireActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                 requireActivity().finish();
             });
         }

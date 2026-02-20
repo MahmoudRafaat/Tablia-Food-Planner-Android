@@ -95,6 +95,9 @@ public class MealsRepository {
         return localDataSource.isMealFavorite(id);
     }
 
+    public Single<Meal> getFavMealById(String id) {
+        return localDataSource.getFavMealById(id);
+    }
 
     public Completable clearAllFavorites() {
         return localDataSource.clearAllFavorites();

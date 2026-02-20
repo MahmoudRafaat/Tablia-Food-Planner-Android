@@ -44,7 +44,6 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.Vi
         String imageUrl = "https://www.themealdb.com/images/ingredients/" + ingredient.first + ".png";
         Glide.with(holder.itemView.getContext())
                 .load(imageUrl)
-                .placeholder(R.drawable.ic_launcher_foreground)
                 .into(holder.ivIngredient);
     }
 

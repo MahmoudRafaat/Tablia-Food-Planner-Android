@@ -67,6 +67,7 @@ public class HomeFragment extends Fragment implements HomeView, PopularMealAdapt
         Intent intent = new Intent(requireContext(), MealDetailsActivity.class);
         intent.putExtra("meal", meal);
         startActivity(intent);
+        requireActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
     }
 
     @Override

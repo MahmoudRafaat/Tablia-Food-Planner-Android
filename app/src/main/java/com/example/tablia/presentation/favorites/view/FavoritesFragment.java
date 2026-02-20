@@ -104,6 +104,7 @@ public class FavoritesFragment extends Fragment implements FavoritesView, Favori
         Intent intent = new Intent(requireContext(), MealDetailsActivity.class);
         intent.putExtra("meal", meal);
         startActivity(intent);
+        requireActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
     }
 
     @Override
@@ -122,6 +123,7 @@ public class FavoritesFragment extends Fragment implements FavoritesView, Favori
             Intent intent = new Intent(requireActivity(), AuthActivity.class);
             intent.putExtra("destination", "login");
             startActivity(intent);
+            requireActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
             requireActivity().finish();
         });
         showEmptyMessage();

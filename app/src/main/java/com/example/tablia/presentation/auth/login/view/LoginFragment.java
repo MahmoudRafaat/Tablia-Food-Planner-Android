@@ -53,14 +53,19 @@ public class LoginFragment extends Fragment implements LoginView {
         binding.btnGust.setOnClickListener(v -> presenter.loginAsGuest());
 
         binding.btnGoogle.setOnClickListener(v -> {
+            // Removing showLoading() here to avoid the lose focus background feel
             GoogleSignInHelper.signIn(requireActivity(), new GoogleSignInHelper.CredentialCallback() {
                 @Override
                 public void onSuccess(String idToken) {
+                    showLoading(); // Show loading only after user selects an account
                     presenter.loginWithGoogle(idToken);
                 }
 
                 @Override
                 public void onFailure(String error) {
+                    if ("user_cancelled".equals(error)) {
+                        return; // Silent return if user cancelled the dialog
+                    }
                     if ("no_credential_error".equals(error)) {
                         showGeneralError("No internet connection. Please check your network.");
                     } else {
@@ -102,13 +107,13 @@ public class LoginFragment extends Fragment implements LoginView {
 
     @Override
     public void showLoading() {
-        binding.progressBar.setVisibility(View.VISIBLE);
+        binding.loadingOverlayLogin.setVisibility(View.VISIBLE);
         setInputsEnabled(false);
     }
 
     @Override
     public void hideLoading() {
-        binding.progressBar.setVisibility(View.GONE);
+        binding.loadingOverlayLogin.setVisibility(View.GONE);
         setInputsEnabled(true);
     }
 
@@ -158,6 +163,7 @@ public class LoginFragment extends Fragment implements LoginView {
         hideLoading();
         Intent intent = new Intent(getActivity(), HomeActivity.class);
         startActivity(intent);
+        requireActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
         getActivity().finish();
     }
 

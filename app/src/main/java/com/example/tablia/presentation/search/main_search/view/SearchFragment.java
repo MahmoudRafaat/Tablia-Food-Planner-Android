@@ -176,13 +176,13 @@ public class SearchFragment extends Fragment implements com.example.tablia.prese
     public void showLoading() {
         if (binding == null) return;
         binding.tvNoResults.setVisibility(View.GONE);
-        binding.progressBarSearch.setVisibility(View.VISIBLE);
+        binding.loadingOverlaySearch.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void hideLoading() {
         if (binding != null) {
-            binding.progressBarSearch.setVisibility(View.GONE);
+            binding.loadingOverlaySearch.setVisibility(View.GONE);
         }
     }
 
@@ -228,6 +228,7 @@ public class SearchFragment extends Fragment implements com.example.tablia.prese
         Intent intent = new Intent(requireContext(), MealDetailsActivity.class);
         intent.putExtra("meal", meal);
         startActivity(intent);
+        requireActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
     }
 
 

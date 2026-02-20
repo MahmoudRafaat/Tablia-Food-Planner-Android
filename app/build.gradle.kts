@@ -56,6 +56,9 @@ dependencies {
     implementation(libs.lottie)
     implementation(libs.fragment)
     implementation(libs.core.splashscreen)
+
+    // Shimmer
+    implementation("com.facebook.shimmer:shimmer:0.5.0")
     
     // Navigation
     implementation(libs.navigation.fragment)
@@ -81,6 +84,11 @@ dependencies {
 
     // YouTube Player
     implementation("com.pierfrancescosoffritti.androidyoutubeplayer:core:13.0.0")
+
+    // Material Calendar View with exclusion to fix Duplicate Class error
+    implementation("com.prolificinteractive:material-calendarview:1.4.3") {
+        exclude(group = "com.android.support")
+    }
 
     val room_version = "2.8.4"
 

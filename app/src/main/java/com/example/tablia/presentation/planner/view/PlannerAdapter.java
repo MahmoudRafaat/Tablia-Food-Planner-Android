@@ -3,7 +3,6 @@ package com.example.tablia.presentation.planner.view;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -14,6 +13,7 @@ import com.bumptech.glide.Glide;
 import com.example.tablia.R;
 import com.example.tablia.data.meals.models.Meal;
 import com.example.tablia.data.meals.models.MealAppointment;
+import com.google.android.material.button.MaterialButton;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,7 +48,6 @@ public class PlannerAdapter extends RecyclerView.Adapter<PlannerAdapter.ViewHold
             holder.tvName.setText(meal.getStrMeal());
             Glide.with(holder.itemView.getContext())
                     .load(meal.getStrMealThumb())
-                    .placeholder(R.drawable.ic_launcher_background)
                     .into(holder.ivMeal);
 
             holder.itemView.setOnClickListener(v -> listener.onMealClick(meal));
@@ -71,13 +70,12 @@ public class PlannerAdapter extends RecyclerView.Adapter<PlannerAdapter.ViewHold
     public static class ViewHolder extends RecyclerView.ViewHolder {
         ImageView ivMeal;
         TextView tvName, tvDate;
-        ImageButton btnRemove;
+        MaterialButton btnRemove;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             ivMeal = itemView.findViewById(R.id.iv_planned_meal);
             tvName = itemView.findViewById(R.id.tv_planned_meal_name);
-            tvDate = itemView.findViewById(R.id.tv_planned_meal_date);
             btnRemove = itemView.findViewById(R.id.btn_remove_plan);
         }
     }

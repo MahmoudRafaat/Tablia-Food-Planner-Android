@@ -11,6 +11,7 @@ import android.view.animation.DecelerateInterpolator;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.splashscreen.SplashScreen;
 
+import com.example.tablia.R;
 import com.example.tablia.databinding.ActivitySplashBinding;
 import com.example.tablia.presentation.auth.AuthActivity;
 import com.example.tablia.presentation.home.view.HomeActivity;
@@ -96,6 +97,7 @@ public class SplashActivity extends AppCompatActivity implements SplashView {
         Intent intent = new Intent(this, AuthActivity.class);
         intent.putExtra("destination", "login");
         startActivity(intent);
+        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
         finish();
     }
 
@@ -104,6 +106,7 @@ public class SplashActivity extends AppCompatActivity implements SplashView {
         Intent intent = new Intent(this, AuthActivity.class);
         intent.putExtra("destination", "onboarding");
         startActivity(intent);
+        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
         finish();
     }
 
@@ -111,6 +114,7 @@ public class SplashActivity extends AppCompatActivity implements SplashView {
     public void navigateToHome() {
         Intent intent = new Intent(this, HomeActivity.class);
         startActivity(intent);
+        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
         finish();
     }
 }

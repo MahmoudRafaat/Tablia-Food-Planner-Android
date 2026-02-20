@@ -10,8 +10,6 @@ import com.example.tablia.data.meals.models.MealAppointment;
 import com.example.tablia.presentation.meal_details.view.MealDetailsView;
 import com.example.tablia.utils.NetworkUtil;
 
-import java.util.UUID;
-
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
@@ -61,35 +59,56 @@ public class MealDetailsPresenterImpl implements MealDetailsPresenter {
     public void getMealDetails(Meal meal) {
         if (meal == null) return;
 
-        view.showLoading();
-
+        // If we already have full details, show them immediately
         if (meal.getStrInstructions() != null && !meal.getStrInstructions().isEmpty()) {
             view.showMealDetails(meal);
-            view.hideLoading();
-        } else {
-            if (!isConnected) {
-                view.hideLoading();
-                view.showNoInternet();
-                return;
-            }
-            disposable.add(repository.getMealById(meal.getIdMeal())
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(
-                            response -> {
-                                view.hideLoading();
-                                if (response != null && response.getMeals() != null && !response.getMeals().isEmpty()) {
-                                    view.showMealDetails(response.getMeals().get(0));
-                                } else {
-                                    view.showError("Meal details not found");
-                                }
-                            },
-                            throwable -> {
-                                view.hideLoading();
-                                view.showError(throwable.getMessage());
-                            }
-                    ));
+            return;
         }
+
+        view.showLoading();
+
+        disposable.add(repository.getFavMealById(meal.getIdMeal())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        localMeal -> {
+                            if (localMeal != null && localMeal.getStrInstructions() != null) {
+                                view.hideLoading();
+                                view.showMealDetails(localMeal);
+                            } else {
+                                fetchMealFromRemote(meal.getIdMeal());
+                            }
+                        },
+                        throwable -> {
+                            fetchMealFromRemote(meal.getIdMeal());
+                        }
+                ));
+    }
+
+    private void fetchMealFromRemote(String mealId) {
+        if (!isConnected) {
+            view.hideLoading();
+            view.showNoInternet();
+            return;
+        }
+
+        disposable.add(repository.getMealById(mealId)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        response -> {
+                            view.hideLoading();
+                            if (response != null && response.getMeals() != null && !response.getMeals().isEmpty()) {
+                                view.showMealDetails(response.getMeals().get(0));
+                            } else {
+                                view.showError("Meal details not found");
+                            }
+                        },
+                        throwable -> {
+                            view.hideLoading();
+                            view.showError(throwable.getMessage());
+                        }
+                ));
     }
 
     @Override
@@ -152,8 +171,9 @@ public class MealDetailsPresenterImpl implements MealDetailsPresenter {
                 view.showNoInternet();
                 return;
             }
+            String appointmentId = meal.getIdMeal() + "_" + timestamp;
             MealAppointment appointment = new MealAppointment(
-                    UUID.randomUUID().toString(),
+                    appointmentId,
                     meal,
                     timestamp
             );
